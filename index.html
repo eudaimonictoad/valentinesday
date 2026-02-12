@@ -162,9 +162,12 @@ const ASSETS = [
 // Grid sprite sheets: 4 cols (animation frames) x 4 rows (directions)
 // Rows: 0=down, 1=left, 2=right, 3=up
 // Sprite info: [frameW, frameH, cols, rows]
+// All Ninja Adventure sprites are 16x16 per frame in a grid
+// Characters: 64x112 = 4 cols x 7 rows (rows 0-3: walk down/left/right/up, 4-6: idle)
+// Monsters:   64x64  = 4 cols x 4 rows (rows 0-3: walk down/left/right/up)
 const GRID = {
-  princess: [16,28,4,4],
-  eggboy:   [16,28,4,4],
+  princess:    [16,16,4,7],
+  eggboy:      [16,16,4,7],
   mob_cyclope: [16,16,4,4],
   mob_dragon:  [16,16,4,4],
   mob_flam:    [16,16,4,4],
@@ -789,21 +792,21 @@ function draw() {
   });
 
   // Egg companion (EggBoy)
-  const EGG_W = T*0.9, EGG_H = T*0.9*28/16; // maintain 16:28 aspect ratio
+  const EGG_SZ = T*0.9; // 16x16 frames, square
   dl.push({y:E.y, fn:()=>{
     let sx=(E.x-cx)*T, sy=(E.y-cy)*T;
-    drawGrid('eggboy',E.row,E.fr,sx-EGG_W/2,sy-EGG_H+T*0.3,EGG_W,EGG_H,false);
+    drawGrid('eggboy',E.row,E.fr,sx-EGG_SZ/2,sy-EGG_SZ+T*0.3,EGG_SZ,EGG_SZ,false);
     X.font='7px "Press Start 2P"'; X.fillStyle='#ffd700'; X.textAlign='center';
-    X.fillText('EGG',sx,sy-EGG_H+T*0.15);
+    X.fillText('EGG',sx,sy-EGG_SZ+T*0.15);
   }});
 
   // Player (Sarah - Princess)
-  const SARAH_W = T*1.1, SARAH_H = T*1.1*28/16;
+  const SARAH_SZ = T*1.1; // 16x16 frames, square
   dl.push({y:P.y, fn:()=>{
     let sx=(P.x-cx)*T, sy=(P.y-cy)*T;
     if(invT>0&&Math.floor(invT/5)%2)X.globalAlpha=0.4;
 
-    drawGrid('princess',P.row,P.fr,sx-SARAH_W/2,sy-SARAH_H+T*0.3,SARAH_W,SARAH_H,false);
+    drawGrid('princess',P.row,P.fr,sx-SARAH_SZ/2,sy-SARAH_SZ+T*0.3,SARAH_SZ,SARAH_SZ,false);
 
     // Attack flash effect
     if(atkT>0){
@@ -815,7 +818,7 @@ function draw() {
     }
 
     X.font='8px "Press Start 2P"'; X.fillStyle='#ffd700'; X.textAlign='center';
-    X.fillText('SARAH',sx,sy-SARAH_H+T*0.15);
+    X.fillText('SARAH',sx,sy-SARAH_SZ+T*0.15);
     X.globalAlpha=1;
   }});
 
