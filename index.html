@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The One True Sarah</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #2a1a2e; overflow: hidden; font-family: 'Press Start 2P', monospace; user-select: none; image-rendering: pixelated; }
+  canvas { display: block; image-rendering: pixelated; }
+
+  #ui-overlay {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 10px 16px; z-index: 10; pointer-events: none;
+  }
+  #hearts { font-size: 20px; text-shadow: 2px 2px 0 #220011; }
+  #score { color: #ffd700; font-size: 9px; text-shadow: 2px 2px 0 #332200; text-align: right; line-height: 1.8; }
+
+  #message-box {
+    position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+    background: #1a1020; border: 3px solid #c9a84c; border-radius: 4px;
+    padding: 14px 22px; color: #f0e8d0; font-size: 10px;
+    max-width: 580px; text-align: center; z-index: 20; display: none; line-height: 1.8;
+    animation: popIn 0.15s ease-out; image-rendering: auto;
+  }
+  @keyframes popIn { from { transform: translateX(-50%) scale(0.9); opacity: 0; } to { transform: translateX(-50%) scale(1); opacity: 1; } }
+
+  #quiz-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 50; display: none;
+    justify-content: center; align-items: center; image-rendering: auto;
+  }
+  #quiz-box {
+    background: #1a1020; border: 4px solid #c9a84c; border-radius: 4px;
+    padding: 28px 32px; max-width: 520px; width: 90%; text-align: center;
+    box-shadow: 0 0 30px rgba(201,168,76,0.2);
+  }
+  #quiz-header { color: #ff6688; font-size: 10px; margin-bottom: 6px; letter-spacing: 1px; }
+  #quiz-emoji { font-size: 32px; margin: 6px 0; }
+  #quiz-question { color: #f0e8d0; font-size: 11px; margin: 14px 0 18px; line-height: 1.8; }
+  .quiz-btn {
+    display: block; width: 100%; margin: 6px 0; padding: 10px 14px;
+    background: #2a2028; border: 2px solid #5a4a3a; border-radius: 3px;
+    color: #d4c8a8; font-family: 'Press Start 2P', monospace; font-size: 9px;
+    cursor: pointer; transition: all 0.12s; text-align: left; line-height: 1.5;
+  }
+  .quiz-btn:hover { background: #3a3030; border-color: #c9a84c; color: #fff; }
+  .quiz-btn.correct { background: #1a3a1a; border-color: #4a4; color: #8f8; }
+  .quiz-btn.wrong { background: #3a1a1a; border-color: #a44; color: #f88; }
+  #quiz-result { font-size: 10px; margin-top: 14px; line-height: 1.7; display: none; }
+  #quiz-continue {
+    margin-top: 12px; padding: 8px 20px; background: #c9a84c; border: none;
+    border-radius: 3px; color: #1a1020; font-family: 'Press Start 2P', monospace;
+    font-size: 8px; cursor: pointer; display: none;
+  }
+  #quiz-continue:hover { background: #e0c060; }
+
+  .screen-overlay {
+    position: fixed; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; z-index: 100; gap: 14px;
+    image-rendering: auto;
+  }
+  #title-screen { background: #12081a; }
+  #game-over-screen { background: rgba(12,6,16,0.95); display: none; }
+
+  .screen-overlay h1 {
+    color: #ffd700; font-size: 16px;
+    text-align: center; line-height: 2.2; text-shadow: 3px 3px 0 #3a2a00; max-width: 600px;
+  }
+  .screen-overlay h2 { color: #ff6688; font-size: 12px; text-align: center; line-height: 1.6; }
+  .subtitle { color: #a09080; font-size: 9px; text-align: center; line-height: 2; max-width: 460px; margin-top: 6px; }
+  .controls { color: #706858; font-size: 8px; text-align: center; line-height: 2.2; margin-top: 8px; }
+  .blink { color: #8a7860; font-size: 10px; animation: blink 1.2s infinite; margin-top: 18px; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+  #mobile-controls { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 30; display: none; }
+  @media (pointer: coarse) { #mobile-controls { display: block; } }
+  .dpad { display: grid; grid-template: 46px 46px 46px / 46px 46px 46px; gap: 3px; }
+  .dpad button { background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); border-radius: 6px; color: white; font-size: 18px; touch-action: manipulation; }
+  .dpad button:active { background: rgba(255,255,255,0.25); }
+</style>
+</head>
+<body>
+
+<div id="title-screen" class="screen-overlay">
+  <h1>THE ONE TRUE<br>SARAH</h1>
+  <h2>A Valentine's Quest from Ser Ben</h2>
+  <div class="subtitle">
+    Ser Ben has penned a Valentine's message...<br>
+    but only the real Sarah may read it.<br>
+    Prove thyself! Slay the orcs and collect<br>
+    the 12 Enchanted Roses.
+  </div>
+  <div class="controls">
+    WASD / Arrows = Move &nbsp;&nbsp; SPACE = Attack<br>
+    Walk into glowing roses to prove yourself
+  </div>
+  <div class="blink">PRESS ANY KEY TO START</div>
+</div>
+
+<div id="game-over-screen" class="screen-overlay">
+  <h1 id="end-title"></h1>
+  <p id="end-message" style="color:#bbb;font-size:10px;text-align:center;max-width:480px;line-height:1.8;"></p>
+  <div class="blink">PRESS ANY KEY TO PLAY AGAIN</div>
+</div>
+
+<div id="ui-overlay">
+  <div id="hearts"></div>
+  <div id="score"></div>
+</div>
+<div id="message-box"></div>
+
+<div id="quiz-overlay">
+  <div id="quiz-box">
+    <div id="quiz-header"></div>
+    <div id="quiz-emoji"></div>
+    <div id="quiz-question"></div>
+    <div id="quiz-options"></div>
+    <div id="quiz-result"></div>
+    <button id="quiz-continue" onclick="closeQuiz()">CONTINUE</button>
+  </div>
+</div>
+
+<canvas id="game"></canvas>
+
+<div id="mobile-controls">
+  <div class="dpad">
+    <div></div><button ontouchstart="mKey='up'" ontouchend="mKey=null">&#9650;</button><div></div>
+    <button ontouchstart="mKey='left'" ontouchend="mKey=null">&#9664;</button>
+    <button ontouchstart="attackTimer=18" style="font-size:12px;">ATK</button>
+    <button ontouchstart="mKey='right'" ontouchend="mKey=null">&#9654;</button>
+    <div></div><button ontouchstart="mKey='down'" ontouchend="mKey=null">&#9660;</button><div></div>
+  </div>
+</div>
+
+<script>
+const C = document.getElementById('game');
+const X = C.getContext('2d');
+function resize() { C.width = window.innerWidth; C.height = window.innerHeight; }
+resize(); window.addEventListener('resize', resize);
+
+// ===== CONFIG =====
+const T = 64; // tile size (bigger = more zoomed in)
+const W = 60, H = 44; // world in tiles
+
+// ===== SPRITES =====
+const spr = {};
+function loadImg(n, s) { return new Promise(r => { const i = new Image(); i.onload = () => { spr[n]=i; r(); }; i.onerror = r; i.src = s; }); }
+const ASSETS = [
+  ['princess','assets/princess.png'],
+  ['eggboy','assets/eggboy.png'],
+  ['mob_cyclope','assets/mob_cyclope.png'],
+  ['mob_dragon','assets/mob_dragon.png'],
+  ['mob_flam','assets/mob_flam.png'],
+  ['tileset','assets/tileset.png'],
+  ['tree1','assets/tree1.png'],['tree2','assets/tree2.png'],
+  ['rock_stone','assets/rock_stone.png'],
+  ['sunflower','assets/sunflower.png'],['well','assets/well.png'],
+];
+
+// Grid sprite sheets: 4 cols (animation frames) x 4 rows (directions)
+// Rows: 0=down, 1=left, 2=right, 3=up
+// Sprite info: [frameW, frameH, cols, rows]
+const GRID = {
+  princess: [16,28,4,4],
+  eggboy:   [16,28,4,4],
+  mob_cyclope: [16,16,4,4],
+  mob_dragon:  [16,16,4,4],
+  mob_flam:    [16,16,4,4],
+};
+
+// Draw a grid-based sprite: row=direction, col=animation frame
+function drawGrid(name, row, col, x, y, w, h, flip) {
+  const img = spr[name]; if (!img) return;
+  const g = GRID[name]; if (!g) return;
+  const srcX = (col % g[2]) * g[0];
+  const srcY = (row % g[3]) * g[1];
+  X.save();
+  if (flip) { X.translate(x+w, y); X.scale(-1,1); X.drawImage(img, srcX,srcY,g[0],g[1], 0,0,w,h); }
+  else X.drawImage(img, srcX,srcY,g[0],g[1], x,y,w,h);
+  X.restore();
+}
+
+// ===== STATE =====
+let started = false, over = false, tick = 0;
+let hp = 3, score = 0, rosesFound = new Set();
+const TOTAL_ROSES = 12;
+let msgT = 0, atkT = 0, invT = 0, quizOpen = false;
+
+let P = { x:12, y:22, dir:1, fr:0, at:0, spd:0.06, state:'idle', row:0 };
+let E = { x:12, y:23.2, fr:0, at:0, row:0 }; // Egg companion
+let keys = {}, mKey = null;
+
+let ground, gx;
+let col; // collision map
+let eggs = [], npcs = [], orcs = [], particles = [];
+
+// ===== QUIZZES =====
+const Q = [
+  { emoji:'☕', hdr:'COFFEE ORDER', q:'What do we always order at Milkcrate?',
+    opts:['Oat milk latte','Dirty chai iced, two shots','Cold brew with cream','Matcha latte'],
+    ans:1, yes:'Dirty chai iced, two shots! Our go-to, every single time.',
+    no:'Dirty chai iced, two shots! You know this one.',
+    name:'Dirty Chai Latte' },
+  { emoji:'🥯', hdr:'BAGEL SPOT', q:'Where do we always end up for bagels?',
+    opts:['Good Karma Cafe','Green Line Cafe','Schmear (The Bagel Parlor)','Knockbox Cafe'],
+    ans:2, yes:'Schmear! Everything bagel, cream cheese, no question about it.',
+    no:'It\'s Schmear! You know this one!',
+    name:'Schmear Everything Bagel' },
+  { emoji:'🧬', hdr:'THE DOCTOR', q:'What did Sarah get her PhD in?',
+    opts:['Quantum physics','Marine biology','CRISPR gene editing','Neuroscience'],
+    ans:2, yes:'CRISPR gene editing! The future of medicine, no big deal.',
+    no:'CRISPR gene editing! C\'mon, you gotta know this one.',
+    name:'CRISPR Kit' },
+  { emoji:'🎲', hdr:'GAME NIGHT', q:'Ben and Sarah love board games — which one has yet to cause a new board game phase?',
+    opts:['Coup','Backgammon','Catan','Wingspan'],
+    ans:3, yes:'Wingspan! We\'ve never touched it. Coup, backgammon, Catan though... it\'s totally not luck...',
+    no:'It\'s Wingspan! Coup, backgammon, and Catan are our go-tos. And it\'s totally not luck...',
+    name:'Board Game Collection' },
+  { emoji:'⛏️', hdr:'MINECRAFT', q:'Ben and Sarah built their forever Minecraft home in which biome?',
+    opts:['Dark oak forest','Cherry blossom','Mushroom island','Flower forest'],
+    ans:1, yes:'Cherry blossom! Pink petals, cozy vibes — our forever blocky home.',
+    no:'Cherry blossom! The prettiest biome for the prettiest home.',
+    name:'Cherry Blossom Sapling' },
+  { emoji:'🚌', hdr:'SEPTA QUIZ', q:'Which buses does Ben take to get to Sarah\'s?',
+    opts:['The 21 then the 42','The 40 then the 42','The 9 then the 34','The 23 then the 45'],
+    ans:1, yes:'The 40 then the 42! Always worth the ride.',
+    no:'The 40, then the 42! Every time.',
+    name:'SEPTA Pass' },
+  { emoji:'🍜', hdr:'MEETING DAD', q:'At which restaurant did Ben meet Sarah\'s dad for the first time?',
+    opts:['Millers','Pattaya','Taco Taco','Pho 75'],
+    ans:1, yes:'Pattaya! What a night that was.',
+    no:'It was Pattaya! That\'s where the big introduction happened.',
+    name:'Pattaya Menu' },
+  { emoji:'💐', hdr:'FARMERS MARKET', q:'Which farmers market do we go to the most?',
+    opts:['Rittenhouse','Clark Park','Headhouse','Spruce Street'],
+    ans:1, yes:'Clark Park! Our favorite Saturday morning tradition.',
+    no:'Clark Park! We\'re there almost every Saturday.',
+    name:'Clark Park Flowers' },
+  { emoji:'📅', hdr:'ANNIVERSARY', q:'When is our anniversary?',
+    opts:['August 14th','September 7th','October 3rd','July 21st'],
+    ans:1, yes:'September 7th, 2025! The day it all officially began.',
+    no:'September 7th! How could you forget?! ...just kidding. Or am I?',
+    name:'Love Letter' },
+  { emoji:'🍞', hdr:'BAKING', q:'What kind of bagels does Sarah bake at home?',
+    opts:['Jalapeno cheddar','Sourdough blueberry','Plain everything','Cinnamon raisin'],
+    ans:1, yes:'Sourdough blueberry! Better than any shop, honestly.',
+    no:'Sourdough blueberry! The signature creation.',
+    name:'Sourdough Starter' },
+  { emoji:'🎂', hdr:'BIRTHDAY', q:'Sarah got Ben one of his favorite birthday gifts of all time — what was it?',
+    opts:['A record player','A Dutch oven','A PS5','A fancy watch'],
+    ans:1, yes:'A Dutch oven! It makes great japanese curry!',
+    no:'A Dutch oven! It makes great japanese curry!',
+    name:'Birthday Dutch Oven' },
+  { emoji:'📺', hdr:'TV NIGHT', q:'Which show have we NOT watched together?',
+    opts:['Stranger Things','Alice in Borderland','Knight of the Seven Kingdoms','Grey\'s Anatomy'],
+    ans:3, yes:'Grey\'s Anatomy?! No way. Stranger Things, Alice in Borderland, and Knight of the Seven Kingdoms though? All us.',
+    no:'It\'s Grey\'s Anatomy! We\'ve never watched that one together.',
+    name:'HBO Remote' },
+  { emoji:'☕', hdr:'COFFEE SHOP CHARACTERS', q:'Which of these is NOT someone we\'ve run into at a coffee shop?',
+    opts:['Ed Sheeran (kinda)','A rich bald venture capitalist','Jessalyn','Guy Fieri'],
+    ans:3, yes:'Guy Fieri?! Nope. But Ed Sheeran, the bald VC, and Jessalyn are all real!',
+    no:'It\'s Guy Fieri! The rest are all real coffee shop characters.',
+    name:'Coffee Shop Regulars' },
+  { emoji:'🧗', hdr:'CLIMBING DATE', q:'Which wall do we always end up on during climbing dates?',
+    opts:['The slab','The overhang','Top rope','The lead wall'],
+    ans:0, yes:'The slab! We can\'t stay away from it.',
+    no:'The slab! That\'s our wall.',
+    name:'Climbing Chalk' },
+];
+// Shuffle options each game
+function shuffleQuizzes() {
+  Q.forEach(q => { const ct = q.opts[q.ans]; for (let i=q.opts.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [q.opts[i],q.opts[j]]=[q.opts[j],q.opts[i]]; } q.ans=q.opts.indexOf(ct); });
+}
+
+// ===== WORLD GEN =====
+function seeded(s) { return () => { s=(s*16807)%2147483647; return (s-1)/2147483646; }; }
+
+function genWorld() {
+  eggs=[]; npcs=[]; orcs=[]; particles=[];
+  col = Array.from({length:H}, ()=>Array(W).fill(false));
+
+  ground = document.createElement('canvas');
+  ground.width = W*T; ground.height = H*T;
+  gx = ground.getContext('2d');
+  gx.imageSmoothingEnabled = false;
+
+  const r = seeded(42);
+  const ts = spr['tileset'];
+
+  // === TILE MAP: 0=grass, 1=path, 2=water, 3=bridge ===
+  const tm = Array.from({length:H}, ()=>Array(W).fill(0));
+
+  // Mark line of tiles as type
+  function markLine(x0,y0,x1,y1,type,w) {
+    w=w||2;
+    const steps=Math.max(Math.abs(x1-x0),Math.abs(y1-y0))*2;
+    for(let s=0;s<=steps;s++){
+      const t=steps===0?0:s/steps;
+      const cx=Math.round(x0+(x1-x0)*t), cy=Math.round(y0+(y1-y0)*t);
+      const hw=Math.floor(w/2);
+      for(let dy=0;dy<w;dy++) for(let dx=0;dx<w;dx++){
+        const nx=cx-hw+dx, ny=cy-hw+dy;
+        if(nx>=0&&nx<W&&ny>=0&&ny<H) tm[ny][nx]=type;
+      }
+    }
+  }
+
+  // Paths
+  markLine(0,21,W-1,21,1,2);    // main horizontal
+  markLine(0,22,W-1,22,1,2);    // widen horizontal
+  markLine(14,0,14,H-1,1,2);    // left vertical
+  markLine(44,0,44,H-1,1,2);    // right vertical
+  markLine(25,8,37,20,1,2);     // diagonal
+
+  // River (sinuous, 3 tiles wide)
+  for(let y=0;y<H;y++){
+    const cx=33+Math.round(Math.sin(y*0.15)*1.5);
+    for(let dx=-1;dx<=1;dx++){
+      const x=cx+dx;
+      if(x>=0&&x<W) tm[y][x]=2;
+    }
+  }
+
+  // Bridge (wide enough to guarantee crossing)
+  for(let dy=-2;dy<=2;dy++) for(let dx=-3;dx<=3;dx++){
+    const bx=33+dx, by=22+dy;
+    if(bx>=0&&bx<W&&by>=0&&by<H) tm[by][bx]=3;
+  }
+
+  // Set water collision
+  for(let y=0;y<H;y++) for(let x=0;x<W;x++){
+    if(tm[y][x]===2) col[y][x]=true;
+  }
+
+  // === GRASS TILE COORDS from tileset (16px grid, row 2) ===
+  const GRASS=[[16,32],[32,32],[48,32],[64,32]];
+
+  // Helper: deterministic tile variant
+  function grassIdx(x,y){ return ((x*7+y*13+(x^y)*3)&0x7FFFFFFF)%GRASS.length; }
+
+  // Helper: check if tile is grass
+  function isGrass(x,y){ return x>=0&&x<W&&y>=0&&y<H&&(tm[y][x]===0); }
+
+  // === PASS 1: DRAW GRASS EVERYWHERE ===
+  for(let y=0;y<H;y++){
+    for(let x=0;x<W;x++){
+      const g=GRASS[grassIdx(x,y)];
+      gx.drawImage(ts, g[0],g[1],16,16, x*T,y*T,T,T);
+    }
+  }
+
+  // === PASS 2: DRAW PATHS ===
+  for(let y=0;y<H;y++) for(let x=0;x<W;x++){
+    if(tm[y][x]!==1) continue;
+    const dx=x*T, dy=y*T;
+    // Dirt fill
+    gx.fillStyle='#b09870';
+    gx.fillRect(dx,dy,T,T);
+    // Lighter center
+    gx.fillStyle='#baa880';
+    gx.fillRect(dx+4,dy+4,T-8,T-8);
+    // Dirt specks
+    gx.fillStyle='#9a8560';
+    gx.fillRect(dx+8+((x*13+y*7)%40),dy+8+((y*17+x*3)%40),4,4);
+    gx.fillRect(dx+28+((x*23+y)%24),dy+24+((y*11+x*7)%24),4,4);
+    // Grass edge overlaps where path meets grass (soft transition)
+    const ew=8; // edge width
+    if(isGrass(x,y-1)){
+      const g=GRASS[grassIdx(x,y-1)];
+      gx.drawImage(ts,g[0],g[1]+12,16,4, dx,dy,T,ew);
+    }
+    if(isGrass(x,y+1)){
+      const g=GRASS[grassIdx(x,y+1)];
+      gx.drawImage(ts,g[0],g[1],16,4, dx,dy+T-ew,T,ew);
+    }
+    if(isGrass(x-1,y)){
+      const g=GRASS[grassIdx(x-1,y)];
+      gx.drawImage(ts,g[0]+12,g[1],4,16, dx,dy,ew,T);
+    }
+    if(isGrass(x+1,y)){
+      const g=GRASS[grassIdx(x+1,y)];
+      gx.drawImage(ts,g[0],g[1],4,16, dx+T-ew,dy,ew,T);
+    }
+  }
+
+  // === PASS 3: DRAW WATER ===
+  for(let y=0;y<H;y++) for(let x=0;x<W;x++){
+    if(tm[y][x]!==2) continue;
+    const dx=x*T, dy=y*T;
+    // Water fill
+    gx.fillStyle='#3878b0';
+    gx.fillRect(dx,dy,T,T);
+    // Deeper center
+    gx.fillStyle='#2a6090';
+    gx.fillRect(dx+8,dy+8,T-16,T-16);
+    // Sparkles
+    gx.fillStyle='rgba(120,185,225,0.35)';
+    gx.fillRect(dx+10+((x*13)%30),dy+6+((y*17)%30),8,3);
+    gx.fillRect(dx+30+((x*7)%20),dy+28+((y*11)%20),6,3);
+    // Bank edges (grass border overlaps onto water)
+    const isLand=(nx,ny)=>nx>=0&&nx<W&&ny>=0&&ny<H&&(tm[ny][nx]===0||tm[ny][nx]===1);
+    const bw=10;
+    // Muddy bank first
+    gx.fillStyle='#5a6a3a';
+    if(isLand(x,y-1)) gx.fillRect(dx,dy,T,bw);
+    if(isLand(x,y+1)) gx.fillRect(dx,dy+T-bw,T,bw);
+    if(isLand(x-1,y)) gx.fillRect(dx,dy,bw,T);
+    if(isLand(x+1,y)) gx.fillRect(dx+T-bw,dy,bw,T);
+    // Then grass edge
+    const ge=6;
+    if(isLand(x,y-1)){const g=GRASS[grassIdx(x,y-1)];gx.drawImage(ts,g[0],g[1]+12,16,4,dx,dy,T,ge);}
+    if(isLand(x,y+1)){const g=GRASS[grassIdx(x,y+1)];gx.drawImage(ts,g[0],g[1],16,4,dx,dy+T-ge,T,ge);}
+    if(isLand(x-1,y)){const g=GRASS[grassIdx(x-1,y)];gx.drawImage(ts,g[0]+12,g[1],4,16,dx,dy,ge,T);}
+    if(isLand(x+1,y)){const g=GRASS[grassIdx(x+1,y)];gx.drawImage(ts,g[0],g[1],4,16,dx+T-ge,dy,ge,T);}
+  }
+
+  // === PASS 4: DRAW BRIDGE ===
+  for(let y=0;y<H;y++) for(let x=0;x<W;x++){
+    if(tm[y][x]!==3) continue;
+    const dx=x*T, dy=y*T;
+    // Wooden plank base
+    gx.fillStyle='#a07a50';
+    gx.fillRect(dx,dy,T,T);
+    gx.fillStyle='#b08a60';
+    gx.fillRect(dx+2,dy+2,T-4,T-4);
+    // Plank grain lines
+    gx.fillStyle='#806040';
+    for(let ly=dy+6;ly<dy+T-2;ly+=8) gx.fillRect(dx+2,ly,T-4,2);
+    // Nails at corners
+    gx.fillStyle='#504030';
+    gx.fillRect(dx+4,dy+4,3,3); gx.fillRect(dx+T-7,dy+4,3,3);
+    gx.fillRect(dx+4,dy+T-7,3,3); gx.fillRect(dx+T-7,dy+T-7,3,3);
+    // Railings on top/bottom edges of bridge
+    if(y>0&&tm[y-1][x]!==3){
+      gx.fillStyle='#604830';gx.fillRect(dx,dy,T,5);
+      gx.fillStyle='#4a3820';gx.fillRect(dx+4,dy,4,8);gx.fillRect(dx+T-8,dy,4,8);
+    }
+    if(y<H-1&&tm[y+1][x]!==3){
+      gx.fillStyle='#604830';gx.fillRect(dx,dy+T-5,T,5);
+      gx.fillStyle='#4a3820';gx.fillRect(dx+4,dy+T-8,4,8);gx.fillRect(dx+T-8,dy+T-8,4,8);
+    }
+  }
+
+  // === FLOWERS (small colored dots on grass) ===
+  const fc=['#e05577','#ee88aa','#eebb44','#dd4466','#ff99bb','#ffcc55','#88ddaa'];
+  for(let i=0;i<250;i++){
+    const fx=Math.floor(r()*W), fy=Math.floor(r()*H);
+    if(tm[fy][fx]!==0) continue;
+    gx.fillStyle=fc[Math.floor(r()*fc.length)];
+    gx.fillRect(fx*T+4+r()*(T-12), fy*T+4+r()*(T-12), 3+r()*5, 3+r()*5);
+  }
+
+  // === SUNFLOWER DECORATIONS ===
+  if(spr['sunflower']){
+    const sf=spr['sunflower'];
+    [[8,20],[10,28],[46,14],[48,24],[20,36],[52,10],[6,18],[56,30]].forEach(([sx,sy])=>{
+      if(tm[sy]&&tm[sy][sx]===0){
+        const sc=T*0.9/sf.width;
+        gx.drawImage(sf,0,0,sf.width,sf.height,sx*T+T*0.1,sy*T+T*0.05,sf.width*sc,sf.height*sc);
+      }
+    });
+  }
+
+  // === WELL DECORATION ===
+  if(spr['well']){
+    const wl=spr['well'], sc=T*1.4/wl.width;
+    gx.drawImage(wl,0,0,wl.width,wl.height,18*T,18*T,wl.width*sc,wl.height*sc);
+  }
+
+  // === TREES ===
+  function drawTree(tx,ty,type){
+    const img=spr[type==='pine'?'tree2':'tree1'];
+    if(!img) return;
+    const sc=T*2.2/img.width;
+    const dw=img.width*sc, dh=img.height*sc;
+    gx.drawImage(img,0,0,img.width,img.height, tx*T+T/2-dw/2,ty*T+T-dh,dw,dh);
+    // Shadow
+    gx.fillStyle='rgba(0,0,0,0.12)';
+    gx.beginPath();
+    gx.ellipse(tx*T+T/2, ty*T+T-4, dw*0.35, 6, 0, 0, Math.PI*2);
+    gx.fill();
+    if(ty>=0&&ty<H&&tx>=0&&tx<W) col[ty][tx]=true;
+  }
+  [[2,4,'round'],[5,8,'pine'],[3,16,'round'],[2,32,'pine'],[4,40,'round'],[6,42,'pine'],
+   [54,3,'pine'],[57,8,'round'],[55,18,'pine'],[56,32,'round'],[54,40,'pine'],[58,42,'round'],
+   [20,2,'round'],[28,3,'pine'],[38,2,'round'],[50,3,'pine'],
+   [18,40,'pine'],[26,42,'round'],[40,40,'pine'],[52,42,'round'],
+   [10,10,'round'],[10,32,'pine'],[22,16,'round'],[42,8,'pine'],[48,34,'round'],[53,28,'pine'],
+   [8,14,'pine'],[36,6,'round'],[24,36,'pine'],[44,38,'round'],
+   [1,1,'pine'],[3,2,'round'],[57,2,'pine'],[59,4,'round'],
+   [1,42,'round'],[59,42,'pine'],[30,4,'round'],[50,40,'pine']
+  ].forEach(([tx,ty,type])=>drawTree(tx,ty,type));
+
+  // === ROCKS ===
+  function drawRock(rx,ry){
+    const img=spr['rock_stone'];
+    if(!img) return;
+    const sc=T*0.9/img.width;
+    const dw=img.width*sc, dh=img.height*sc;
+    gx.drawImage(img,0,0,img.width,img.height, rx*T+T/2-dw/2,ry*T+T-dh,dw,dh);
+    if(ry>=0&&ry<H&&rx>=0&&rx<W) col[ry][rx]=true;
+  }
+  [[12,6],[28,12],[48,10],[54,20],[16,38],[42,38],[7,26],[52,6],[38,30],[26,28],
+   [9,4],[47,6],[53,36],[5,30],[40,14],[22,8]
+  ].forEach(([rx,ry])=>drawRock(rx,ry));
+
+  // === EASTER EGGS (quiz chests) ===
+  const eggPos = [
+    [16,6],[26,10],[40,5],[52,14],[48,28],[56,36],
+    [10,34],[22,38],[38,40],[42,16],[20,20],[35,24],
+    [8,12],[50,38]
+  ];
+  eggPos.forEach((p,i) => {
+    eggs.push({x:p[0],y:p[1],qi:i,got:false,cd:0,near:false});
+  });
+
+  npcs = [];
+
+  // === ENEMIES (Ninja Adventure monsters) ===
+  // type 0=Cyclope (tanky), 1=Dragon (medium), 2=Flam (fast)
+  const ENEMY_TYPES = [
+    {type:0,hp:3,spd:0.016,mobSpr:'mob_cyclope'},
+    {type:1,hp:2,spd:0.022,mobSpr:'mob_dragon'},
+    {type:2,hp:1,spd:0.032,mobSpr:'mob_flam'},
+  ];
+  const er = seeded(77);
+  for(let i=0;i<10;i++){
+    let ox,oy;
+    do{ox=10+er()*40;oy=4+er()*34;}while(col[Math.floor(oy)]?.[Math.floor(ox)]||Math.hypot(ox-12,oy-22)<8);
+    const ot=ENEMY_TYPES[i%3];
+    orcs.push({x:ox,y:oy,hp:ot.hp,maxHp:ot.hp,spd:ot.spd,dir:er()*Math.PI*2,ct:er()*180,
+      dead:false,fr:0,at:0,fadeOut:0,...ot});
+  }
+}
+
+// ===== INPUT =====
+window.addEventListener('keydown', e => {
+  if (!started){start();return;} if(over){restart();return;} if(quizOpen)return;
+  keys[e.key]=true;
+  if (e.key===' '||e.key==='z') atkT=18;
+  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
+});
+window.addEventListener('keyup', e => keys[e.key]=false);
+document.getElementById('title-screen').onclick = ()=>{ if(!started)start(); };
+document.getElementById('game-over-screen').onclick = ()=>{ if(over)restart(); };
+
+function start() { document.getElementById('title-screen').style.display='none'; started=true; shuffleQuizzes(); genWorld(); }
+function restart() {
+  document.getElementById('game-over-screen').style.display='none';
+  over=false; score=0; hp=3; invT=0; rosesFound.clear();
+  P.x=12; P.y=22; P.row=0; P.fr=0; E.x=12; E.y=23.2; E.row=0; E.fr=0;
+  shuffleQuizzes(); genWorld();
+}
+
+// ===== QUIZ =====
+function openQuiz(i) {
+  if (quizOpen||i<0||i>=Q.length) return;
+  quizOpen=true;
+  const q=Q[i];
+  document.getElementById('quiz-overlay').style.display='flex';
+  document.getElementById('quiz-header').textContent=q.hdr;
+  document.getElementById('quiz-emoji').textContent=q.emoji;
+  document.getElementById('quiz-question').textContent=q.q;
+  document.getElementById('quiz-result').style.display='none';
+  document.getElementById('quiz-continue').style.display='none';
+  const od=document.getElementById('quiz-options'); od.innerHTML='';
+  q.opts.forEach((o,j) => {
+    const b=document.createElement('button'); b.className='quiz-btn';
+    b.textContent=`${String.fromCharCode(65+j)}) ${o}`;
+    b.onclick=()=>answer(i,j); od.appendChild(b);
+  });
+}
+function answer(qi,ai) {
+  const q=Q[qi];
+  document.querySelectorAll('.quiz-btn').forEach((b,i)=>{
+    b.disabled=true;
+    if (i===q.ans) b.classList.add('correct');
+    if (i===ai&&i!==q.ans) b.classList.add('wrong');
+  });
+  const res=document.getElementById('quiz-result'), cont=document.getElementById('quiz-continue');
+  res.style.display='block'; cont.style.display='inline-block';
+  if (ai===q.ans) {
+    res.style.color='#88ff88'; res.textContent=q.yes;
+    score+=5; rosesFound.add(q.name);
+    eggs.forEach(e=>{ if(e.qi===qi)e.got=true; });
+    spawn(P.x,P.y,'#ff4477',12);
+  } else {
+    res.style.color='#ff8888'; res.textContent=q.no;
+    hp--; eggs.forEach(e=>{ if(e.qi===qi){e.cd=150;e.near=true;} });
+    spawn(P.x,P.y,'#ff4444',8);
+    if (hp<=0) setTimeout(()=>{closeQuiz();endGame(false);},300);
+  }
+}
+function closeQuiz() {
+  quizOpen=false;
+  document.getElementById('quiz-overlay').style.display='none';
+  if (rosesFound.size>=TOTAL_ROSES) setTimeout(()=>endGame(true),400);
+}
+
+function showMsg(t,d) { d=d||140; document.getElementById('message-box').textContent=t; document.getElementById('message-box').style.display='block'; msgT=d; }
+function endGame(won) {
+  over=true;
+  const t=document.getElementById('end-title'), m=document.getElementById('end-message');
+  if (won) {
+    t.style.color='#ffd700'; t.textContent='THE ONE TRUE SARAH';
+    m.innerHTML='You have proven yourself worthy.<br>The 12 Enchanted Roses bloom in your honor.<br><br>Here is Ser Ben\'s message:<br><br><span style="color:#ff6688;font-size:12px;">Sarah,</span><br><br><span style="color:#f0e8d0;">You are my favorite person in this world.<br>Every dirty chai, every farmers market morning,<br>every board game night, every bus ride to see you<br>— it\'s all worth it because it\'s with you.<br><br>Happy Valentine\'s Day.</span><br><br><span style="color:#ff6688;">With all my love,<br>Ben</span><br><br><span style="color:#ffd700">'+rosesFound.size+'/'+TOTAL_ROSES+' roses</span>';
+  } else {
+    t.style.color='#ff4466'; t.textContent='THE ROSES WITHER...';
+    m.innerHTML='Only the true Sarah may claim<br>Ser Ben\'s message. Try again!<br><br><span style="color:#ffd700">'+rosesFound.size+'/'+TOTAL_ROSES+' roses collected</span>';
+  }
+  document.getElementById('game-over-screen').style.display='flex';
+}
+
+// ===== UPDATE =====
+function spawn(x,y,c,n) { for(let i=0;i<n;i++) particles.push({x,y,vx:(Math.random()-0.5)*0.14,vy:-Math.random()*0.1,c,life:22+Math.random()*18}); }
+
+function update() {
+  if (!started||over||quizOpen) return;
+  tick++;
+
+  let dx=0,dy=0;
+  if(keys.ArrowLeft||keys.a||keys.A||mKey==='left'){dx=-1;P.dir=-1;}
+  if(keys.ArrowRight||keys.d||keys.D||mKey==='right'){dx=1;P.dir=1;}
+  if(keys.ArrowUp||keys.w||keys.W||mKey==='up')dy=-1;
+  if(keys.ArrowDown||keys.s||keys.S||mKey==='down')dy=1;
+
+  if(dx||dy){
+    let m=Math.sqrt(dx*dx+dy*dy);
+    let nx=P.x+(dx/m)*P.spd, ny=P.y+(dy/m)*P.spd;
+    let tx=Math.floor(nx),ty=Math.floor(ny);
+    if(tx>=0&&tx<W&&ty>=0&&ty<H&&!col[ty][tx]){P.x=nx;P.y=ny;}
+    P.state='walk'; P.at++;
+    if(P.at>6){P.fr=(P.fr+1)%4;P.at=0;}
+    // Set direction row: 0=down,1=left,2=right,3=up
+    if(dy>0) P.row=0; else if(dy<0) P.row=3;
+    if(dx<0) P.row=1; else if(dx>0) P.row=2;
+  } else {
+    P.state=atkT>0?'attack':'idle'; P.at++;
+    if(P.at>12){P.fr=(P.fr+1)%4;P.at=0;}
+  }
+  P.x=Math.max(0.5,Math.min(W-0.5,P.x));
+  P.y=Math.max(0.5,Math.min(H-0.5,P.y));
+
+  // Egg follows
+  let edx=P.x-E.x, edy=(P.y+0.7)-E.y, ed=Math.hypot(edx,edy);
+  if(ed>1.3){
+    E.x+=edx*0.035;E.y+=edy*0.035;
+    // Set Egg direction based on movement
+    if(Math.abs(edx)>Math.abs(edy)) E.row=edx>0?2:1;
+    else E.row=edy>0?0:3;
+  }
+  E.at++; if(E.at>10){E.fr=(E.fr+1)%4;E.at=0;}
+
+  if(atkT>0)atkT--;
+  if(invT>0)invT--;
+
+  // Easter egg collision
+  eggs.forEach(e=>{
+    if(e.got)return;
+    if(e.cd>0){e.cd--;return;}
+    let d=Math.hypot(P.x-e.x,P.y-e.y);
+    if(d<1.2&&!e.near){e.near=true;openQuiz(e.qi);}
+    if(d>=2)e.near=false;
+  });
+
+  // NPC
+  npcs.forEach(n=>{ if(Math.hypot(P.x-n.x,P.y-n.y)<2&&msgT<=0) showMsg(n.msg,120); });
+
+  // Enemies
+  orcs.forEach(o=>{
+    if(o.dead){ return; }
+    o.ct--;
+    if(o.ct<=0){o.dir=Math.random()<0.3?Math.atan2(P.y-o.y,P.x-o.x):Math.random()*Math.PI*2;o.ct=50+Math.random()*120;}
+    let nx=o.x+Math.cos(o.dir)*o.spd, ny=o.y+Math.sin(o.dir)*o.spd;
+    let tx=Math.floor(nx),ty=Math.floor(ny);
+    if(tx>=0&&tx<W&&ty>=0&&ty<H&&!col[ty][tx]){o.x=nx;o.y=ny;}else o.dir+=Math.PI;
+    o.x=Math.max(1,Math.min(W-1,o.x)); o.y=Math.max(1,Math.min(H-1,o.y));
+    o.at++; if(o.at>10){o.fr=(o.fr+1)%4;o.at=0;}
+
+    // Enemy hits player
+    if(Math.hypot(P.x-o.x,P.y-o.y)<0.8&&invT<=0){hp--;invT=80;spawn(P.x,P.y,'#ff4444',6);if(hp<=0)endGame(false);}
+
+    // Player attacks enemy
+    if(atkT>12){
+      let ax=P.x+P.dir*1.2;
+      if(Math.hypot(ax-o.x,P.y-o.y)<1.5){
+        o.hp--;spawn(o.x,o.y,'#ffaa44',6);
+        if(o.hp<=0){o.dead=true;o.fadeOut=0;score+=3;}
+      }
+    }
+  });
+  // Remove fully faded enemies
+  orcs=orcs.filter(o=>!o.dead||o.fadeOut<1);
+
+  particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life--;p.vy+=0.012;});
+  particles=particles.filter(p=>p.life>0);
+
+  if(msgT>0){msgT--;if(msgT<=0)document.getElementById('message-box').style.display='none';}
+
+  // UI
+  let hs='';for(let i=0;i<3;i++)hs+=i<hp?'❤️':'🖤';
+  document.getElementById('hearts').innerHTML=hs;
+  document.getElementById('score').innerHTML='ROSES: '+rosesFound.size+'/'+TOTAL_ROSES+'<br>SCORE: '+score;
+}
+
+// ===== DRAW =====
+function draw() {
+  X.fillStyle='#1a2a10'; X.fillRect(0,0,C.width,C.height);
+  if(!started||over) return;
+
+  X.imageSmoothingEnabled = false; // keep pixels crisp
+
+  const cx=P.x-(C.width/2)/T, cy=P.y-(C.height/2)/T;
+
+  // Ground
+  X.drawImage(ground, -cx*T, -cy*T);
+
+  // Sort all drawables by Y
+  let dl = [];
+
+  // (signs removed)
+
+  // Easter egg chests
+  eggs.forEach(e=>{
+    if(e.got)return;
+    dl.push({y:e.y, fn:()=>{
+      let sx=(e.x-cx)*T, sy=(e.y-cy)*T;
+      if(sx<-60||sx>C.width+60||sy<-60||sy>C.height+60)return;
+      let bob=Math.sin(tick*0.06+e.x)*3;
+      // Glow
+      let glow=0.3+Math.sin(tick*0.08+e.x)*0.15;
+      X.save(); X.globalAlpha=glow;
+      let g=X.createRadialGradient(sx+T/2,sy+T/2+bob,2,sx+T/2,sy+T/2+bob,T*1.1);
+      g.addColorStop(0,'#ff4477'); g.addColorStop(1,'transparent');
+      X.fillStyle=g; X.beginPath(); X.arc(sx+T/2,sy+T/2+bob,T*1.1,0,Math.PI*2); X.fill();
+      X.restore();
+      // Enchanted Rose
+      let rcx=sx+T*0.5, rcy=sy+T*0.3+bob;
+      // Stem
+      X.fillStyle='#2a6620'; X.fillRect(rcx-2,rcy+8,4,T*0.35);
+      // Leaves
+      X.fillStyle='#3a8830';
+      X.beginPath(); X.ellipse(rcx-8,rcy+18,7,4,-.4,0,Math.PI*2); X.fill();
+      X.beginPath(); X.ellipse(rcx+8,rcy+22,7,4,.4,0,Math.PI*2); X.fill();
+      // Rose petals (layered circles)
+      X.fillStyle='#cc2244';
+      X.beginPath(); X.arc(rcx,rcy,10,0,Math.PI*2); X.fill();
+      X.fillStyle='#ee3366';
+      X.beginPath(); X.arc(rcx-3,rcy-2,7,0,Math.PI*2); X.fill();
+      X.beginPath(); X.arc(rcx+3,rcy-2,7,0,Math.PI*2); X.fill();
+      X.fillStyle='#ff4477';
+      X.beginPath(); X.arc(rcx,rcy-3,5,0,Math.PI*2); X.fill();
+      // Sparkle
+      X.fillStyle='#ffaacc'; X.globalAlpha=0.6+Math.sin(tick*0.1+e.x)*0.3;
+      X.beginPath(); X.arc(rcx+4,rcy-6,2,0,Math.PI*2); X.fill();
+      X.globalAlpha=1;
+    }});
+  });
+
+  // Enemies (Ninja Adventure monsters)
+  const MOB_SZ = T*1.1; // monster display size
+  orcs.forEach(o=>{
+    dl.push({y:o.y, fn:()=>{
+      let sx=(o.x-cx)*T, sy=(o.y-cy)*T;
+      if(sx<-180||sx>C.width+180||sy<-180||sy>C.height+180)return;
+      // Pick direction row based on movement angle
+      let dirAngle = o.dir;
+      let row;
+      let adx=Math.cos(dirAngle), ady=Math.sin(dirAngle);
+      if(Math.abs(adx)>Math.abs(ady)) row=adx>0?2:1;
+      else row=ady>0?0:3;
+      if(o.dead){
+        o.fadeOut=Math.min(1,o.fadeOut+0.04);
+        X.globalAlpha=Math.max(0,1-o.fadeOut);
+        let shrink=MOB_SZ*(1-o.fadeOut*0.3);
+        drawGrid(o.mobSpr,0,0,sx-shrink/2,sy-shrink/2+(o.fadeOut*20),shrink,shrink,false);
+        X.globalAlpha=1;
+      } else {
+        drawGrid(o.mobSpr,row,o.fr%4,sx-MOB_SZ/2,sy-MOB_SZ/2,MOB_SZ,MOB_SZ,false);
+        // HP bar
+        let barW=T*0.7;
+        X.fillStyle='#200'; X.fillRect(sx-barW/2,sy-MOB_SZ/2-6,barW,4);
+        X.fillStyle='#ff4444';
+        X.fillRect(sx-barW/2,sy-MOB_SZ/2-6,barW*(o.hp/o.maxHp),4);
+      }
+    }});
+  });
+
+  // Egg companion (EggBoy)
+  const EGG_W = T*0.9, EGG_H = T*0.9*28/16; // maintain 16:28 aspect ratio
+  dl.push({y:E.y, fn:()=>{
+    let sx=(E.x-cx)*T, sy=(E.y-cy)*T;
+    drawGrid('eggboy',E.row,E.fr,sx-EGG_W/2,sy-EGG_H+T*0.3,EGG_W,EGG_H,false);
+    X.font='7px "Press Start 2P"'; X.fillStyle='#ffd700'; X.textAlign='center';
+    X.fillText('EGG',sx,sy-EGG_H+T*0.15);
+  }});
+
+  // Player (Sarah - Princess)
+  const SARAH_W = T*1.1, SARAH_H = T*1.1*28/16;
+  dl.push({y:P.y, fn:()=>{
+    let sx=(P.x-cx)*T, sy=(P.y-cy)*T;
+    if(invT>0&&Math.floor(invT/5)%2)X.globalAlpha=0.4;
+
+    drawGrid('princess',P.row,P.fr,sx-SARAH_W/2,sy-SARAH_H+T*0.3,SARAH_W,SARAH_H,false);
+
+    // Attack flash effect
+    if(atkT>0){
+      X.save(); X.globalAlpha=0.5;
+      let slashX=sx+(P.row===2?1:P.row===1?-1:0)*T*0.6, slashY=sy-T*0.1;
+      X.fillStyle='#fff';
+      X.beginPath(); X.arc(slashX,slashY,T*0.3*(atkT/18),0,Math.PI*2); X.fill();
+      X.restore();
+    }
+
+    X.font='8px "Press Start 2P"'; X.fillStyle='#ffd700'; X.textAlign='center';
+    X.fillText('SARAH',sx,sy-SARAH_H+T*0.15);
+    X.globalAlpha=1;
+  }});
+
+  dl.sort((a,b)=>a.y-b.y);
+  dl.forEach(d=>d.fn());
+
+  // Particles
+  particles.forEach(p=>{
+    let sx=(p.x-cx)*T, sy=(p.y-cy)*T;
+    X.fillStyle=p.c; X.globalAlpha=p.life/35;
+    X.fillRect(sx,sy,6,6);
+  });
+  X.globalAlpha=1;
+
+  // Minimap
+  let mw=110,mh=80,mx=C.width-mw-10,my=C.height-mh-10;
+  X.fillStyle='rgba(20,40,15,0.7)'; X.fillRect(mx,my,mw,mh);
+  X.strokeStyle='#8b7d3c'; X.lineWidth=2; X.strokeRect(mx,my,mw,mh);
+  eggs.forEach(e=>{if(e.got)return;X.fillStyle='#ff4477';X.fillRect(mx+(e.x/W)*mw-1,my+(e.y/H)*mh-1,3,3);});
+  orcs.forEach(o=>{if(o.dead)return;X.fillStyle='#ff4444';X.fillRect(mx+(o.x/W)*mw-1,my+(o.y/H)*mh-1,2,2);});
+  X.fillStyle='#44aaff';X.fillRect(mx+(P.x/W)*mw-2,my+(P.y/H)*mh-2,4,4);
+}
+
+// ===== LOOP =====
+function loop() { update(); draw(); requestAnimationFrame(loop); }
+Promise.all(ASSETS.map(([n,s])=>loadImg(n,s))).then(loop);
+</script>
+</body>
+</html>
