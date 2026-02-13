@@ -90,12 +90,12 @@
     <div class="blink" style="margin-top:30px;">PRESS ANY KEY</div>
   </div>
   <div class="intro-slide" id="slide-1" style="display:none;">
-    <h2 style="font-size:14px;line-height:2;">A Valentine's Quest<br>for the Lady Sarah<br>from Ser Ben</h2>
+    <h2 style="font-size:14px;line-height:2;">A Valentine's Quest<br>from Ser Ben</h2>
     <div class="blink">PRESS ANY KEY</div>
   </div>
   <div class="intro-slide" id="slide-2" style="display:none;">
     <div class="subtitle" style="font-size:14px;line-height:2.4;max-width:520px;">
-      Only the One True Valentine may read Ser Ben's message. Prove yourself, Lady Sarah.
+      Ser Ben has penned a message meant only for the eyes of his Lady Sarah. Prove that you are truly her.
     </div>
     <div class="blink">PRESS ANY KEY</div>
   </div>
@@ -911,7 +911,7 @@ function draw() {
   X.globalAlpha=1;
 
   // Minimap
-  let mw=110,mh=80,mx=C.width-mw-10,my=C.height-mh-10;
+  let mw=220,mh=160,mx=C.width-mw-10,my=C.height-mh-10;
   X.fillStyle='rgba(20,40,15,0.7)'; X.fillRect(mx,my,mw,mh);
   X.strokeStyle='#8b7d3c'; X.lineWidth=2; X.strokeRect(mx,my,mw,mh);
   eggs.forEach(e=>{if(e.got)return;X.fillStyle='#ff4477';X.fillRect(mx+(e.x/W)*mw-1,my+(e.y/H)*mh-1,3,3);});
