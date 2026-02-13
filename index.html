@@ -12,10 +12,9 @@
 
   #ui-overlay {
     position: fixed; top: 0; left: 0; right: 0;
-    display: flex; justify-content: space-between; align-items: flex-start;
+    display: flex; justify-content: flex-end; align-items: flex-start;
     padding: 10px 16px; z-index: 10; pointer-events: none;
   }
-  #hearts { font-size: 20px; text-shadow: 2px 2px 0 #220011; }
   #score { color: #ffd700; font-size: 9px; text-shadow: 2px 2px 0 #332200; text-align: right; line-height: 1.8; }
 
   #message-box {
@@ -106,7 +105,6 @@
 </div>
 
 <div id="ui-overlay">
-  <div id="hearts"></div>
   <div id="score"></div>
 </div>
 <div id="message-box"></div>
@@ -156,8 +154,29 @@ const ASSETS = [
   ['tileset','assets/tileset.png'],
   ['tree1','assets/tree1.png'],['tree2','assets/tree2.png'],
   ['rock_stone','assets/rock_stone.png'],
+  ['rock_ninja','assets/rock_ninja.png'],
+  ['heart_sheet','assets/heart_sheet.png'],
   ['sunflower','assets/sunflower.png'],['well','assets/well.png'],
 ];
+
+// ===== AUDIO =====
+const sfx = {};
+function loadAudio(name, src, opts) {
+  const a = new Audio(src);
+  if (opts?.loop) a.loop = true;
+  if (opts?.volume !== undefined) a.volume = opts.volume;
+  a.preload = 'auto';
+  sfx[name] = a;
+}
+loadAudio('music', 'assets/music_peaceful.ogg', {loop: true, volume: 0.25});
+loadAudio('coin', 'assets/sfx_coin.wav', {volume: 0.5});
+loadAudio('hit', 'assets/sfx_hit.wav', {volume: 0.4});
+loadAudio('success', 'assets/sfx_success.wav', {volume: 0.5});
+loadAudio('gameover', 'assets/sfx_gameover.wav', {volume: 0.5});
+function playSfx(name) {
+  const s = sfx[name];
+  if (s) { s.currentTime = 0; s.play().catch(()=>{}); }
+}
 
 // Grid sprite sheets: cols = directions, rows = animation frames
 // Cols: 0=down, 1=up, 2=left, 3=right
@@ -496,17 +515,23 @@ function genWorld() {
    [1,42,'round'],[59,42,'pine'],[30,4,'round'],[50,40,'pine']
   ].forEach(([tx,ty,type])=>drawTree(tx,ty,type));
 
-  // === ROCKS ===
+  // === ROCKS (Ninja Adventure) ===
   function drawRock(rx,ry){
-    const img=spr['rock_stone'];
+    const img=spr['rock_ninja'];
     if(!img) return;
-    const sc=T*0.9/img.width;
+    const sc=T*0.85/img.width;
     const dw=img.width*sc, dh=img.height*sc;
     gx.drawImage(img,0,0,img.width,img.height, rx*T+T/2-dw/2,ry*T+T-dh,dw,dh);
+    // Shadow
+    gx.fillStyle='rgba(0,0,0,0.1)';
+    gx.beginPath();
+    gx.ellipse(rx*T+T/2, ry*T+T-2, dw*0.35, 4, 0, 0, Math.PI*2);
+    gx.fill();
     if(ry>=0&&ry<H&&rx>=0&&rx<W) col[ry][rx]=true;
   }
   [[12,6],[28,12],[48,10],[54,20],[16,38],[42,38],[7,26],[52,6],[38,30],[26,28],
-   [9,4],[47,6],[53,36],[5,30],[40,14],[22,8]
+   [9,4],[47,6],[53,36],[5,30],[40,14],[22,8],
+   [18,12],[36,28],[46,20],[25,32],[50,8],[8,38],[44,42],[15,4]
   ].forEach(([rx,ry])=>drawRock(rx,ry));
 
   // === EASTER EGGS (quiz chests) ===
@@ -549,12 +574,13 @@ window.addEventListener('keyup', e => keys[e.key]=false);
 document.getElementById('title-screen').onclick = ()=>{ if(!started)start(); };
 document.getElementById('game-over-screen').onclick = ()=>{ if(over)restart(); };
 
-function start() { document.getElementById('title-screen').style.display='none'; started=true; shuffleQuizzes(); genWorld(); }
+function start() { document.getElementById('title-screen').style.display='none'; started=true; shuffleQuizzes(); genWorld(); playSfx('music'); }
 function restart() {
   document.getElementById('game-over-screen').style.display='none';
   over=false; score=0; hp=3; invT=0; rosesFound.clear();
   P.x=12; P.y=22; P.row=0; P.fr=0; E.x=12; E.y=23.2; E.row=0; E.fr=0;
   shuffleQuizzes(); genWorld();
+  sfx.music.currentTime=0; playSfx('music');
 }
 
 // ===== QUIZ =====
@@ -589,10 +615,12 @@ function answer(qi,ai) {
     score+=5; rosesFound.add(q.name);
     eggs.forEach(e=>{ if(e.qi===qi)e.got=true; });
     spawn(P.x,P.y,'#ff4477',12);
+    playSfx('success');
   } else {
     res.style.color='#ff8888'; res.textContent=q.no;
     hp--; eggs.forEach(e=>{ if(e.qi===qi){e.cd=150;e.near=true;} });
     spawn(P.x,P.y,'#ff4444',8);
+    playSfx('hit');
     if (hp<=0) setTimeout(()=>{closeQuiz();endGame(false);},300);
   }
 }
@@ -605,6 +633,8 @@ function closeQuiz() {
 function showMsg(t,d) { d=d||140; document.getElementById('message-box').textContent=t; document.getElementById('message-box').style.display='block'; msgT=d; }
 function endGame(won) {
   over=true;
+  sfx.music.pause();
+  if(!won) playSfx('gameover'); else playSfx('success');
   const t=document.getElementById('end-title'), m=document.getElementById('end-message');
   if (won) {
     t.style.color='#ffd700'; t.textContent='THE ONE TRUE SARAH';
@@ -684,14 +714,14 @@ function update() {
     o.at++; if(o.at>10){o.fr=(o.fr+1)%4;o.at=0;}
 
     // Enemy hits player
-    if(Math.hypot(P.x-o.x,P.y-o.y)<0.8&&invT<=0){hp--;invT=80;spawn(P.x,P.y,'#ff4444',6);if(hp<=0)endGame(false);}
+    if(Math.hypot(P.x-o.x,P.y-o.y)<0.8&&invT<=0){hp--;invT=80;spawn(P.x,P.y,'#ff4444',6);playSfx('hit');if(hp<=0)endGame(false);}
 
     // Player attacks enemy
     if(atkT>12){
       let ax=P.x+P.dir*1.2;
       if(Math.hypot(ax-o.x,P.y-o.y)<1.5){
         o.hp--;spawn(o.x,o.y,'#ffaa44',6);
-        if(o.hp<=0){o.dead=true;o.fadeOut=0;score+=3;}
+        if(o.hp<=0){o.dead=true;o.fadeOut=0;score+=3;playSfx('coin');}
       }
     }
   });
@@ -704,8 +734,6 @@ function update() {
   if(msgT>0){msgT--;if(msgT<=0)document.getElementById('message-box').style.display='none';}
 
   // UI
-  let hs='';for(let i=0;i<3;i++)hs+=i<hp?'❤️':'🖤';
-  document.getElementById('hearts').innerHTML=hs;
   document.getElementById('score').innerHTML='ROSES: '+rosesFound.size+'/'+TOTAL_ROSES+'<br>SCORE: '+score;
 }
 
@@ -841,6 +869,21 @@ function draw() {
   eggs.forEach(e=>{if(e.got)return;X.fillStyle='#ff4477';X.fillRect(mx+(e.x/W)*mw-1,my+(e.y/H)*mh-1,3,3);});
   orcs.forEach(o=>{if(o.dead)return;X.fillStyle='#ff4444';X.fillRect(mx+(o.x/W)*mw-1,my+(o.y/H)*mh-1,2,2);});
   X.fillStyle='#44aaff';X.fillRect(mx+(P.x/W)*mw-2,my+(P.y/H)*mh-2,4,4);
+
+  // === PIXEL HEARTS (top center) ===
+  const himg=spr['heart_sheet'];
+  if(himg){
+    const hsz=44; // heart display size
+    const hgap=6;
+    const totalW=3*hsz+2*hgap;
+    const hx0=Math.floor(C.width/2-totalW/2);
+    const hy=12;
+    X.imageSmoothingEnabled=false;
+    for(let i=0;i<3;i++){
+      const frame=i<hp?0:4; // 0=full, 4=empty
+      X.drawImage(himg, frame*16,0,16,16, hx0+i*(hsz+hgap),hy,hsz,hsz);
+    }
+  }
 }
 
 // ===== LOOP =====
