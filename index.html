@@ -129,8 +129,7 @@
 </div>
 
 <div id="win-letter-screen" class="screen-overlay" style="display:none;">
-  <h1 style="color:#ffd700;font-size:18px;">YOUR VALENTINE'S MESSAGE</h1>
-  <p style="color:#f0e8d0;font-size:11px;text-align:center;max-width:520px;line-height:2.4;margin-top:20px;">
+  <p style="color:#f0e8d0;font-size:11px;text-align:center;max-width:520px;line-height:2.4;">
     To receive your handwritten letter, please look within the <span style="color:#ffd700;">dutch oven</span> in your kitchen.
   </p>
   <p style="color:#a09080;font-size:10px;text-align:center;max-width:520px;line-height:2;margin-top:16px;">
@@ -801,16 +800,13 @@ function endGame(won) {
   if(!won) playSfx('gameover'); else playSfx('music_intro');
   const t=document.getElementById('end-title'), m=document.getElementById('end-message');
   if (won) {
-    t.style.color='#ffd700'; t.textContent='THE ONE TRUE VALENTINE';
+    t.style.color='#ffd700'; t.style.fontSize='28px'; t.textContent='VICTORY';
     let statsText='You have successfully collected the 12 Enchanted Roses';
     if(kills>0) statsText+=' and slain '+kills+' monster'+(kills>1?'s':'')+' along the way';
     statsText+='.';
     m.innerHTML=
-      '<span style="color:#ff6688;font-size:12px;">You are The One True Valentine.</span>'
-      +'<br><br>'
-      +'<span style="color:#a09080;font-size:10px;">'+statsText+'</span>'
-      +'<br><br>'
-      +'<span style="color:#f0e8d0;font-size:11px;">Here is your Valentine\'s message.</span>';
+      '<span style="color:#a09080;font-size:10px;">'+statsText+'</span>'
+;
   } else {
     t.style.color='#ff4466'; t.textContent='THE ROSES WITHER...';
     m.innerHTML='Only the One True Valentine may claim<br>Ser Ben\'s message. Try again!<br><br><span style="color:#ffd700">'+rosesFound.size+'/'+TOTAL_ROSES+' roses collected</span>';
