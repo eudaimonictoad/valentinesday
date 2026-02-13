@@ -121,9 +121,7 @@
   <div class="blink">PRESS ANY KEY TO PLAY AGAIN</div>
 </div>
 
-<div id="ui-overlay">
-  <div id="score"></div>
-</div>
+<div id="ui-overlay"></div>
 <div id="message-box"></div>
 
 <div id="quiz-overlay">
@@ -784,7 +782,7 @@ function update() {
   if(msgT>0){msgT--;if(msgT<=0)document.getElementById('message-box').style.display='none';}
 
   // UI
-  document.getElementById('score').innerHTML='ROSES: '+rosesFound.size+'/'+TOTAL_ROSES+'<br>SCORE: '+score;
+  // Rose count drawn on canvas near hearts
 }
 
 // ===== DRAW =====
@@ -933,6 +931,13 @@ function draw() {
       const frame=i<hp?4:0; // 4=full, 0=empty
       X.drawImage(himg, frame*16,0,16,16, hx0+i*(hsz+hgap),hy,hsz,hsz);
     }
+    // Rose count below hearts
+    X.font='10px "Press Start 2P"';
+    X.fillStyle='#ffd700';
+    X.textAlign='center';
+    X.shadowColor='#332200'; X.shadowOffsetX=2; X.shadowOffsetY=2; X.shadowBlur=0;
+    X.fillText('ROSES: '+rosesFound.size+'/'+TOTAL_ROSES, C.width/2, hy+hsz+18);
+    X.shadowColor='transparent';
   }
 }
 
