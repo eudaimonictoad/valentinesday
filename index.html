@@ -80,7 +80,7 @@
   .dpad { display: grid; grid-template: 46px 46px 46px / 46px 46px 46px; gap: 3px; }
   .dpad button { background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); border-radius: 6px; color: white; font-size: 18px; touch-action: manipulation; }
   .dpad button:active { background: rgba(255,255,255,0.25); }
-  .back-btn { position: absolute; bottom: 24px; color: rgba(160,144,128,0.4); font-size: 9px; cursor: pointer; letter-spacing: 1px; }
+  .back-btn { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); color: rgba(160,144,128,0.4); font-size: 9px; cursor: pointer; letter-spacing: 1px; z-index: 101; }
   .back-btn:hover { color: rgba(160,144,128,0.7); }
 </style>
 </head>
