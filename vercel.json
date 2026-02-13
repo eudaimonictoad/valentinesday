@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/bubba", "destination": "/index.html" }
+  ]
+}
