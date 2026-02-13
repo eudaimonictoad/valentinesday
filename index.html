@@ -172,6 +172,15 @@ const ASSETS = [
   ['rock_ninja','assets/rock_ninja.png'],
   ['heart_sheet','assets/heart_sheet.png'],
   ['sunflower','assets/sunflower.png'],['well','assets/well.png'],
+  ['obj_stump','assets/obj_stump.png'],
+  ['obj_bush','assets/obj_bush.png'],
+  ['obj_bush_autumn','assets/obj_bush_autumn.png'],
+  ['obj_barrel','assets/obj_barrel.png'],
+  ['obj_barrel2','assets/obj_barrel2.png'],
+  ['obj_crate','assets/obj_crate.png'],
+  ['obj_house1','assets/obj_house1.png'],
+  ['obj_house2','assets/obj_house2.png'],
+  ['obj_flowerbed','assets/obj_flowerbed.png'],
 ];
 
 // ===== AUDIO =====
@@ -542,6 +551,63 @@ function genWorld() {
    [9,4],[47,6],[53,36],[5,30],[40,14],[22,8],
    [18,12],[36,28],[46,20],[25,32],[50,8],[8,38],[44,42],[15,4]
   ].forEach(([rx,ry])=>drawRock(rx,ry));
+
+  // === STUMPS ===
+  function drawObj(name,ox,oy,scale,block){
+    const img=spr[name]; if(!img) return;
+    const sc=T*scale/img.width;
+    const dw=img.width*sc, dh=img.height*sc;
+    gx.drawImage(img,0,0,img.width,img.height, ox*T+T/2-dw/2,oy*T+T-dh,dw,dh);
+    gx.fillStyle='rgba(0,0,0,0.1)';
+    gx.beginPath();
+    gx.ellipse(ox*T+T/2, oy*T+T-2, dw*0.3, 4, 0, 0, Math.PI*2);
+    gx.fill();
+    if(block && oy>=0&&oy<H&&ox>=0&&ox<W) col[oy][ox]=true;
+  }
+  // Stumps (blocking, 2-tile wide so mark 2 cols)
+  function drawStump(sx,sy){
+    drawObj('obj_stump',sx,sy,1.6,true);
+    if(sx+1<W) col[sy][sx+1]=true;
+  }
+  [[6,14],[30,8],[50,16],[17,30],[44,34],[24,4],[55,26],[36,12]
+  ].forEach(([sx,sy])=>drawStump(sx,sy));
+
+  // === BUSHES (blocking) ===
+  [[4,12],[8,20],[14,16],[32,6],[38,18],[46,26],[52,32],[19,26],
+   [56,8],[11,38],[34,36],[42,10],[28,40],[48,4]
+  ].forEach(([bx,by])=>drawObj('obj_bush',bx,by,0.9,true));
+
+  // Autumn bushes
+  [[6,24],[20,12],[38,34],[50,28],[44,6],[30,16],[54,38]
+  ].forEach(([bx,by])=>drawObj('obj_bush_autumn',bx,by,0.9,true));
+
+  // === BARRELS & CRATES (blocking, near houses) ===
+  [[16,10],[17,10],[26,14],[46,12],[47,12],[36,32],[37,32]
+  ].forEach(([bx,by])=>drawObj(Math.random()>0.5?'obj_barrel':'obj_barrel2',bx,by,0.85,true));
+
+  [[27,14],[48,12],[36,33]
+  ].forEach(([bx,by])=>drawObj('obj_crate',bx,by,0.85,true));
+
+  // === HOUSES (blocking, multi-tile) ===
+  function drawHouse(name,hx,hy){
+    const img=spr[name]; if(!img) return;
+    const sc=T*2.8/img.width;
+    const dw=img.width*sc, dh=img.height*sc;
+    gx.drawImage(img,0,0,img.width,img.height, hx*T,hy*T+T-dh,dw,dh);
+    // Block 3x3 area
+    for(let dy=-1;dy<=1;dy++) for(let dx=0;dx<3;dx++){
+      const cx=hx+dx, cy=hy+dy;
+      if(cx>=0&&cx<W&&cy>=0&&cy<H) col[cy][cx]=true;
+    }
+  }
+  drawHouse('obj_house1',15,9);
+  drawHouse('obj_house2',45,11);
+  drawHouse('obj_house1',35,31);
+  drawHouse('obj_house2',25,13);
+
+  // === FLOWER BEDS (decorative, no collision) ===
+  [[4,18],[20,8],[32,26],[48,36],[56,14],[12,40],[40,4],[52,40]
+  ].forEach(([fx,fy])=>drawObj('obj_flowerbed',fx,fy,1.4,false));
 
   // === EASTER EGGS (quiz chests) ===
   const eggPos = [
