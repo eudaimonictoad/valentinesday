@@ -95,7 +95,7 @@
   </div>
   <div class="intro-slide" id="slide-2" style="display:none;">
     <div class="subtitle" style="font-size:14px;line-height:2.4;max-width:520px;">
-      Ser Ben has penned a message meant only for the eyes of his Lady Sarah. Prove that you are truly her.
+      Ser Ben has penned a message meant only for the eyes of his Valentine, Lady Sarah. To make sure only she reads it, he has laid out a quest that only his Lady Sarah would be able to complete.
     </div>
     <div class="blink">PRESS ANY KEY</div>
   </div>
@@ -547,8 +547,7 @@ function genWorld() {
   // === EASTER EGGS (quiz chests) ===
   const eggPos = [
     [16,6],[26,10],[40,5],[52,14],[48,28],[56,36],
-    [10,34],[22,38],[38,40],[42,16],[20,20],[35,24],
-    [8,12],[50,38]
+    [10,34],[22,38],[38,40],[42,16],[20,20],[35,24]
   ];
   eggPos.forEach((p,i) => {
     eggs.push({x:p[0],y:p[1],qi:i,got:false,cd:0,near:false});
@@ -924,8 +923,8 @@ function draw() {
     }
   }
   X.strokeStyle='#8b7d3c'; X.lineWidth=2; X.strokeRect(mx,my,mw,mh);
-  eggs.forEach(e=>{if(e.got)return;X.fillStyle='#ff4477';X.fillRect(mx+(e.x/W)*mw-1,my+(e.y/H)*mh-1,3,3);});
-  orcs.forEach(o=>{if(o.dead)return;X.fillStyle='#ff4444';X.fillRect(mx+(o.x/W)*mw-1,my+(o.y/H)*mh-1,2,2);});
+  eggs.forEach(e=>{if(e.got)return;X.fillStyle='#ffd700';X.fillRect(mx+(e.x/W)*mw-1,my+(e.y/H)*mh-1,3,3);});
+  orcs.forEach(o=>{if(o.dead)return;X.fillStyle='#ff2222';X.fillRect(mx+(o.x/W)*mw-1,my+(o.y/H)*mh-1,3,3);});
   X.fillStyle='#44aaff';X.fillRect(mx+(P.x/W)*mw-2,my+(P.y/H)*mh-2,4,4);
 
   // === PIXEL HEARTS (top center) ===
