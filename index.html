@@ -543,67 +543,89 @@ function genWorld() {
    [18,12],[36,28],[46,20],[25,32],[50,8],[8,38],[44,42],[15,4]
   ].forEach(([rx,ry])=>drawRock(rx,ry));
 
-  // === OBSTACLE HELPER ===
-  // Only place on grass (tm===0) to avoid water/path/bridge
-  function canPlace(px,py){
-    return px>=1&&px<W-1&&py>=1&&py<H-1&&tm[py][px]===0&&!col[py][px];
-  }
-  function drawObj(name,ox,oy,scale,block){
-    if(!canPlace(ox,oy)) return;
-    const img=spr[name]; if(!img) return;
-    const sc=T*scale/img.width;
-    const dw=img.width*sc, dh=img.height*sc;
-    gx.drawImage(img,0,0,img.width,img.height, ox*T+T/2-dw/2,oy*T+T-dh,dw,dh);
+  // === BUSHES (canvas-drawn, no external sprites needed) ===
+  function drawBush(bx,by,sz,color){
+    if(tm[by]&&tm[by][bx]!==0) return;
+    if(col[by]&&col[by][bx]) return;
+    const cx=bx*T+T/2, cy=by*T+T/2;
+    const s=T*sz;
+    // Shadow
     gx.fillStyle='rgba(0,0,0,0.1)';
-    gx.beginPath();
-    gx.ellipse(ox*T+T/2, oy*T+T-2, dw*0.3, 4, 0, 0, Math.PI*2);
-    gx.fill();
-    if(block) col[oy][ox]=true;
+    gx.beginPath(); gx.ellipse(cx,by*T+T-2,s*0.45,5,0,0,Math.PI*2); gx.fill();
+    // Bush body
+    gx.fillStyle=color;
+    gx.beginPath(); gx.arc(cx,cy-s*0.1,s*0.45,0,Math.PI*2); gx.fill();
+    // Highlight
+    gx.fillStyle=color.replace(')',',0.6)').replace('rgb','rgba');
+    gx.beginPath(); gx.arc(cx-s*0.1,cy-s*0.25,s*0.25,0,Math.PI*2); gx.fill();
+    // Dark leaves
+    const dk=color.replace(/\d+/g,(m,i)=>i<15?Math.max(0,parseInt(m)-30):m);
+    gx.fillStyle=dk;
+    gx.beginPath(); gx.arc(cx+s*0.15,cy+s*0.1,s*0.2,0,Math.PI*2); gx.fill();
+    col[by][bx]=true;
   }
+  [[4,12,'rgb(60,140,50)'],[8,18,'rgb(50,130,60)'],[19,16,'rgb(70,150,50)'],
+   [38,8,'rgb(55,135,55)'],[46,26,'rgb(65,145,50)'],[52,32,'rgb(50,125,55)'],
+   [56,8,'rgb(60,140,60)'],[11,38,'rgb(55,130,50)'],[42,10,'rgb(70,145,55)'],
+   [28,40,'rgb(50,135,60)'],[48,4,'rgb(60,130,50)'],[6,6,'rgb(55,140,55)'],
+   [50,36,'rgb(65,135,50)'],[19,26,'rgb(50,145,60)']
+  ].forEach(([bx,by,c])=>drawBush(bx,by,0.8,c));
 
-  // === STUMPS (blocking) ===
-  [[6,14],[50,16],[17,30],[24,4],[55,26],[38,8]
-  ].forEach(([sx,sy])=>{
-    drawObj('obj_stump',sx,sy,1.4,true);
-    if(canPlace(sx+1,sy)) col[sy][sx+1]=true;
-  });
-
-  // === BUSHES (blocking) ===
-  [[4,12],[8,18],[19,16],[38,8],[46,26],[52,32],[19,26],
-   [56,8],[11,38],[42,10],[28,40],[48,4],[6,6],[50,36]
-  ].forEach(([bx,by])=>drawObj('obj_bush',bx,by,0.85,true));
-
-  // === BARRELS & CRATES (blocking, near houses) ===
-  [[18,10],[19,10],[48,8],[49,8],[8,30],[9,30]
-  ].forEach(([bx,by],i)=>drawObj(i%2===0?'obj_barrel':'obj_barrel2',bx,by,0.85,true));
-
-  [[20,10],[50,8],[10,30]
-  ].forEach(([bx,by])=>drawObj('obj_crate',bx,by,0.85,true));
-
-  // === HOUSES (blocking, multi-tile) ===
-  function drawHouse(name,hx,hy){
-    // Check all tiles are grass
-    for(let dy=0;dy<2;dy++) for(let dx=0;dx<2;dx++){
-      if(!canPlace(hx+dx,hy+dy)) return;
-    }
-    const img=spr[name]; if(!img) return;
-    const sc=T*2.2/img.width;
-    const dw=img.width*sc, dh=img.height*sc;
-    gx.drawImage(img,0,0,img.width,img.height, hx*T+(T-dw/2),hy*T+T*2-dh,dw,dh);
-    // Block 2x2 area
-    for(let dy=0;dy<2;dy++) for(let dx=0;dx<2;dx++){
-      const cx=hx+dx, cy=hy+dy;
-      if(cx>=0&&cx<W&&cy>=0&&cy<H) col[cy][cx]=true;
-    }
+  // === STUMPS (canvas-drawn) ===
+  function drawStump(sx,sy){
+    if(tm[sy]&&tm[sy][sx]!==0) return;
+    if(col[sy]&&col[sy][sx]) return;
+    const cx=sx*T+T/2, cy=sy*T+T/2;
+    const s=T*0.35;
+    // Shadow
+    gx.fillStyle='rgba(0,0,0,0.1)';
+    gx.beginPath(); gx.ellipse(cx,sy*T+T-2,s+4,5,0,0,Math.PI*2); gx.fill();
+    // Bark (sides)
+    gx.fillStyle='#6a4a2a';
+    gx.beginPath(); gx.ellipse(cx,cy+s*0.2,s,s*0.8,0,0,Math.PI*2); gx.fill();
+    // Top (cut rings)
+    gx.fillStyle='#c8a870';
+    gx.beginPath(); gx.ellipse(cx,cy-s*0.15,s*0.85,s*0.6,0,0,Math.PI*2); gx.fill();
+    // Ring
+    gx.strokeStyle='#a08050'; gx.lineWidth=2;
+    gx.beginPath(); gx.ellipse(cx,cy-s*0.15,s*0.5,s*0.35,0,0,Math.PI*2); gx.stroke();
+    // Center
+    gx.fillStyle='#8a6840';
+    gx.beginPath(); gx.ellipse(cx,cy-s*0.15,s*0.2,s*0.15,0,0,Math.PI*2); gx.fill();
+    col[sy][sx]=true;
   }
-  drawHouse('obj_house1',17,8);
-  drawHouse('obj_house2',47,6);
-  drawHouse('obj_house1',7,28);
-  drawHouse('obj_house2',50,34);
+  [[6,14],[50,16],[17,30],[24,4],[55,26],[38,10],[20,34],[46,38]
+  ].forEach(([sx,sy])=>drawStump(sx,sy));
 
-  // === FLOWER BEDS (decorative, no collision) ===
-  [[4,16],[20,6],[48,30],[56,12],[12,36],[40,4],[52,40],[6,8]
-  ].forEach(([fx,fy])=>drawObj('obj_flowerbed',fx,fy,1.2,false));
+  // === BARRELS (canvas-drawn) ===
+  function drawBarrel(bx,by){
+    if(tm[by]&&tm[by][bx]!==0) return;
+    if(col[by]&&col[by][bx]) return;
+    const cx=bx*T+T/2, cy=by*T+T/2;
+    const w=T*0.35, h=T*0.4;
+    // Shadow
+    gx.fillStyle='rgba(0,0,0,0.1)';
+    gx.beginPath(); gx.ellipse(cx,by*T+T-2,w+2,4,0,0,Math.PI*2); gx.fill();
+    // Barrel body
+    gx.fillStyle='#a07040';
+    gx.fillRect(cx-w,cy-h,w*2,h*2);
+    // Rounded top/bottom
+    gx.fillStyle='#a07040';
+    gx.beginPath(); gx.ellipse(cx,cy-h,w,w*0.35,0,0,Math.PI*2); gx.fill();
+    gx.beginPath(); gx.ellipse(cx,cy+h,w,w*0.35,0,0,Math.PI*2); gx.fill();
+    // Bands
+    gx.fillStyle='#705030';
+    gx.fillRect(cx-w-1,cy-h*0.4,w*2+2,3);
+    gx.fillRect(cx-w-1,cy+h*0.3,w*2+2,3);
+    // Top face
+    gx.fillStyle='#b88a58';
+    gx.beginPath(); gx.ellipse(cx,cy-h,w,w*0.35,0,0,Math.PI*2); gx.fill();
+    gx.strokeStyle='#806040'; gx.lineWidth=1;
+    gx.beginPath(); gx.ellipse(cx,cy-h,w,w*0.35,0,0,Math.PI*2); gx.stroke();
+    col[by][bx]=true;
+  }
+  [[18,8],[19,8],[48,14],[49,14],[8,30],[40,36]
+  ].forEach(([bx,by])=>drawBarrel(bx,by));
 
   // === EASTER EGGS (quiz chests) ===
   const eggPos = [
