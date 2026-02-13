@@ -2,3 +2,6 @@
 .playwright-mcp/
 raw-packs/
 game_*.png
+assets/preview_*
+music-preview.html
+sfx-preview.html

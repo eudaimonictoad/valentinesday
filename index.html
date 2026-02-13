@@ -72,6 +72,8 @@
   .controls { color: #706858; font-size: 8px; text-align: center; line-height: 2.2; margin-top: 8px; }
   .blink { color: #8a7860; font-size: 10px; animation: blink 1.2s infinite; margin-top: 18px; }
   @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+  .intro-slide { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; animation: fadeSlide 0.5s ease-out; }
+  @keyframes fadeSlide { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
   #mobile-controls { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 30; display: none; }
   @media (pointer: coarse) { #mobile-controls { display: block; } }
@@ -83,19 +85,37 @@
 <body>
 
 <div id="title-screen" class="screen-overlay">
-  <h1>THE ONE TRUE<br>SARAH</h1>
-  <h2>A Valentine's Quest from Ser Ben</h2>
-  <div class="subtitle">
-    Ser Ben has penned a Valentine's message...<br>
-    but only the real Sarah may read it.<br>
-    Prove thyself! Slay the orcs and collect<br>
-    the 12 Enchanted Roses.
+  <div class="intro-slide" id="slide-0">
+    <h1 style="font-size:28px;line-height:1.6;">THE ONE TRUE<br>SARAH</h1>
+    <div class="blink" style="margin-top:30px;">PRESS ANY KEY</div>
   </div>
-  <div class="controls">
-    WASD / Arrows = Move &nbsp;&nbsp; SPACE = Attack<br>
-    Walk into glowing roses to prove yourself
+  <div class="intro-slide" id="slide-1" style="display:none;">
+    <h2 style="font-size:14px;line-height:2;">A Valentine's Quest<br>for the Lady Sarah<br>from Ser Ben</h2>
+    <div class="blink">PRESS ANY KEY</div>
   </div>
-  <div class="blink">PRESS ANY KEY TO START</div>
+  <div class="intro-slide" id="slide-2" style="display:none;">
+    <div class="subtitle" style="font-size:10px;line-height:2.4;">
+      Ser Ben has penned a Valentine's message...<br>
+      but only the real Sarah may read it.
+    </div>
+    <div class="blink">PRESS ANY KEY</div>
+  </div>
+  <div class="intro-slide" id="slide-3" style="display:none;">
+    <div class="subtitle" style="font-size:10px;line-height:2.4;">
+      Collect the 12 Enchanted Roses<br>
+      and slay the monsters<br>
+      who stand in your way.
+    </div>
+    <div class="blink">PRESS ANY KEY</div>
+  </div>
+  <div class="intro-slide" id="slide-4" style="display:none;">
+    <div class="controls" style="font-size:10px;line-height:2.8;">
+      WASD / Arrows = Move<br>
+      SPACE = Attack<br>
+      Walk into glowing roses to prove yourself
+    </div>
+    <div class="blink" style="margin-top:20px;color:#ffd700;">PRESS ANY KEY TO BEGIN</div>
+  </div>
 </div>
 
 <div id="game-over-screen" class="screen-overlay">
@@ -168,7 +188,8 @@ function loadAudio(name, src, opts) {
   a.preload = 'auto';
   sfx[name] = a;
 }
-loadAudio('music', 'assets/music_peaceful.ogg', {loop: true, volume: 0.25});
+loadAudio('music_intro', 'assets/music_dream.ogg', {loop: true, volume: 0.25});
+loadAudio('music', 'assets/music_calmvillage.ogg', {loop: true, volume: 0.25});
 loadAudio('coin', 'assets/sfx_coin.wav', {volume: 0.5});
 loadAudio('hit', 'assets/sfx_hit.wav', {volume: 0.4});
 loadAudio('success', 'assets/sfx_success.wav', {volume: 0.5});
@@ -205,7 +226,8 @@ function drawGrid(name, row, col, x, y, w, h, flip) {
 }
 
 // ===== STATE =====
-let started = false, over = false, tick = 0;
+let started = false, over = false, tick = 0, introSlide = 0;
+const TOTAL_SLIDES = 5;
 let hp = 3, score = 0, rosesFound = new Set();
 const TOTAL_ROSES = 12;
 let msgT = 0, atkT = 0, invT = 0, quizOpen = false;
@@ -565,16 +587,37 @@ function genWorld() {
 
 // ===== INPUT =====
 window.addEventListener('keydown', e => {
-  if (!started){start();return;} if(over){restart();return;} if(quizOpen)return;
+  if (!started){advanceIntro();return;} if(over){restart();return;} if(quizOpen)return;
   keys[e.key]=true;
   if (e.key===' '||e.key==='z') atkT=18;
   if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
 });
 window.addEventListener('keyup', e => keys[e.key]=false);
-document.getElementById('title-screen').onclick = ()=>{ if(!started)start(); };
+document.getElementById('title-screen').onclick = ()=>{ if(!started)advanceIntro(); };
 document.getElementById('game-over-screen').onclick = ()=>{ if(over)restart(); };
 
-function start() { document.getElementById('title-screen').style.display='none'; started=true; shuffleQuizzes(); genWorld(); playSfx('music'); }
+function advanceIntro() {
+  // Start intro music on first interaction
+  if(introSlide===0) playSfx('music_intro');
+  // Hide current slide
+  const cur=document.getElementById('slide-'+introSlide);
+  if(cur) cur.style.display='none';
+  introSlide++;
+  if(introSlide>=TOTAL_SLIDES){
+    start();
+  } else {
+    const nxt=document.getElementById('slide-'+introSlide);
+    if(nxt) { nxt.style.display='flex'; nxt.style.animation='none'; nxt.offsetHeight; nxt.style.animation='fadeSlide 0.5s ease-out'; }
+  }
+}
+
+function start() {
+  document.getElementById('title-screen').style.display='none';
+  started=true; shuffleQuizzes(); genWorld();
+  // Fade out intro music, start gameplay music
+  if(sfx.music_intro){ sfx.music_intro.pause(); sfx.music_intro.currentTime=0; }
+  playSfx('music');
+}
 function restart() {
   document.getElementById('game-over-screen').style.display='none';
   over=false; score=0; hp=3; invT=0; rosesFound.clear();
@@ -880,7 +923,7 @@ function draw() {
     const hy=12;
     X.imageSmoothingEnabled=false;
     for(let i=0;i<3;i++){
-      const frame=i<hp?0:4; // 0=full, 4=empty
+      const frame=i<hp?4:0; // 4=full, 0=empty
       X.drawImage(himg, frame*16,0,16,16, hx0+i*(hsz+hgap),hy,hsz,hsz);
     }
   }
