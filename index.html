@@ -120,7 +120,7 @@
 
 <div id="game-over-screen" class="screen-overlay">
   <h1 id="end-title"></h1>
-  <p id="end-message" style="color:#bbb;font-size:10px;text-align:center;max-width:480px;line-height:1.8;"></p>
+  <p id="end-message" style="color:#bbb;font-size:10px;text-align:center;max-width:560px;line-height:1.8;"></p>
   <div class="blink">PRESS ANY KEY TO PLAY AGAIN</div>
 </div>
 
@@ -192,7 +192,9 @@ loadAudio('music_intro', 'assets/music_dream.ogg', {loop: true, volume: 0.25});
 loadAudio('music', 'assets/music_calmvillage.ogg', {loop: true, volume: 0.25});
 loadAudio('coin', 'assets/sfx_coin.wav', {volume: 0.5});
 loadAudio('hit', 'assets/sfx_hit.wav', {volume: 0.4});
+loadAudio('slash', 'assets/sfx_slash.wav', {volume: 0.35});
 loadAudio('success', 'assets/sfx_success.wav', {volume: 0.5});
+loadAudio('victory', 'assets/sfx_victory.wav', {volume: 0.6});
 loadAudio('gameover', 'assets/sfx_gameover.wav', {volume: 0.5});
 function playSfx(name) {
   const s = sfx[name];
@@ -252,11 +254,6 @@ const Q = [
     ans:2, yes:'Schmear! Everything bagel, cream cheese, no question about it.',
     no:'It\'s Schmear! You know this one!',
     name:'Schmear Everything Bagel' },
-  { emoji:'🧬', hdr:'THE DOCTOR', q:'What did Sarah get her PhD in?',
-    opts:['Quantum physics','Marine biology','CRISPR gene editing','Neuroscience'],
-    ans:2, yes:'CRISPR gene editing! The future of medicine, no big deal.',
-    no:'CRISPR gene editing! C\'mon, you gotta know this one.',
-    name:'CRISPR Kit' },
   { emoji:'🎲', hdr:'GAME NIGHT', q:'Ben and Sarah love board games — which one has yet to cause a new board game phase?',
     opts:['Coup','Backgammon','Catan','Wingspan'],
     ans:3, yes:'Wingspan! We\'ve never touched it. Coup, backgammon, Catan though... it\'s totally not luck...',
@@ -287,25 +284,20 @@ const Q = [
     ans:1, yes:'September 7th, 2025! The day it all officially began.',
     no:'September 7th! How could you forget?! ...just kidding. Or am I?',
     name:'Love Letter' },
-  { emoji:'🍞', hdr:'BAKING', q:'What kind of bagels does Sarah bake at home?',
-    opts:['Jalapeno cheddar','Sourdough blueberry','Plain everything','Cinnamon raisin'],
-    ans:1, yes:'Sourdough blueberry! Better than any shop, honestly.',
-    no:'Sourdough blueberry! The signature creation.',
-    name:'Sourdough Starter' },
   { emoji:'🎂', hdr:'BIRTHDAY', q:'Sarah got Ben one of his favorite birthday gifts of all time — what was it?',
     opts:['A record player','A Dutch oven','A PS5','A fancy watch'],
     ans:1, yes:'A Dutch oven! It makes great japanese curry!',
     no:'A Dutch oven! It makes great japanese curry!',
     name:'Birthday Dutch Oven' },
-  { emoji:'📺', hdr:'TV NIGHT', q:'Which show have we NOT watched together?',
-    opts:['Stranger Things','Alice in Borderland','Knight of the Seven Kingdoms','Grey\'s Anatomy'],
-    ans:3, yes:'Grey\'s Anatomy?! No way. Stranger Things, Alice in Borderland, and Knight of the Seven Kingdoms though? All us.',
-    no:'It\'s Grey\'s Anatomy! We\'ve never watched that one together.',
-    name:'HBO Remote' },
+  { emoji:'📺', hdr:'TV NIGHT', q:'Which is NOT a character from a show Ben and Sarah watched together?',
+    opts:['Ryuji','Egg','Dogmeat','Michael Scott'],
+    ans:3, yes:'Michael Scott?! We never watched The Office together. Ryuji, Egg, and Dogmeat though? All us.',
+    no:'It\'s Michael Scott! We never watched The Office together.',
+    name:'TV Remote' },
   { emoji:'☕', hdr:'COFFEE SHOP CHARACTERS', q:'Which of these is NOT someone we\'ve run into at a coffee shop?',
-    opts:['Ed Sheeran (kinda)','A rich bald venture capitalist','Jessalyn','Guy Fieri'],
-    ans:3, yes:'Guy Fieri?! Nope. But Ed Sheeran, the bald VC, and Jessalyn are all real!',
-    no:'It\'s Guy Fieri! The rest are all real coffee shop characters.',
+    opts:['Ed Sheeran (kinda)','A rich bald venture capitalist','Jessalyn','Gordon Ramsay'],
+    ans:3, yes:'Gordon Ramsay?! Nope. But Ed Sheeran, the bald VC, and Jessalyn are all real!',
+    no:'It\'s Gordon Ramsay! The rest are all real coffee shop characters.',
     name:'Coffee Shop Regulars' },
   { emoji:'🧗', hdr:'CLIMBING DATE', q:'Which wall do we always end up on during climbing dates?',
     opts:['The slab','The overhang','Top rope','The lead wall'],
@@ -589,7 +581,7 @@ function genWorld() {
 window.addEventListener('keydown', e => {
   if (!started){advanceIntro();return;} if(over){restart();return;} if(quizOpen)return;
   keys[e.key]=true;
-  if (e.key===' '||e.key==='z') atkT=18;
+  if (e.key===' '||e.key==='z') { atkT=18; playSfx('slash'); }
   if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
 });
 window.addEventListener('keyup', e => keys[e.key]=false);
@@ -677,11 +669,29 @@ function showMsg(t,d) { d=d||140; document.getElementById('message-box').textCon
 function endGame(won) {
   over=true;
   sfx.music.pause();
-  if(!won) playSfx('gameover'); else playSfx('success');
+  if(!won) playSfx('gameover'); else playSfx('victory');
   const t=document.getElementById('end-title'), m=document.getElementById('end-message');
   if (won) {
     t.style.color='#ffd700'; t.textContent='THE ONE TRUE SARAH';
-    m.innerHTML='You have proven yourself worthy.<br>The 12 Enchanted Roses bloom in your honor.<br><br>Here is Ser Ben\'s message:<br><br><span style="color:#ff6688;font-size:12px;">Sarah,</span><br><br><span style="color:#f0e8d0;">You are my favorite person in this world.<br>Every dirty chai, every farmers market morning,<br>every board game night, every bus ride to see you<br>— it\'s all worth it because it\'s with you.<br><br>Happy Valentine\'s Day.</span><br><br><span style="color:#ff6688;">With all my love,<br>Ben</span><br><br><span style="color:#ffd700">'+rosesFound.size+'/'+TOTAL_ROSES+' roses</span>';
+    m.innerHTML=
+      '<span style="color:#a09080;font-size:9px;">You have proven yourself worthy.<br>The 12 Enchanted Roses bloom in your honor.</span>'
+      +'<br><br>'
+      +'<span style="color:#ff6688;font-size:13px;">Dearest Sarah,</span>'
+      +'<br><br>'
+      +'<span style="color:#f0e8d0;font-size:10px;line-height:2.2;">'
+      +'[BEN\'S MESSAGE GOES HERE]<br><br>'
+      +'Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>'
+      +'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br>'
+      +'Ut enim ad minim veniam, quis nostrud exercitation.<br><br>'
+      +'Replace this with your real message to Sarah!<br>'
+      +'This is just filler text for now.'
+      +'</span>'
+      +'<br><br>'
+      +'<span style="color:#ff6688;font-size:11px;">Happy Valentine\'s Day</span>'
+      +'<br>'
+      +'<span style="color:#ff6688;font-size:12px;">With all my love,<br>Ben</span>'
+      +'<br><br>'
+      +'<span style="color:#ffd700;font-size:9px;">'+rosesFound.size+'/'+TOTAL_ROSES+' roses</span>';
   } else {
     t.style.color='#ff4466'; t.textContent='THE ROSES WITHER...';
     m.innerHTML='Only the true Sarah may claim<br>Ser Ben\'s message. Try again!<br><br><span style="color:#ffd700">'+rosesFound.size+'/'+TOTAL_ROSES+' roses collected</span>';
