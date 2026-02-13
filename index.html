@@ -80,6 +80,8 @@
   .dpad { display: grid; grid-template: 46px 46px 46px / 46px 46px 46px; gap: 3px; }
   .dpad button { background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); border-radius: 6px; color: white; font-size: 18px; touch-action: manipulation; }
   .dpad button:active { background: rgba(255,255,255,0.25); }
+  .back-btn { position: absolute; bottom: 24px; color: rgba(160,144,128,0.4); font-size: 9px; cursor: pointer; letter-spacing: 1px; }
+  .back-btn:hover { color: rgba(160,144,128,0.7); }
 </style>
 </head>
 <body>
@@ -93,18 +95,21 @@
   <div class="intro-slide" id="slide-1" style="display:none;">
     <h2 style="font-size:14px;line-height:2;">A Valentine's Quest<br>from Ser Ben</h2>
     <div class="blink">PRESS ANY KEY</div>
+    <div class="back-btn" onclick="goBackIntro()">&#8249; back</div>
   </div>
   <div class="intro-slide" id="slide-2" style="display:none;">
     <div class="subtitle" style="font-size:14px;line-height:2.4;max-width:520px;">
       Ser Ben has penned a message meant only for the eyes of his Valentine, Lady Sarah. To make sure only she reads it, he has laid out a quest that only his Lady Sarah would be able to complete.
     </div>
     <div class="blink">PRESS ANY KEY</div>
+    <div class="back-btn" onclick="goBackIntro()">&#8249; back</div>
   </div>
   <div class="intro-slide" id="slide-3" style="display:none;">
     <div class="subtitle" style="font-size:14px;line-height:2.4;max-width:520px;">
       Collect the 12 Enchanted Roses by answering questions about your love story, and slay the monsters that stand in your path.
     </div>
     <div class="blink">PRESS ANY KEY</div>
+    <div class="back-btn" onclick="goBackIntro()">&#8249; back</div>
   </div>
   <div class="intro-slide" id="slide-4" style="display:none;">
     <div class="controls" style="font-size:13px;line-height:2.8;">
@@ -113,6 +118,7 @@
       Walk into glowing roses to prove yourself
     </div>
     <div class="blink" style="margin-top:20px;color:#ffd700;">PRESS ANY KEY TO BEGIN</div>
+    <div class="back-btn" onclick="goBackIntro()">&#8249; back</div>
   </div>
 </div>
 
@@ -135,6 +141,7 @@
     For a digital copy, you can always visit<br><a href="https://sarahs.quest/bubba" style="color:#66bbff;text-decoration:underline;">sarahs.quest/bubba</a>
   </p>
   <div class="blink" style="margin-top:30px;color:#66ffaa;cursor:pointer;" id="btn-digital">PRESS ANY KEY TO CONTINUE</div>
+  <div class="back-btn" id="btn-back-letter">&#8249; back</div>
 </div>
 
 <div id="win-digital-screen" class="screen-overlay" style="display:none;">
@@ -152,6 +159,7 @@
     <p style="color:#ff6688;font-size:11px;margin-top:20px;">Happy Valentine's Day!</p>
     <p style="color:#ff6688;font-size:12px;margin-top:8px;">With love and adoration,<br>Ben</p>
   </div>
+  <div class="back-btn" id="btn-back-digital">&#8249; back</div>
 </div>
 
 <div id="ui-overlay"></div>
@@ -623,15 +631,26 @@ function genWorld() {
 }
 
 // ===== INPUT =====
+const isBack = k => k==='Backspace'||k==='ArrowLeft';
 window.addEventListener('keydown', e => {
-  if (!started){advanceIntro();return;}
+  if (!started){
+    if(isBack(e.key)) goBackIntro(); else advanceIntro();
+    return;
+  }
   if(over){
     if(wonGame&&Date.now()-endTime>1000){
       const go=document.getElementById('game-over-screen');
       const ls=document.getElementById('win-letter-screen');
       const ds=document.getElementById('win-digital-screen');
-      if(go.style.display==='flex'){go.style.display='none';ls.style.display='flex';endTime=Date.now();}
-      else if(ls.style.display==='flex'){ls.style.display='none';ds.style.display='flex';}
+      if(isBack(e.key)){
+        // Go back through win screens
+        if(ds.style.display==='flex'){ds.style.display='none';ls.style.display='flex';endTime=Date.now();}
+        else if(ls.style.display==='flex'){ls.style.display='none';go.style.display='flex';endTime=Date.now();}
+      } else {
+        // Go forward
+        if(go.style.display==='flex'){go.style.display='none';ls.style.display='flex';endTime=Date.now();}
+        else if(ls.style.display==='flex'){ls.style.display='none';ds.style.display='flex';}
+      }
     }
     return;
   }
@@ -655,6 +674,18 @@ document.getElementById('btn-digital').onclick = ()=>{
   document.getElementById('win-letter-screen').style.display='none';
   document.getElementById('win-digital-screen').style.display='flex';
 };
+document.getElementById('btn-back-letter').onclick = (e)=>{
+  e.stopPropagation();
+  document.getElementById('win-letter-screen').style.display='none';
+  document.getElementById('game-over-screen').style.display='flex';
+  endTime=Date.now();
+};
+document.getElementById('btn-back-digital').onclick = (e)=>{
+  e.stopPropagation();
+  document.getElementById('win-digital-screen').style.display='none';
+  document.getElementById('win-letter-screen').style.display='flex';
+  endTime=Date.now();
+};
 
 function advanceIntro() {
   // Start intro music on first interaction
@@ -669,6 +700,14 @@ function advanceIntro() {
     const nxt=document.getElementById('slide-'+introSlide);
     if(nxt) { nxt.style.display='flex'; nxt.style.animation='none'; nxt.offsetHeight; nxt.style.animation='fadeSlide 0.5s ease-out'; }
   }
+}
+function goBackIntro() {
+  if(introSlide<=0) return;
+  const cur=document.getElementById('slide-'+introSlide);
+  if(cur) cur.style.display='none';
+  introSlide--;
+  const prev=document.getElementById('slide-'+introSlide);
+  if(prev) { prev.style.display='flex'; prev.style.animation='none'; prev.offsetHeight; prev.style.animation='fadeSlide 0.5s ease-out'; }
 }
 
 function start() {
@@ -760,7 +799,9 @@ function endGame(won) {
     if(kills>0) statsText+=' and slain '+kills+' monster'+(kills>1?'s':'')+' along the way';
     statsText+='.';
     m.innerHTML=
-      '<span style="color:#a09080;font-size:10px;">'+statsText+'</span>'
+      '<span style="color:#ff6688;font-size:12px;">You are The One True Valentine.</span>'
+      +'<br><br>'
+      +'<span style="color:#a09080;font-size:10px;">'+statsText+'</span>'
       +'<br><br>'
       +'<span style="color:#f0e8d0;font-size:11px;">Here is your Valentine\'s message.</span>';
   } else {
