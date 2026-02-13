@@ -86,6 +86,7 @@
 
 <div id="title-screen" class="screen-overlay">
   <div class="intro-slide" id="slide-0">
+    <div style="font-size:12px;color:#a09080;margin-bottom:8px;">Sarah's Quest:</div>
     <h1 style="font-size:28px;line-height:1.6;">THE ONE TRUE<br>VALENTINE</h1>
     <div class="blink" style="margin-top:30px;">PRESS ANY KEY</div>
   </div>
@@ -118,7 +119,39 @@
 <div id="game-over-screen" class="screen-overlay">
   <h1 id="end-title"></h1>
   <p id="end-message" style="color:#bbb;font-size:10px;text-align:center;max-width:560px;line-height:1.8;"></p>
-  <div class="blink">PRESS ANY KEY TO PLAY AGAIN</div>
+  <div id="gameover-buttons" style="display:none;margin-top:20px;gap:16px;flex-direction:column;align-items:center;">
+    <div id="btn-restart" class="blink" style="cursor:pointer;color:#ffd700;font-size:11px;padding:10px 20px;">RESTART</div>
+    <div id="btn-continue" class="blink" style="cursor:pointer;color:#66ffaa;font-size:11px;padding:10px 20px;">CONTINUE WHERE I LEFT OFF</div>
+  </div>
+  <div id="gameover-wintext" class="blink" style="display:none;cursor:pointer;">PRESS ANY KEY TO CONTINUE</div>
+</div>
+
+<div id="win-letter-screen" class="screen-overlay" style="display:none;">
+  <h1 style="color:#ffd700;font-size:18px;">YOUR VALENTINE'S MESSAGE</h1>
+  <p style="color:#f0e8d0;font-size:11px;text-align:center;max-width:520px;line-height:2.4;margin-top:20px;">
+    To receive your handwritten letter, please look within the <span style="color:#ffd700;">dutch oven</span> in your kitchen.
+  </p>
+  <p style="color:#a09080;font-size:10px;text-align:center;max-width:520px;line-height:2;margin-top:16px;">
+    For a digital copy, you can always visit<br><a href="https://sarahs.quest/bubba" style="color:#66bbff;text-decoration:underline;">sarahs.quest/bubba</a>
+  </p>
+  <div class="blink" style="margin-top:30px;color:#66ffaa;cursor:pointer;" id="btn-digital">PRESS ANY KEY TO CONTINUE</div>
+</div>
+
+<div id="win-digital-screen" class="screen-overlay" style="display:none;">
+  <div style="max-width:560px;text-align:center;line-height:2.2;">
+    <p style="color:#ff6688;font-size:14px;margin-bottom:16px;">Dear Sarah,</p>
+    <p style="color:#f0e8d0;font-size:10px;line-height:2.4;">
+      Happy Valentine's Day! I love you dearly and am so glad to spend time with you, grow with you, to have your shoulder to lean on, and be in your corner, too.
+    </p>
+    <p style="color:#f0e8d0;font-size:10px;line-height:2.4;margin-top:12px;">
+      Thank you for sharing your life with me — from emo night to Monongahela. I admire you — your humility, sweetness, and work ethic.
+    </p>
+    <p style="color:#f0e8d0;font-size:10px;line-height:2.4;margin-top:12px;">
+      More than anything, though, I adore you — and for that, I can't explain why. I love you, to the moon and back.
+    </p>
+    <p style="color:#ff6688;font-size:11px;margin-top:20px;">Happy Valentine's Day!</p>
+    <p style="color:#ff6688;font-size:12px;margin-top:8px;">With love and adoration,<br>Ben</p>
+  </div>
 </div>
 
 <div id="ui-overlay"></div>
@@ -166,6 +199,8 @@ const ASSETS = [
   ['mob_cyclope','assets/mob_cyclope.png'],
   ['mob_dragon','assets/mob_dragon.png'],
   ['mob_flam','assets/mob_flam.png'],
+  ['mob_racoon','assets/mob_racoon.png'],
+  ['mob_skull','assets/mob_skull.png'],
   ['tileset','assets/tileset.png'],
   ['tree1','assets/tree1.png'],['tree2','assets/tree2.png'],
   ['rock_stone','assets/rock_stone.png'],
@@ -208,6 +243,8 @@ const GRID = {
   mob_cyclope: [16,16,4,4],
   mob_dragon:  [16,16,4,4],
   mob_flam:    [16,16,4,4],
+  mob_racoon:  [16,16,4,4],
+  mob_skull:   [16,16,4,4],
 };
 
 // Draw a grid-based sprite: row=direction, col=animation frame
@@ -223,9 +260,9 @@ function drawGrid(name, row, col, x, y, w, h, flip) {
 }
 
 // ===== STATE =====
-let started = false, over = false, tick = 0, introSlide = 0;
+let started = false, over = false, wonGame = false, loopStarted = false, endTime = 0, tick = 0, introSlide = 0;
 const TOTAL_SLIDES = 5;
-let hp = 3, score = 0, rosesFound = new Set();
+let hp = 3, score = 0, kills = 0, rosesFound = new Set();
 const TOTAL_ROSES = 12;
 let msgT = 0, atkT = 0, invT = 0, quizOpen = false;
 
@@ -557,10 +594,15 @@ function genWorld() {
 
   // === ENEMIES (Ninja Adventure monsters) ===
   // type 0=Cyclope (tanky), 1=Dragon (medium), 2=Flam (fast)
+  // Chasers: Racoon (tanky chaser), Skull (fast chaser) — always follow player
   const ENEMY_TYPES = [
-    {type:0,hp:3,spd:0.016,mobSpr:'mob_cyclope'},
-    {type:1,hp:2,spd:0.022,mobSpr:'mob_dragon'},
-    {type:2,hp:1,spd:0.032,mobSpr:'mob_flam'},
+    {type:0,hp:3,spd:0.016,mobSpr:'mob_cyclope',chaser:false},
+    {type:1,hp:2,spd:0.022,mobSpr:'mob_dragon',chaser:false},
+    {type:2,hp:1,spd:0.032,mobSpr:'mob_flam',chaser:false},
+  ];
+  const CHASER_TYPES = [
+    {type:3,hp:4,spd:0.024,mobSpr:'mob_racoon',chaser:true},
+    {type:4,hp:2,spd:0.038,mobSpr:'mob_skull',chaser:true},
   ];
   const er = seeded(77);
   for(let i=0;i<10;i++){
@@ -570,18 +612,49 @@ function genWorld() {
     orcs.push({x:ox,y:oy,hp:ot.hp,maxHp:ot.hp,spd:ot.spd,dir:er()*Math.PI*2,ct:er()*180,
       dead:false,fr:0,at:0,fadeOut:0,...ot});
   }
+  // Spawn 2 chasers (one of each)
+  for(let i=0;i<2;i++){
+    let ox,oy;
+    do{ox=10+er()*40;oy=4+er()*34;}while(col[Math.floor(oy)]?.[Math.floor(ox)]||Math.hypot(ox-12,oy-22)<12);
+    const ct=CHASER_TYPES[i];
+    orcs.push({x:ox,y:oy,hp:ct.hp,maxHp:ct.hp,spd:ct.spd,dir:er()*Math.PI*2,ct:0,
+      dead:false,fr:0,at:0,fadeOut:0,...ct});
+  }
 }
 
 // ===== INPUT =====
 window.addEventListener('keydown', e => {
-  if (!started){advanceIntro();return;} if(over){restart();return;} if(quizOpen)return;
+  if (!started){advanceIntro();return;}
+  if(over){
+    if(wonGame&&Date.now()-endTime>1000){
+      const go=document.getElementById('game-over-screen');
+      const ls=document.getElementById('win-letter-screen');
+      const ds=document.getElementById('win-digital-screen');
+      if(go.style.display==='flex'){go.style.display='none';ls.style.display='flex';endTime=Date.now();}
+      else if(ls.style.display==='flex'){ls.style.display='none';ds.style.display='flex';}
+    }
+    return;
+  }
+  if(quizOpen)return;
   keys[e.key]=true;
   if (e.key===' '||e.key==='z') { atkT=18; playSfx('slash'); }
   if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
 });
 window.addEventListener('keyup', e => keys[e.key]=false);
 document.getElementById('title-screen').onclick = ()=>{ if(!started)advanceIntro(); };
-document.getElementById('game-over-screen').onclick = ()=>{ if(over)restart(); };
+document.getElementById('btn-restart').onclick = (e)=>{ e.stopPropagation(); if(over)restart(); };
+document.getElementById('btn-continue').onclick = (e)=>{ e.stopPropagation(); if(over)restartContinue(); };
+document.getElementById('gameover-wintext').onclick = ()=>{
+  if(Date.now()-endTime<1000)return;
+  document.getElementById('game-over-screen').style.display='none';
+  document.getElementById('win-letter-screen').style.display='flex';
+  endTime=Date.now();
+};
+document.getElementById('btn-digital').onclick = ()=>{
+  if(Date.now()-endTime<1000)return;
+  document.getElementById('win-letter-screen').style.display='none';
+  document.getElementById('win-digital-screen').style.display='flex';
+};
 
 function advanceIntro() {
   // Start intro music on first interaction
@@ -607,9 +680,24 @@ function start() {
 }
 function restart() {
   document.getElementById('game-over-screen').style.display='none';
-  over=false; score=0; hp=3; invT=0; rosesFound.clear();
+  document.getElementById('win-letter-screen').style.display='none';
+  document.getElementById('win-digital-screen').style.display='none';
+  document.getElementById('game').style.display='';
+  over=false; score=0; kills=0; hp=3; invT=0; rosesFound.clear();
   P.x=12; P.y=22; P.row=0; P.fr=0; E.x=12; E.y=23.2; E.row=0; E.fr=0;
   shuffleQuizzes(); genWorld();
+  if(sfx.music_intro){sfx.music_intro.pause();sfx.music_intro.currentTime=0;}
+  if(!loopStarted){loopStarted=true;loop();}
+  sfx.music.currentTime=0; playSfx('music');
+}
+function restartContinue() {
+  document.getElementById('game-over-screen').style.display='none';
+  over=false; hp=3; invT=0;
+  P.x=12; P.y=22; P.row=0; P.fr=0; E.x=12; E.y=23.2; E.row=0; E.fr=0;
+  // Mark already-collected roses as got in the egg list
+  eggs.forEach(e=>{ if(rosesFound.has(Q[e.qi]?.name)) e.got=true; });
+  // Respawn all enemies
+  orcs.forEach(o=>{ o.dead=false; o.hp=o.maxHp||2; o.fadeOut=undefined; });
   sfx.music.currentTime=0; playSfx('music');
 }
 
@@ -647,7 +735,7 @@ function answer(qi,ai) {
     spawn(P.x,P.y,'#ff4477',12);
     playSfx('success');
   } else {
-    res.style.color='#ff8888'; res.textContent=q.no;
+    res.style.color='#ff8888'; res.textContent=q.no+' Come back again later to answer correctly.';
     hp--; eggs.forEach(e=>{ if(e.qi===qi){e.cd=150;e.near=true;} });
     spawn(P.x,P.y,'#ff4444',8);
     playSfx('hit');
@@ -662,34 +750,29 @@ function closeQuiz() {
 
 function showMsg(t,d) { d=d||140; document.getElementById('message-box').textContent=t; document.getElementById('message-box').style.display='block'; msgT=d; }
 function endGame(won) {
-  over=true;
-  sfx.music.pause();
-  if(!won) playSfx('gameover'); else playSfx('victory');
+  over=true; wonGame=won; endTime=Date.now();
+  if(sfx.music) sfx.music.pause();
+  if(!won) playSfx('gameover'); else playSfx('music_intro');
   const t=document.getElementById('end-title'), m=document.getElementById('end-message');
   if (won) {
     t.style.color='#ffd700'; t.textContent='THE ONE TRUE VALENTINE';
+    let statsText='You have successfully collected the 12 Enchanted Roses';
+    if(kills>0) statsText+=' and slain '+kills+' monster'+(kills>1?'s':'')+' along the way';
+    statsText+='.';
     m.innerHTML=
-      '<span style="color:#a09080;font-size:9px;">You are The One True Valentine.<br>The 12 Enchanted Roses bloom in your honor.</span>'
+      '<span style="color:#a09080;font-size:10px;">'+statsText+'</span>'
       +'<br><br>'
-      +'<span style="color:#ff6688;font-size:13px;">Dearest Sarah,</span>'
-      +'<br><br>'
-      +'<span style="color:#f0e8d0;font-size:10px;line-height:2.2;">'
-      +'[BEN\'S MESSAGE GOES HERE]<br><br>'
-      +'Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>'
-      +'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br>'
-      +'Ut enim ad minim veniam, quis nostrud exercitation.<br><br>'
-      +'Replace this with your real message to Sarah!<br>'
-      +'This is just filler text for now.'
-      +'</span>'
-      +'<br><br>'
-      +'<span style="color:#ff6688;font-size:11px;">Happy Valentine\'s Day</span>'
-      +'<br>'
-      +'<span style="color:#ff6688;font-size:12px;">With all my love,<br>Ben</span>'
-      +'<br><br>'
-      +'<span style="color:#ffd700;font-size:9px;">'+rosesFound.size+'/'+TOTAL_ROSES+' roses</span>';
+      +'<span style="color:#f0e8d0;font-size:11px;">Here is your Valentine\'s message.</span>';
   } else {
     t.style.color='#ff4466'; t.textContent='THE ROSES WITHER...';
     m.innerHTML='Only the One True Valentine may claim<br>Ser Ben\'s message. Try again!<br><br><span style="color:#ffd700">'+rosesFound.size+'/'+TOTAL_ROSES+' roses collected</span>';
+  }
+  if(won){
+    document.getElementById('gameover-buttons').style.display='none';
+    document.getElementById('gameover-wintext').style.display='block';
+  } else {
+    document.getElementById('gameover-buttons').style.display='flex';
+    document.getElementById('gameover-wintext').style.display='none';
   }
   document.getElementById('game-over-screen').style.display='flex';
 }
@@ -753,8 +836,13 @@ function update() {
   // Enemies
   orcs.forEach(o=>{
     if(o.dead){ return; }
-    o.ct--;
-    if(o.ct<=0){o.dir=Math.random()<0.3?Math.atan2(P.y-o.y,P.x-o.x):Math.random()*Math.PI*2;o.ct=50+Math.random()*120;}
+    if(o.chaser){
+      // Chasers always track the player
+      o.dir=Math.atan2(P.y-o.y,P.x-o.x);
+    } else {
+      o.ct--;
+      if(o.ct<=0){o.dir=Math.random()<0.3?Math.atan2(P.y-o.y,P.x-o.x):Math.random()*Math.PI*2;o.ct=50+Math.random()*120;}
+    }
     let nx=o.x+Math.cos(o.dir)*o.spd, ny=o.y+Math.sin(o.dir)*o.spd;
     let tx=Math.floor(nx),ty=Math.floor(ny);
     if(tx>=0&&tx<W&&ty>=0&&ty<H&&!col[ty][tx]){o.x=nx;o.y=ny;}else o.dir+=Math.PI;
@@ -769,7 +857,7 @@ function update() {
       let ax=P.x+P.dir*1.2;
       if(Math.hypot(ax-o.x,P.y-o.y)<1.5){
         o.hp--;spawn(o.x,o.y,'#ffaa44',6);
-        if(o.hp<=0){o.dead=true;o.fadeOut=0;score+=3;playSfx('coin');}
+        if(o.hp<=0){o.dead=true;o.fadeOut=0;score+=3;kills++;playSfx('coin');}
       }
     }
   });
@@ -952,7 +1040,27 @@ function draw() {
 
 // ===== LOOP =====
 function loop() { update(); draw(); requestAnimationFrame(loop); }
-Promise.all(ASSETS.map(([n,s])=>loadImg(n,s))).then(loop);
+Promise.all(ASSETS.map(([n,s])=>loadImg(n,s))).then(()=>{
+  // ?preview jumps straight to win sequence, /bubba jumps to digital letter
+  const params = new URLSearchParams(window.location.search);
+  if(window.location.pathname==='/bubba'){
+    document.getElementById('title-screen').style.display='none';
+    document.getElementById('game').style.display='none';
+    document.getElementById('win-digital-screen').style.display='flex';
+    over=true; wonGame=true; started=true;
+    document.getElementById('btn-play-again').textContent='PLAY THE GAME';
+    return;
+  }
+  if(params.has('preview')){
+    document.getElementById('title-screen').style.display='none';
+    document.getElementById('game').style.display='none';
+    kills=7; rosesFound=new Set(['a','b','c','d','e','f','g','h','i','j','k','l']);
+    over=true; wonGame=true; started=true;
+    endGame(true);
+    return;
+  }
+  loopStarted=true; loop();
+});
 </script>
 </body>
 </html>
