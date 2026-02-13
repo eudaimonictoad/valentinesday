@@ -620,11 +620,12 @@ function genWorld() {
     orcs.push({x:ox,y:oy,hp:ot.hp,maxHp:ot.hp,spd:ot.spd,dir:er()*Math.PI*2,ct:er()*180,
       dead:false,fr:0,at:0,fadeOut:0,...ot});
   }
-  // Spawn 2 chasers (one of each)
-  for(let i=0;i<2;i++){
+  // Spawn 4 chasers (3 racoons, 1 skull)
+  const chaserList=[0,0,0,1];
+  for(let i=0;i<4;i++){
     let ox,oy;
     do{ox=10+er()*40;oy=4+er()*34;}while(col[Math.floor(oy)]?.[Math.floor(ox)]||Math.hypot(ox-12,oy-22)<12);
-    const ct=CHASER_TYPES[i];
+    const ct=CHASER_TYPES[chaserList[i]];
     orcs.push({x:ox,y:oy,hp:ct.hp,maxHp:ct.hp,spd:ct.spd,dir:er()*Math.PI*2,ct:0,
       dead:false,fr:0,at:0,fadeOut:0,...ct});
   }
