@@ -159,12 +159,12 @@ const ASSETS = [
   ['sunflower','assets/sunflower.png'],['well','assets/well.png'],
 ];
 
-// Grid sprite sheets: 4 cols (animation frames) x 4 rows (directions)
-// Rows: 0=down, 1=left, 2=right, 3=up
+// Grid sprite sheets: cols = directions, rows = animation frames
+// Cols: 0=down, 1=up, 2=left, 3=right
 // Sprite info: [frameW, frameH, cols, rows]
 // All Ninja Adventure sprites are 16x16 per frame in a grid
-// Characters: 64x112 = 4 cols x 7 rows (rows 0-3: walk down/left/right/up, 4-6: idle)
-// Monsters:   64x64  = 4 cols x 4 rows (rows 0-3: walk down/left/right/up)
+// Characters: 64x112 = 4 cols(dirs) x 7 rows(frames) — walk rows 0-3, idle row 4, atk row 5, jump row 6
+// Monsters:   64x64  = 4 cols(dirs) x 4 rows(frames)
 const GRID = {
   princess:    [16,16,4,7],
   eggboy:      [16,16,4,7],
@@ -635,10 +635,10 @@ function update() {
     let tx=Math.floor(nx),ty=Math.floor(ny);
     if(tx>=0&&tx<W&&ty>=0&&ty<H&&!col[ty][tx]){P.x=nx;P.y=ny;}
     P.state='walk'; P.at++;
-    if(P.at>6){P.fr=(P.fr+1)%4;P.at=0;}
-    // Set direction row: 0=down,1=left,2=right,3=up
-    if(dy>0) P.row=0; else if(dy<0) P.row=3;
-    if(dx<0) P.row=1; else if(dx>0) P.row=2;
+    if(P.at>8){P.fr=(P.fr+1)%4;P.at=0;}
+    // Set direction row: 0=down,1=up,2=left,3=right
+    if(dy>0) P.row=0; else if(dy<0) P.row=1;
+    if(dx<0) P.row=2; else if(dx>0) P.row=3;
   } else {
     P.state=atkT>0?'attack':'idle';
     P.fr=0; P.at=0; // stay on frame 0 when idle
@@ -650,8 +650,8 @@ function update() {
   let edx=P.x-E.x, edy=(P.y+0.7)-E.y, ed=Math.hypot(edx,edy);
   if(ed>1.3){
     E.x+=edx*0.035;E.y+=edy*0.035;
-    if(Math.abs(edx)>Math.abs(edy)) E.row=edx>0?2:1;
-    else E.row=edy>0?0:3;
+    if(Math.abs(edx)>Math.abs(edy)) E.row=edx>0?3:2;
+    else E.row=edy>0?0:1;
     E.at++; if(E.at>10){E.fr=(E.fr+1)%4;E.at=0;}
   } else {
     E.fr=0; E.at=0; // stay on frame 0 when idle
@@ -773,8 +773,8 @@ function draw() {
       let dirAngle = o.dir;
       let row;
       let adx=Math.cos(dirAngle), ady=Math.sin(dirAngle);
-      if(Math.abs(adx)>Math.abs(ady)) row=adx>0?2:1;
-      else row=ady>0?0:3;
+      if(Math.abs(adx)>Math.abs(ady)) row=adx>0?3:2;
+      else row=ady>0?0:1;
       if(o.dead){
         o.fadeOut=Math.min(1,o.fadeOut+0.04);
         X.globalAlpha=Math.max(0,1-o.fadeOut);
@@ -782,7 +782,7 @@ function draw() {
         drawGrid(o.mobSpr,0,0,sx-shrink/2,sy-shrink/2+(o.fadeOut*20),shrink,shrink,false);
         X.globalAlpha=1;
       } else {
-        drawGrid(o.mobSpr,row,o.fr%4,sx-MOB_SZ/2,sy-MOB_SZ/2,MOB_SZ,MOB_SZ,false);
+        drawGrid(o.mobSpr,o.fr%4,row,sx-MOB_SZ/2,sy-MOB_SZ/2,MOB_SZ,MOB_SZ,false);
         // HP bar
         let barW=T*0.7;
         X.fillStyle='#200'; X.fillRect(sx-barW/2,sy-MOB_SZ/2-6,barW,4);
@@ -796,7 +796,7 @@ function draw() {
   const EGG_SZ = T*0.9; // 16x16 frames, square
   dl.push({y:E.y, fn:()=>{
     let sx=(E.x-cx)*T, sy=(E.y-cy)*T;
-    drawGrid('eggboy',E.row,E.fr,sx-EGG_SZ/2,sy-EGG_SZ+T*0.3,EGG_SZ,EGG_SZ,false);
+    drawGrid('eggboy',E.fr,E.row,sx-EGG_SZ/2,sy-EGG_SZ+T*0.3,EGG_SZ,EGG_SZ,false);
     X.font='7px "Press Start 2P"'; X.fillStyle='#ffd700'; X.textAlign='center';
     X.fillText('EGG',sx,sy-EGG_SZ+T*0.15);
   }});
@@ -807,12 +807,12 @@ function draw() {
     let sx=(P.x-cx)*T, sy=(P.y-cy)*T;
     if(invT>0&&Math.floor(invT/5)%2)X.globalAlpha=0.4;
 
-    drawGrid('princess',P.row,P.fr,sx-SARAH_SZ/2,sy-SARAH_SZ+T*0.3,SARAH_SZ,SARAH_SZ,false);
+    drawGrid('princess',P.fr,P.row,sx-SARAH_SZ/2,sy-SARAH_SZ+T*0.3,SARAH_SZ,SARAH_SZ,false);
 
     // Attack flash effect
     if(atkT>0){
       X.save(); X.globalAlpha=0.5;
-      let slashX=sx+(P.row===2?1:P.row===1?-1:0)*T*0.6, slashY=sy-T*0.1;
+      let slashX=sx+(P.row===3?1:P.row===2?-1:0)*T*0.6, slashY=sy-T*0.1;
       X.fillStyle='#fff';
       X.beginPath(); X.arc(slashX,slashY,T*0.3*(atkT/18),0,Math.PI*2); X.fill();
       X.restore();
