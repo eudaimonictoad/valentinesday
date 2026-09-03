@@ -21,7 +21,9 @@ Edit `src/config.json` (Patricia's keepsake, Chloe's keepsake, the Joker's locat
 python3 escape-room/src/build_all.py
 ```
 
-That regenerates the HTML in `html/` and the PDFs in `pdf/` (needs Node + Playwright with Chromium, which the render script points at; if that's not on your machine, just open the HTML files in Chrome and print to PDF with backgrounds on).
+That regenerates the HTML in `html/` and the PDFs in `pdf/`. It needs the fonts (`bash escape-room/fonts/get-fonts.sh` downloads them once) and Node + Playwright with Chromium for the PDF step; if that's not on your machine, open the HTML files in Chrome and print to PDF with backgrounds on.
+
+The PDFs and font files are not committed (GitHub access from this session only allowed text files); the PDFs were delivered directly in the chat.
 
 ## Changing the cipher answer
 
