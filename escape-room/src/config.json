@@ -1,0 +1,6 @@
+{
+  "_comment": "Edit these three, then run: python3 escape-room/src/build_all.py",
+  "patricia_keepsake": "a tin of coffee",
+  "chloe_keepsake": "a pillowcase",
+  "joker_location": "inside the oven, which must be cold"
+}

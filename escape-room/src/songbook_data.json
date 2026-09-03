@@ -1,0 +1,313 @@
+[
+ {
+  "title": "The Barista's Hornpipe",
+  "beats": 4,
+  "numbering": {
+   "accent": 36,
+   "dotted_eighth_sixteenth": 26,
+   "dotted_half": 12,
+   "eighth_pair": 15,
+   "eighth_rest": 40,
+   "flat": 21,
+   "half": 29,
+   "quarter": 32,
+   "sharp": 28,
+   "sixteenth_quad": 22,
+   "staccato": 9
+  }
+ },
+ {
+  "title": "Air for a Rainy Tuesday",
+  "beats": 4,
+  "numbering": {
+   "dotted_quarter": 4,
+   "fermata": 15,
+   "half": 28,
+   "half_rest": 33,
+   "quarter": 29,
+   "sixteenth": 17,
+   "sixteenth_rest": 19,
+   "staccato": 18,
+   "whole": 32
+  }
+ },
+ {
+  "title": "The Copy-Shop Reel",
+  "beats": 4,
+  "numbering": {
+   "accent": 8,
+   "chord": 2,
+   "dotted_half": 23,
+   "eighth": 3,
+   "quarter": 32,
+   "sixteenth_rest": 40,
+   "tie": 20,
+   "whole": 38
+  }
+ },
+ {
+  "title": "Waltz for a Geneticist",
+  "beats": 3,
+  "numbering": {
+   "dotted_eighth_sixteenth": 23,
+   "eighth_pair": 17,
+   "flat": 36,
+   "grace": 9,
+   "half_rest": 25,
+   "quarter": 7,
+   "quarter_rest": 22,
+   "sixteenth_pair": 3,
+   "sixteenth_quad": 29,
+   "tie": 31,
+   "triplet": 4
+  }
+ },
+ {
+  "title": "The Milkmaid's Lament",
+  "beats": 4,
+  "numbering": {
+   "accent": 40,
+   "chord": 38,
+   "dotted_half": 22,
+   "half_rest": 36,
+   "quarter": 34,
+   "quarter_rest": 25,
+   "sixteenth": 23,
+   "sixteenth_rest": 5
+  }
+ },
+ {
+  "title": "Coffee at Dawn",
+  "beats": 4,
+  "numbering": {
+   "dotted_half": 26,
+   "flat": 19,
+   "half": 34,
+   "half_rest": 9,
+   "quarter": 8,
+   "sharp": 7,
+   "sixteenth": 36,
+   "sixteenth_quad": 40,
+   "staccato": 38,
+   "tie": 37,
+   "whole_rest": 2
+  }
+ },
+ {
+  "title": "A Nocturne for the Park",
+  "beats": 3,
+  "numbering": {
+   "accent": 6,
+   "dotted_eighth_sixteenth": 30,
+   "eighth_rest": 9,
+   "fermata": 38,
+   "half_rest": 35,
+   "quarter": 21,
+   "sixteenth_rest": 26,
+   "tie": 39
+  }
+ },
+ {
+  "title": "The Lemon Tree Polka",
+  "beats": 4,
+  "numbering": {
+   "dotted_half": 26,
+   "dotted_quarter": 28,
+   "eighth": 24,
+   "eighth_rest": 31,
+   "fermata": 34,
+   "flat": 12,
+   "quarter": 30,
+   "sixteenth_pair": 15,
+   "whole": 3,
+   "whole_rest": 36
+  }
+ },
+ {
+  "title": "The Painter's Gavotte",
+  "beats": 4,
+  "numbering": {
+   "accent": 14,
+   "eighth": 7,
+   "eighth_pair": 15,
+   "fermata": 21,
+   "grace": 29,
+   "half": 36,
+   "quarter": 25,
+   "sixteenth_quad": 3,
+   "whole": 34
+  }
+ },
+ {
+  "title": "March of the Small Paintings",
+  "beats": 4,
+  "numbering": {
+   "accent": 4,
+   "chord": 40,
+   "dotted_eighth_sixteenth": 3,
+   "eighth": 28,
+   "quarter": 36,
+   "quarter_rest": 16,
+   "staccato": 18,
+   "whole": 9
+  }
+ },
+ {
+  "title": "The Tram to Brunswick",
+  "beats": 4,
+  "numbering": {
+   "chord": 16,
+   "dotted_half": 15,
+   "fermata": 18,
+   "flat": 37,
+   "half": 13,
+   "half_rest": 8,
+   "quarter": 30,
+   "sixteenth_pair": 12,
+   "sixteenth_quad": 11,
+   "sixteenth_rest": 20
+  }
+ },
+ {
+  "title": "Song of the Sock Drawer",
+  "beats": 3,
+  "numbering": {
+   "dotted_eighth_sixteenth": 28,
+   "dotted_half": 17,
+   "eighth_rest": 7,
+   "grace": 33,
+   "quarter": 37,
+   "sixteenth": 31,
+   "sixteenth_quad": 34,
+   "sixteenth_rest": 9,
+   "staccato": 19,
+   "tie": 11
+  }
+ },
+ {
+  "title": "Minuet for Two Teacups",
+  "beats": 3,
+  "numbering": {
+   "chord": 25,
+   "dotted_eighth": 39,
+   "dotted_eighth_sixteenth": 16,
+   "dotted_half": 12,
+   "half": 22,
+   "quarter": 1,
+   "quarter_rest": 14,
+   "sixteenth_pair": 29,
+   "sixteenth_quad": 13,
+   "sixteenth_rest": 8,
+   "triplet": 6
+  }
+ },
+ {
+  "title": "The Landlord's Jig",
+  "beats": 4,
+  "numbering": {
+   "dotted_eighth_sixteenth": 38,
+   "eighth": 20,
+   "grace": 11,
+   "half_rest": 5,
+   "quarter": 26,
+   "sharp": 33,
+   "sixteenth_pair": 35,
+   "sixteenth_quad": 4,
+   "staccato": 40,
+   "whole_rest": 34
+  }
+ },
+ {
+  "title": "Lullaby for a Houseplant",
+  "beats": 3,
+  "numbering": {
+   "accent": 9,
+   "chord": 15,
+   "dotted_half": 23,
+   "dotted_quarter": 31,
+   "eighth_rest": 8,
+   "fermata": 5,
+   "flat": 37,
+   "quarter": 38,
+   "sixteenth_pair": 17,
+   "sixteenth_quad": 24,
+   "staccato": 18
+  }
+ },
+ {
+  "title": "The Fire-Escape Waltz",
+  "beats": 3,
+  "numbering": {
+   "accent": 34,
+   "dotted_half": 1,
+   "eighth": 23,
+   "eighth_pair": 16,
+   "eighth_rest": 2,
+   "fermata": 24,
+   "grace": 37,
+   "quarter": 22
+  }
+ },
+ {
+  "title": "Hymn to the Dishwasher",
+  "beats": 4,
+  "numbering": {
+   "accent": 38,
+   "chord": 18,
+   "dotted_eighth": 14,
+   "eighth": 1,
+   "eighth_rest": 21,
+   "half": 13,
+   "half_rest": 37,
+   "quarter": 28,
+   "sharp": 40,
+   "sixteenth_pair": 22,
+   "tie": 16
+  }
+ },
+ {
+  "title": "The Sunday Crossword Rag",
+  "beats": 4,
+  "numbering": {
+   "dotted_quarter": 26,
+   "flat": 27,
+   "grace": 15,
+   "half": 33,
+   "half_rest": 3,
+   "quarter": 20,
+   "quarter_rest": 6,
+   "sixteenth_pair": 35
+  }
+ },
+ {
+  "title": "Serenade for the Last Slice",
+  "beats": 4,
+  "numbering": {
+   "dotted_eighth_sixteenth": 37,
+   "eighth_pair": 11,
+   "fermata": 24,
+   "flat": 7,
+   "half": 19,
+   "quarter": 13,
+   "sixteenth_quad": 8,
+   "tie": 16,
+   "whole": 18
+  }
+ },
+ {
+  "title": "Farewell to the Fourth Floor",
+  "beats": 4,
+  "numbering": {
+   "accent": 11,
+   "chord": 35,
+   "dotted_eighth_sixteenth": 30,
+   "grace": 5,
+   "half": 33,
+   "quarter": 32,
+   "sixteenth": 16,
+   "sixteenth_rest": 26,
+   "triplet": 40,
+   "whole": 14
+  }
+ }
+]
