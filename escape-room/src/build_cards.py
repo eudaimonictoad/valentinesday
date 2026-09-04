@@ -37,11 +37,14 @@ def build():
             rows += f'<div class="c"><b>{rank} of {suit}</b> — {meaning}; its fortune is sought <i>{PLACES[p]}</i>.</div>'
             p += 1
         blocks.append(f'<div class="suit"><h3><span>{sym}</span> {suit} <span class="small" style="font-family:\'IM Fell English\';font-style:italic;letter-spacing:0;text-transform:none">— {theme}</span></h3>{rows}</div>')
+    # the two Jokers, set as a fifth suit so they do not stand out
+    jrows = (f'<div class="c"><b>The Red Joker</b> — the fool who knows everything and says nothing; its fortune is sought <i>{esc(cfg["joker_location"])}</i>.</div>'
+             f'<div class="c"><b>The Black Joker</b> — the fool who says everything and knows nothing; its fortune is sought <i>inside a rolled-up yoga mat</i>.</div>')
+    blocks.append(f'<div class="suit"><h3><span>✦</span> Jokers <span class="small" style="font-family:\'IM Fell English\';font-style:italic;letter-spacing:0;text-transform:none">— matters that fit nowhere else</span></h3>{jrows}</div>')
     body = f"""<div class="page">
 {masthead("The Cartomancer's Pocket Guide", 'The Meaning of every Card, and where its Fortune is to be Sought', 'As practised in the Kitchens of Europe · Sixth Printing')}
 <p class="preface">Draw a card, or be given one, or find one where no card ought to be. Read its meaning below, and then, if you are brave, go and look for its fortune in the place appointed. The places are traditional and have not been altered in six printings. The cards do not care whether you believe them.</p>
 <div class="cols2">{''.join(blocks)}</div>
-<div class="joker"><b>The Joker</b> (either colour) — the fool who knows everything and says nothing; the card that appears where it was not put. Its fortune is sought <i>{esc(cfg['joker_location'])}</i>. {esc(cfg.get('joker_quip', ''))}</div>
 <div class="foot">The Cartomancer's Pocket Guide</div>
 </div>"""
     write_page('07-cartomancers-pocket-guide', body, "The Cartomancer's Pocket Guide", CSS)

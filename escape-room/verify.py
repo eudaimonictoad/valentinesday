@@ -38,11 +38,12 @@ for nm in ('Patricia', 'Chloe', 'Shirley'):
     chk(f"{nm}'s keepsake is unique in the register", reg.count(keep(nm)) == 1)
 
 cards = H('07-cartomancers-pocket-guide')
-chk("C4 Joker -> Dutch oven", 'fortune is sought <i>in the Dutch oven' in cards)
+chk("C4 Red Joker -> Dutch oven", 'The Red Joker</b>' in cards and 'fortune is sought <i>in the Dutch oven' in cards)
+chk("Joker is set like the other suits, not boxed", 'class="joker"' not in cards)
 chk("B3 Queen of Hearts -> toilet cistern",
     'Queen of Hearts</b> — a kind and loyal woman; its fortune is sought <i>at the back of the upstairs toilet' in cards)
 fortunes = re.findall(r'fortune is sought <i>([^<]*)', cards)
-chk("52 cards + joker have fortunes", len(fortunes) == 53, len(fortunes))
+chk("52 cards + two jokers have fortunes", len(fortunes) == 54, len(fortunes))
 chk("all fortunes distinct", len(set(fortunes)) == len(fortunes))
 REAL = ['backgammon', 'wingspan', 'liquor', 'meditation', 'cushion', 'suitcase', 'backpack', 'sweets', 'candy', 'frame', 'picture', 'photo', 'puzzle', 'jigsaw']
 chk("no card fortune points at a real hiding place", not [f for f in fortunes if any(w in f.lower() for w in REAL)])
