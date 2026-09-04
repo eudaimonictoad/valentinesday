@@ -3,7 +3,6 @@
 # the combined PDF, to be torn off. File name kept for the merge script.
 import json
 from common import *
-from content_clues import CLUES
 
 CSS = """
 .warn { border: 3px double #000; padding: 6px 12px; text-align: center; font-family: 'IM Fell DW Pica SC'; font-size: 12pt; letter-spacing: 0.1em; margin-bottom: 8px; }
@@ -198,16 +197,15 @@ def build():
 <li><span class="key">PURPLE</span> and <span class="key">LIGHT BLUE</span> are not used. Put them in a drawer.</li>
 </ol>
 <p style="font-size:9.4pt;font-style:italic">Two locks is the whole scheme. The wheel exists to produce the second key, so it cannot be skipped.</p>
-<div class="foot">Game-master's setup guide &middot; 2 of 5</div>
+<div class="foot">Game-master&rsquo;s setup guide &middot; one of the eight leaves to remove</div>
 </div>
 <div class="page">
 <h3>Every hiding place and what goes in it</h3>
 <table><tr><th>Place</th><th>Contents</th></tr>{prows}</table>
-<div class="foot">Game-master's setup guide · 3 of 5</div>
+<div class="foot">Game-master&rsquo;s setup guide &middot; last leaf but one; the cipher solution follows, remove that too</div>
 </div>"""
-    clue_rows = "<br>\n".join(f'&nbsp;&nbsp;<b>{l}</b> &mdash; <i>{t}</i>' for l, t in CLUES)
     page3 = f"""<div class="page">
-<h3>Everything you write by hand · there are only five things</h3>
+<h3>Everything you write by hand · there are only two things left</h3>
 
 <div class="write"><b>1 · The welcome letter.</b> Your words, your handwriting. It must do three jobs and no more:
 give her the address <span class="mono">sarahs.quest</span>; warn her that some things she finds will not make
@@ -215,31 +213,27 @@ sense on the day she finds them; and end with a line in your own voice. Do not e
 Do not mention the suitcase. If you are stuck for an opening: <i>&ldquo;There are six paintings in this apartment and
 every one of them is a question. You will need a scale, a knife, a pin, and more patience than I deserve.&rdquo;</i></div>
 
-<div class="write"><b>2 · The six painting backs.</b> These are printed for you on the sheet titled <i>The Six Painting Backs</i>. Cut each card out on its frame line, which trims away the name above it, and fasten one to the back of each painting.<br>
-{clue_rows}</div>
 
-<div class="write"><b>3 · The wall.</b> Two inks on one surface. The tracing sheet two pages back shows the whole thing laid out.<br>
+<div class="write"><b>2 · The wall.</b> Two inks on one surface. The tracing sheet two pages back shows the whole thing laid out.<br>
 &nbsp;&nbsp;<b>Line one, dry-erase marker, large:</b> <span class="mono">ALIEN BLUES</span><br>
 &nbsp;&nbsp;<b>Line two, mixed.</b> The lowercase words go in dry-erase marker. The CAPITAL words go in invisible ink, as pig-pen shapes, in the gaps:<br>
 &nbsp;&nbsp;<span class="mono">BREATHE in BREATHE out open the GREEN thing you SIT on</span><br>
 &nbsp;&nbsp;So what she sees walking in is <i>ALIEN BLUES / ___ in ___ out open the ___ thing you ___ on</i>, a sentence with holes in it.
 Under the blue light the holes fill with shapes, and with the pig-pen sheet the shapes read BREATHE, BREATHE, GREEN, SIT. That is 22 shapes to draw.
-The visible words give nothing away; the hidden ones are the answer, so she still needs the pen and the sheet. Test a corner first:
-glass and glazed tile wipe clean, grout and stone do not. The mirror is the safest surface in the room.</div>
+The visible words give nothing away; the hidden ones are the answer, so she still needs the pen and the sheet.</div>
+</div>
 
-<div class="write"><b>4 · The cipher card.</b> Any scrap of paper. In capitals, exactly, with the spaces where they are:
-<div class="mono" style="text-align:center;font-size:15pt;margin:6px 0">DW5OY7 H5W VKYJ LKRWQ</div>
-Put it in a small envelope. On the envelope write: <i>This will mean nothing until the hour is set.</i>
-Tuck it just inside the cushion&rsquo;s zip, where a hand will meet it straight away.</div>
 
-<div class="write"><b>5 · Three hint envelopes</b> (optional, but they save the evening). Seal three envelopes and label them
-<i>If you are stuck on the music</i>, <i>If you are stuck on the knife</i>, and <i>If you are stuck at the very end</i>.
-Inside each, one sentence: <i>Everything you need is at sarahs.quest/hints.html &mdash; and I will not think less of you.</i></div>
+<div class="foot">Game-master&rsquo;s setup guide &middot; one of the eight leaves to remove</div>
+</div>
+<div class="page">
+<h3>Printed for you &middot; you write none of this</h3>
+<div class="write"><b>Cut these out during set-up.</b> <b>The six painting backs</b> &mdash; the sheet titled <i>The Six Painting Backs</i>; cut each card out on its frame line, which trims off the name above it, and tape one to the back of its painting. <b>The cipher card and four envelope labels</b> &mdash; the sheet titled <i>Cut-Outs</i>; the cipher card goes in a small envelope just inside the meditation cushion&rsquo;s zip, and the three hint envelopes are optional but they save the evening.</div>
 
 <h3>What you do not write</h3>
 <p style="font-size:9.6pt">The flags&rsquo; pigpen is already on the website. The register, the card guide, the concordance,
 the songbook, the knife catalogue and the recipe book are printed and final. The only cipher you draw by hand is the wall.</p>
-<div class="foot">Game-master&rsquo;s setup guide · 4 of 5</div>
+<div class="foot">Game-master&rsquo;s setup guide &middot; one of the eight leaves to remove</div>
 </div>
 <div class="page">
 <h3>The five tests, before she arrives</h3>
@@ -268,14 +262,14 @@ the songbook, the knife catalogue and the recipe book are printed and final. The
 <li>Load one lemon with the Joker and set the bowl out. Knife and scale on the counter.</li>
 <li>Cipher card into the cushion. Write the wall. Flyer on the fridge.</li>
 <li>Scatter the seven open sheets around the room: knife catalogue, songbook, Stars and Their Notes, receipt book, register, cartomancer's guide, concordance. The Prophet onto the shelf among other books. Keep the pig-pen key and both plates for their hiding places.</li>
-<li>Tear the last <b>seven</b> leaves out of the printed packet and hide them from yourself: the wall to trace, these five guide pages, and the cipher solution. The wall sheet is the first of the seven and it gives the answer away, so count from the back and be sure you have all seven.</li>
+<li>Tear the last <b>eight</b> leaves out of the printed packet and hide them from yourself: the wall to trace, these six guide pages, and the cipher solution. The wall sheet is the first of the eight and it gives the answer away, so count from the back and be sure you have all eight.</li>
 </ol>
 
 <h3>If she stalls</h3>
 <p style="font-size:9.6pt"><span class="mono">sarahs.quest/hints.html</span> holds a hint for every predicament in the game, each with a nudge,
 then a firmer nudge, then the answer outright. It is linked in a box at the top of the flags page, so she can reach it
 on her own and you never have to be the one who gives it away. Or just tell her; you are allowed.</p>
-<div class="foot">Game-master&rsquo;s setup guide · 5 of 5 · the cipher solution follows, remove that too</div>
+<div class="foot">Game-master&rsquo;s setup guide &middot; last leaf but one; the cipher solution follows, remove that too</div>
 </div>"""
     write_page('10-mapping-GAMEMASTER-remove', page1 + page2 + page3, "Game-master's setup guide", CSS)
 

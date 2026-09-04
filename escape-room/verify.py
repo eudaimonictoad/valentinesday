@@ -112,8 +112,8 @@ chk("F5 neither painting spot collides with a card fortune", not hits, hits)
 chk("F6 candy jar no longer holds the paintings",
     'Abyssinia painting' not in gm.split('The candy jar')[1].split('</tr>')[0] if 'The candy jar' in gm else False)
 chk("F7 guide's candy-jar row names the framer's card", "framer's delivery card" in gm)
-chk("F8 guide tells him to tear off seven leaves, not six",
-    'seven</b> leaves' in gm and 'last six leaves' not in gm)
+chk("F8 guide's tear-off count matches the real game-master section",
+    'eight</b> leaves' in gm and 'last six leaves' not in gm and 'seven</b> leaves' not in gm)
 chk("F9 set-up order places the pen and card in the jar", 'into the candy jar' in gm)
 
 chk("F10 no reprint cover hard-codes a painting location",
@@ -126,8 +126,8 @@ from content_clues import CLUES
 backs = H('14-painting-back-clues')
 chk("G1 all six painting clues are printed on cards", all(t in backs for _, t in CLUES),
     [l for l, t in CLUES if t not in backs])
-chk("G1 the guide lists the same six clues", all(t in gm for _, t in CLUES),
-    [l for l, t in CLUES if t not in gm])
+chk("G1 the guide points at the cards instead of repeating them",
+    'The Six Painting Backs' in gm and not [t for _, t in CLUES if t in gm])
 chk("G2 each painting name sits outside its frame, to be trimmed",
     backs.count('this row is trimmed off') == 6, backs.count('this row is trimmed off'))
 chk("G3 the clue cards do not name a hiding place",

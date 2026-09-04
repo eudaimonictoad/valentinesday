@@ -21,6 +21,7 @@ HERS = [
     ('12-clue-frames',              'Clue frames (12 blanks)'),
     ('14-painting-back-clues',      'The six painting backs'),
     ('13-framers-delivery-card',    "Framer's delivery card"),
+    ('15-cutouts',                  'Cut-outs: cipher card and envelope labels'),
 ]
 # These MUST stay last and MUST stay together: the set-up order tells him to tear
 # off exactly this many leaves from the back.
@@ -58,6 +59,7 @@ REPRINT_CATCHUP = [
     ('09-pigpen-key',                'HERS: replaces packet 29, pig-pen alphabet'),
     ('14-painting-back-clues',       'NEW: the six painting backs, cut up during set-up'),
     ('13-framers-delivery-card',     'HERS: new sheet, after the clue frames'),
+    ('15-cutouts',                   'NEW: cipher card + envelope labels, cut up during set-up'),
     ('pigpen-message',               'YOURS: replaces packet 34, the wall to trace'),
     ('10-mapping-GAMEMASTER-remove', 'YOURS: replaces packet 35-39, setup guide'),
     ('02-cipher-wheel-SOLUTION-gamemaster-only', 'YOURS: replaces packet 40, solution'),
@@ -74,8 +76,8 @@ def main():
         a, n = where[stem]
         print(f'   {a:>3}-{a+n-1:<3} {mark}')
     # The guide instructs him to tear off the last seven leaves. Keep that honest.
-    assert gm_pages == 7, f'game-master section is {gm_pages} pages; the setup guide says seven'
-    print(f'\ngame-master leaves to tear off: {gm_pages}  (setup guide says seven)')
+    assert gm_pages == 8, f'game-master section is {gm_pages} pages; the setup guide says eight'
+    print(f'\ngame-master leaves to tear off: {gm_pages}  (setup guide says eight)')
 
     w3 = merge(REPRINT_CATCHUP, 'REPRINT-everything-since-your-print.pdf')
     n3 = sum(n for _, n in w3.values())
@@ -85,7 +87,7 @@ def main():
         print(f'   {a:>3}-{a+n-1:<3} {mark or "cover"}')
     cover3 = w3['reprint-cover-catchup'][1]
     assert cover3 == 1, f'the catch-up cover is {cover3} pages; it tells him to print from page 2'
-    assert n3 - cover3 == 14, f'catch-up pack is {n3-cover3} sheets, the cover says fourteen'
+    assert n3 - cover3 == 16, f'catch-up pack is {n3-cover3} sheets, the cover says sixteen'
 
 
 
