@@ -5,6 +5,8 @@ import sys
 from common import *
 
 GRID1 = 'ABCDEFGHI'; GRID2 = 'JKLMNOPQR'; X1 = 'STUV'; X2 = 'WXYZ'
+# The wall. lowercase = dry-erase marker, CAPITALS = invisible ink drawn as pig-pen.
+WALL = 'BREATHE in BREATHE out open the GREEN thing you SIT on'
 
 def glyph(letter, x, y, s=26, sw=2.2):
     """SVG for one pigpen glyph with its top-left at (x, y) and side length s."""
@@ -62,7 +64,7 @@ def alphabet_table(x, y, cols=13, cell=48):
 
 def message_svg(text, s=22, gap=8, per_line=22, annotate=False):
     """Draw a message in pigpen glyphs; spaces become gaps, other characters are kept as text."""
-    words = text.upper().split(' ')
+    words = text.split(' ')
     lines = []; cur = []
     for w in words:
         if sum(len(x) + 1 for x in cur) + len(w) > per_line and cur:
@@ -73,6 +75,15 @@ def message_svg(text, s=22, gap=8, per_line=22, annotate=False):
     for ln in lines:
         x = 10
         for w in ln:
+            if w.isalpha() and w.islower():
+                # a marker word: written in plain dry-erase, not in cipher
+                wdt = max(len(w) * s * 0.58, s)
+                out.append(f'<text x="{x + wdt/2}" y="{y + s*0.82}" text-anchor="middle" font-family="IM Fell English" font-style="italic" font-size="{s*1.05:.1f}">{esc(w)}</text>')
+                if annotate:
+                    out.append(f'<text x="{x + wdt/2}" y="{y - 5}" text-anchor="middle" font-family="Old Standard TT" font-size="{s*0.42:.1f}" fill="#999">marker</text>')
+                x += wdt + gap
+                x += s * 0.9
+                continue
             for ch in w:
                 if ch.isalpha():
                     out.append(glyph(ch, x, y, s, 2))
@@ -83,7 +94,8 @@ def message_svg(text, s=22, gap=8, per_line=22, annotate=False):
                 x += s + gap
             x += s * 0.9
         y += s + (26 if not annotate else 34)
-    return f'<svg viewBox="0 0 {per_line*(s+gap)+60} {y}" width="{per_line*(s+gap)+60}" height="{y}" xmlns="http://www.w3.org/2000/svg">{"".join(out)}</svg>'
+    W = per_line*(s+gap)+60
+    return f'<svg viewBox="0 0 {W} {y}" width="100%" style="max-width:{W}px;height:auto" xmlns="http://www.w3.org/2000/svg">{"".join(out)}</svg>'
 
 CSS = """
 .fig { display: block; margin: 8px auto; }
@@ -109,18 +121,24 @@ def build():
     write_page('09-pigpen-key', body, 'The Pig-Pen Alphabet', CSS)
 
 def build_message(text):
-    """Game-master tracing sheet: each glyph drawn full size with its letter above it."""
+    """Game-master tracing sheet for the wall: marker words in plain type, cipher words as glyphs with their letters above."""
+    caps = ' '.join(w for w in text.split() if w.isupper())
+    n = sum(len(w) for w in text.split() if w.isupper())
     body = f"""<div class="page">
-{masthead('The Wall', 'Trace these shapes in invisible ink', 'Game-master copy · not for Sarah · remove before she arrives')}
-<p class="preface">Write <b>ALIEN BLUES</b> above these in dry-erase marker, then copy the shapes below beneath it in the invisible-ink pen. The small grey letter over each shape is what that shape means; do not copy the letters, only the shapes. Leave a clear gap between words.</p>
-<div class="msg">{message_svg(text, 26, 10, 12, annotate=True)}</div>
-<p class="small center">Reads: <b>{esc(text.upper())}</b></p>
+{masthead('The Wall', 'Two inks, one line', 'Game-master copy · not for Sarah · remove before she arrives')}
+<p class="preface"><b>Line one</b>, in dry-erase marker, large: <b>ALIEN BLUES</b>.<br>
+<b>Line two</b>, beneath it, laid out exactly as below. The <i>italic words</i> go in dry-erase marker. The <b>shapes</b> go in the invisible-ink pen; the small grey letter over each shape is what it means, so copy the shapes, never the letters. Leave a clear gap between every word. {n} shapes in all.</p>
+<div class="msg"><div style="font-family:'Libre Baskerville';font-weight:700;font-size:30px;letter-spacing:.06em;margin-bottom:10px">ALIEN BLUES</div>{message_svg(text, 26, 10, 27, annotate=True)}</div>
+<p class="small center">Line two reads, all together: <b>{esc(text.upper())}</b>. Hidden words only: <b>{esc(caps)}</b>.</p>
 <div class="foot">Game-master copy · The Wall</div>
 </div>"""
-    write_page('pigpen-message', body, 'Wall message to trace', CSS)
+    write_page('pigpen-message', body, 'Wall to trace', CSS)
+
+def build_wall():
+    build_message(WALL)
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         build_message(' '.join(sys.argv[1:]))
     else:
-        build()
+        build(); build_wall()

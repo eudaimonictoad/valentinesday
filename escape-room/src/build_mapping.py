@@ -58,7 +58,7 @@ def chart():
     # Tier 0
     s.append(band(10, 22, 700, 66, 'MINUTE ONE'))
     s.append(box(20, 34, 320, 44, ['HANDED TO HER: the letter and the Milk Crate painting.', 'The letter gives her the address sarahs.quest.']))
-    s.append(box(370, 34, 330, 44, ['OUT IN THE OPEN: the nine printables, the flyer, the lemons,', 'the knife AND the scale, The Prophet, the locked suitcase.']))
+    s.append(box(370, 34, 330, 44, ['OUT IN THE OPEN: seven printed sheets (not the pig-pen key, not the plates),', 'the flyer, the lemons, the knife AND the scale, The Prophet, the locked suitcase.']))
     # Tier 1: A and C in parallel
     s.append(band(10, 112, 700, 258, 'OPEN AT THE SAME TIME  ·  two lines, either order'))
     a, ya = chain(20, 126, 320, [
@@ -99,7 +99,7 @@ def chart():
     # Tier 4: the lock
     s.append(band(10, 628, 700, 330, 'THE LOCK  ·  needs a piece from every line'))
     s.append(box(20, 642, 320, 44, ['Abyssinia + Gleaners + pigpen sheet → sarahs.quest. Ethiopia is', 'Figure VII (HALF PAST), Italy is Figure XIV (THREE) → 3:30']))
-    s.append(box(370, 642, 330, 44, ['Flyer → bathroom. Blue-light pen + pigpen sheet', 'marker: BREATHE IN, BREATHE OUT. ink: OPEN THE GREEN THING YOU SIT ON']))
+    s.append(box(370, 642, 330, 44, ['Flyer → bathroom. Blue-light pen + pigpen sheet', 'ALIEN BLUES in marker; then BREATHE in BREATHE out open the GREEN thing you SIT on (caps in ink)']))
     s.append(arrow(535, 686, 535, 698))
     s.append(payload(370, 700, 330, 32, ['HIDE INSIDE THE MEDITATION CUSHION:', 'the card:  DW5OY7 H5W VKYJ LKRWQ']))
     s.append(arrow(180, 686, 180, 746)); s.append(arrow(535, 732, 535, 746))
@@ -115,7 +115,7 @@ def chart():
 
 PLACES = [
  ("Her hands", "The welcome letter and the Milk Crate painting. Nothing is hidden on the painting; its back just carries the written clue."),
- ("Out in the open", "The nine printables scattered about; the flyer on the fridge; a bowl of lemons, one loaded; the knife and the kitchen scale on the counter; The Prophet on the shelf among many books; the locked suitcase"),
+ ("Out in the open", "Seven printed sheets scattered about: knife catalogue, songbook, Stars and Their Notes, receipt book, register, cartomancer's guide, concordance. NOT the pig-pen key (liquor cabinet) and NOT the two plates (backgammon set, Dutch oven). Also the flyer on the fridge; a bowl of lemons, one loaded; the knife and the kitchen scale on the counter; The Prophet on the shelf among many books; the locked suitcase"),
  ("Backgammon set", "Plate II; the Patricia painting"),
  ("Wingspan box", "The Hamlet painting; the fairy painting; a real Queen of Hearts playing card"),
  ("Toilet cistern", "The BLACK key in a ziplock bag. Nothing else, ever. No paper, no paintings."),
@@ -179,15 +179,14 @@ every one of them is a question. You will need a scale, a knife, a pin, and more
 &nbsp;&nbsp;<b>Abyssinia</b> &mdash; <i>This country has another name now. Find its colours at sarahs.quest, and turn them over.</i><br>
 &nbsp;&nbsp;<b>Gleaners</b> &mdash; <i>The caf&eacute; sits in a market named for a country. Its colours are at sarahs.quest too. You will need this one and Abyssinia both.</i></div>
 
-<div class="write"><b>3 · The wall.</b> Two inks, and the order matters.<br>
-&nbsp;&nbsp;<b>In dry-erase marker</b>, large, so she can read it the moment she walks in:<br>
-&nbsp;&nbsp;<span class="mono">ALIEN BLUES</span><br>
-&nbsp;&nbsp;<span class="mono">BREATHE IN, BREATHE OUT.</span><br>
-&nbsp;&nbsp;<b>In the invisible-ink pen</b>, underneath, copy the shapes from the tracing sheet two pages back.
-They read OPEN THE GREEN THING YOU SIT ON. Each shape has its letter above it in grey; copy the shapes only,
-never the letters. The visible half is atmosphere and gives nothing away; the hidden half is the answer, so she
-still needs the pen and the pig-pen sheet to get there. Test a corner first: glass and glazed tile wipe clean,
-grout and stone do not. The mirror is the safest surface in the room.</div>
+<div class="write"><b>3 · The wall.</b> Two inks on one surface. The tracing sheet two pages back shows the whole thing laid out.<br>
+&nbsp;&nbsp;<b>Line one, dry-erase marker, large:</b> <span class="mono">ALIEN BLUES</span><br>
+&nbsp;&nbsp;<b>Line two, mixed.</b> The lowercase words go in dry-erase marker. The CAPITAL words go in invisible ink, as pig-pen shapes, in the gaps:<br>
+&nbsp;&nbsp;<span class="mono">BREATHE in BREATHE out open the GREEN thing you SIT on</span><br>
+&nbsp;&nbsp;So what she sees walking in is <i>ALIEN BLUES / ___ in ___ out open the ___ thing you ___ on</i>, a sentence with holes in it.
+Under the blue light the holes fill with shapes, and with the pig-pen sheet the shapes read BREATHE, BREATHE, GREEN, SIT. That is 22 shapes to draw.
+The visible words give nothing away; the hidden ones are the answer, so she still needs the pen and the sheet. Test a corner first:
+glass and glazed tile wipe clean, grout and stone do not. The mirror is the safest surface in the room.</div>
 
 <div class="write"><b>4 · The cipher card.</b> Any scrap of paper. In capitals, exactly, with the spaces where they are:
 <div class="mono" style="text-align:center;font-size:15pt;margin:6px 0">DW5OY7 H5W VKYJ LKRWQ</div>
@@ -208,7 +207,7 @@ the songbook, the knife catalogue and the recipe book are printed and final. The
 <ol>
 <li><b>The knife.</b> Put your real knife on your real scale. It must read 79 g. The nearest catalogue entries are 58 g and 99 g, so you have about 14 g of slack either way. If it is wildly off, pick a different knife.</li>
 <li><b>The book.</b> Open your copy of The Prophet. Page 12, fourth word of the first line, must be <b>corn</b>. Page 15, the first sentence beginning &ldquo;Give&rdquo;, sixth word, must be <b>bread</b>. Editions differ and this is the single most likely thing to break.</li>
-<li><b>The wall.</b> Shine the blue-light pen on your writing. The shapes must show clearly. Then wipe a corner to be certain it comes off.</li>
+<li><b>The wall.</b> Shine the blue-light pen on your writing. The hidden shapes must show clearly between the marker words. Then wipe a corner to be certain both inks come off.</li>
 <li><b>The wheel.</b> Cut both plates, pin them, set the hands to half past three, and decode the cipher card yourself. It must read BEHIND THE MANY FACES.</li>
 <li><b>The website.</b> Open sarahs.quest on your phone. Tap Figure VII, the green-yellow-red flag with the blue disc: its back must read HALF PAST. Then tap Figure XIV, the green-white-red vertical stripes: its back must read THREE. Together they give half past three.</li>
 </ol>
@@ -221,7 +220,7 @@ the songbook, the knife catalogue and the recipe book are printed and final. The
 <li>Plate II in the backgammon set. Plate I in the Dutch oven. Pig-pen sheet in the liquor cabinet.</li>
 <li>Load one lemon with the Joker and set the bowl out. Knife and scale on the counter.</li>
 <li>Cipher card into the cushion. Write the wall. Flyer on the fridge.</li>
-<li>Scatter the printed sheets around the room. The Prophet onto the shelf among other books.</li>
+<li>Scatter the seven open sheets around the room: knife catalogue, songbook, Stars and Their Notes, receipt book, register, cartomancer's guide, concordance. The Prophet onto the shelf among other books. Keep the pig-pen key and both plates for their hiding places.</li>
 <li>Tear the last six leaves out of the printed packet and hide them from yourself.</li>
 </ol>
 

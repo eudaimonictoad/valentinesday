@@ -4,5 +4,6 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_knives, build_cipher, build_songbook, build_celebs, build_recipes, build_names, build_cards, build_concordance, build_mapping, build_pigpen
 for m in (build_knives, build_cipher, build_songbook, build_celebs, build_recipes, build_names, build_cards, build_concordance, build_mapping, build_pigpen):
     m.build()
+build_pigpen.build_wall()
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 subprocess.run(['node', os.path.join(root, 'render.js')], check=True)
