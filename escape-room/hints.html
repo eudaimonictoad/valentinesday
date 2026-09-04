@@ -20,6 +20,11 @@
   .preface { margin: 14px 2px 20px; text-align: justify; }
   .preface b { font-family: 'IM Fell DW Pica SC', serif; letter-spacing: 0.04em; }
 
+  .alarm { border: 2px solid #171512; background: #fbf8f1; padding: 12px 16px; margin: 16px 0 18px;
+           box-shadow: 3px 3px 0 rgba(23,21,18,0.16); font-size: 15px; line-height: 1.4; }
+  .alarm-t { display: block; font-family: 'IM Fell DW Pica SC', serif; font-size: 16px;
+             letter-spacing: 0.1em; margin-bottom: 5px; }
+  .alarm b { font-family: 'IM Fell DW Pica SC', serif; font-weight: normal; letter-spacing: 0.04em; }
   .item { border-bottom: 1px solid #cdc6b6; }
   .item:first-of-type { border-top: 1px solid #cdc6b6; }
   .q { all: unset; display: flex; align-items: baseline; gap: 10px; width: 100%; cursor: pointer;
@@ -61,7 +66,12 @@
     <div class="est">Pocket Library Series &middot; No. 12 &middot; Consult Sparingly</div>
   </div>
 
-  <p class="preface">Find the line below that sounds most like your predicament and open it. Each offers <b>a nudge</b> first, then <b>a firmer nudge</b>, and only then <b>the answer outright</b>. Nothing is revealed until you ask for it, so you may take the smallest help that gets you moving and leave the rest unread. There is no scoring and nobody is watching.</p>
+  <div class="alarm">
+    <span class="alarm-t">Read this first</span>
+    These are real answers, not riddles. Each line gives <b>a nudge</b>, then <b>a firmer nudge</b>, and only last <b>the answer outright</b>. Nothing is revealed until you tap for it, so take the smallest help that gets you moving and leave the rest unread. Nobody will know either way.
+  </div>
+
+  <p class="preface">Find the line below that sounds most like your predicament, and open that one only.</p>
 
   <div id="list"></div>
 

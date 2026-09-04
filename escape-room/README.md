@@ -1,6 +1,6 @@
 # Escape-room printables (game-master notes)
 
-Print everything in `pdf/` in black and white on Letter paper. **Do not print or leave out `02-cipher-wheel-SOLUTION-gamemaster-only.pdf`; that one is for you.**
+Print everything in `pdf/` in black and white on Letter paper. **`pdf/ALL-escape-room-print-me.pdf` is the one file to print.** Its last four pages are for you only (the wall tracing sheet, the three-page setup guide with flowchart and lock order, and the cipher solution); tear them off before she arrives. `verify.py` re-checks every link in the chain.
 
 | File | What it is | The real clue inside |
 |---|---|---|
@@ -10,7 +10,7 @@ Print everything in `pdf/` in black and white on Letter paper. **Do not print or
 | `03-parlour-songbook.pdf` | 20 fake airs, each note shape numbered; page 1 is a key to the note shapes (no numbers). | In *The Barista's Hornpipe*, the **dotted half note = 12** and the **pair of beamed eighths = 15**. Every other air has its own random numbering. |
 | `04-stars-and-their-notes.pdf` | 32 celebrities, each with a favourite air and two favourite notes | **Ed Sheeran → The Barista's Hornpipe → the dotted half note, then the pair of beamed eighths → 12, 15** → pages 12 and 15 in the concordance (file 08) → corn + bread. |
 | `05-household-receipt-book.pdf` | 74 short recipes, each with a "best enjoyed while…" pairing | **Cornbread: "Best eaten while playing a game of backgammon."** All other pairings are red herrings (household hiding spots, other board games, etc.). |
-| `06-register-of-names.pdf` | 276 girls' names with origin, meaning, and a "keepsake" object | **Patricia → a tin of coffee. Chloe → a pillowcase.** (Sarah → "the author's whole heart".) Change these in `src/config.json`. |
+| `06-register-of-names.pdf` | 275 girls' names with origin, meaning, and a "keepsake" object | **Patricia → a small painted egg (the Wingspan box). Chloe → a young tree in a pot (the bonsai). Shirley → a bottle kept for company (the liquor cabinet).** Sarah → a stuffed animal named Sushi. All in `src/config.json`. |
 | `07-cartomancers-pocket-guide.pdf` | Meaning of all 52 cards and where each "fortune is sought" | **Joker → at the back of the upstairs toilet** (with a cheeky line about lifting the lid). Change in `src/config.json`. |
 | `08-prophet-concordance.pdf` | "A Reader's Concordance" to *The Prophet*: one counting rule per page, 1 to 84 | **Page 12: the fourth word of the first line = corn. Page 15: the sixth word of the first sentence beginning with "Give" = bread** ("Give one another of your bread…"). All other pages give random words. Footer says to read words in the order sought. Replaces the cut-out template. |
 
