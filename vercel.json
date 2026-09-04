@@ -1,4 +1,7 @@
 {
+  "redirects": [
+    { "source": "/", "destination": "/flags.html", "permanent": false }
+  ],
   "rewrites": [
     { "source": "/bubba", "destination": "/index.html" }
   ]
