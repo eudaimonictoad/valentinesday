@@ -16,7 +16,9 @@ CSS = """
         display: flex; flex-direction: column; justify-content: center; text-align: center; }
 .card .rule { border-top: 3px double #000; width: 42%; margin: 0 auto 9px; }
 .card .rule.b { margin: 9px auto 0; }
-.card .txt { font-size: 12.4pt; line-height: 1.42; font-style: italic; }
+.card .txt { font-size: 11.6pt; line-height: 1.42; font-style: italic; }
+.card .url { font-family: 'Old Standard TT'; font-weight: 700; font-style: normal;
+                 letter-spacing: 0.02em; white-space: nowrap; }
 .card .orn { font-size: 10pt; letter-spacing: 0.3em; margin-top: 7px; }
 .head { font-size: 9.2pt; text-align: justify; margin: 0 0 7px; }
 .masthead { padding: 7px 0 6px; margin-bottom: 7px; }
