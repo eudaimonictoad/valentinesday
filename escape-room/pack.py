@@ -19,6 +19,7 @@ HERS = [
     ('09-pigpen-key',               'Pig-pen alphabet'),
     ('11-vundabar-flyer',           'Vundabar flyer'),
     ('12-clue-frames',              'Clue frames (12 blanks)'),
+    ('14-painting-back-clues',      'The six painting backs'),
     ('13-framers-delivery-card',    "Framer's delivery card"),
 ]
 # These MUST stay last and MUST stay together: the set-up order tells him to tear
@@ -55,6 +56,7 @@ REPRINT_CATCHUP = [
     ('02-cipher-wheel',              'HERS: replaces packet 3-4, cipher plates'),
     ('07-cartomancers-pocket-guide', 'HERS: replaces packet 26-27, card guide'),
     ('09-pigpen-key',                'HERS: replaces packet 29, pig-pen alphabet'),
+    ('14-painting-back-clues',       'NEW: the six painting backs, cut up during set-up'),
     ('13-framers-delivery-card',     'HERS: new sheet, after the clue frames'),
     ('pigpen-message',               'YOURS: replaces packet 34, the wall to trace'),
     ('10-mapping-GAMEMASTER-remove', 'YOURS: replaces packet 35-39, setup guide'),
@@ -83,7 +85,7 @@ def main():
         print(f'   {a:>3}-{a+n-1:<3} {mark or "cover"}')
     cover3 = w3['reprint-cover-catchup'][1]
     assert cover3 == 1, f'the catch-up cover is {cover3} pages; it tells him to print from page 2'
-    assert n3 - cover3 == 13, f'catch-up pack is {n3-cover3} sheets, the cover says thirteen'
+    assert n3 - cover3 == 14, f'catch-up pack is {n3-cover3} sheets, the cover says fourteen'
 
 
 

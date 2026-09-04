@@ -122,6 +122,17 @@ chk("F10 no reprint cover hard-codes a painting location",
     [f for f in ('reprint-cover-catchup', 'reprint-cover-paintings')
      if os.path.exists(f'html/{f}.html') and (ab in H(f) or gl in H(f))])
 
+from content_clues import CLUES
+backs = H('14-painting-back-clues')
+chk("G1 all six painting clues are printed on cards", all(t in backs for _, t in CLUES),
+    [l for l, t in CLUES if t not in backs])
+chk("G1 the guide lists the same six clues", all(t in gm for _, t in CLUES),
+    [l for l, t in CLUES if t not in gm])
+chk("G2 each painting name sits outside its frame, to be trimmed",
+    backs.count('this row is trimmed off') == 6, backs.count('this row is trimmed off'))
+chk("G3 the clue cards do not name a hiding place",
+    not [w for w in ('cupboard', 'candy jar', 'cistern', 'Dutch oven', 'backgammon', 'Wingspan') if w in backs])
+
 
 print('\n'.join('PASS  ' + s for s in ok))
 if bad: print('\n' + '\n'.join('FAIL  ' + s for s in bad))

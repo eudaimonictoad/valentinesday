@@ -3,6 +3,7 @@
 # the combined PDF, to be torn off. File name kept for the merge script.
 import json
 from common import *
+from content_clues import CLUES
 
 CSS = """
 .warn { border: 3px double #000; padding: 6px 12px; text-align: center; font-family: 'IM Fell DW Pica SC'; font-size: 12pt; letter-spacing: 0.1em; margin-bottom: 8px; }
@@ -204,6 +205,7 @@ def build():
 <table><tr><th>Place</th><th>Contents</th></tr>{prows}</table>
 <div class="foot">Game-master's setup guide · 3 of 5</div>
 </div>"""
+    clue_rows = "<br>\n".join(f'&nbsp;&nbsp;<b>{l}</b> &mdash; <i>{t}</i>' for l, t in CLUES)
     page3 = f"""<div class="page">
 <h3>Everything you write by hand · there are only five things</h3>
 
@@ -213,13 +215,8 @@ sense on the day she finds them; and end with a line in your own voice. Do not e
 Do not mention the suitcase. If you are stuck for an opening: <i>&ldquo;There are six paintings in this apartment and
 every one of them is a question. You will need a scale, a knife, a pin, and more patience than I deserve.&rdquo;</i></div>
 
-<div class="write"><b>2 · The six painting backs.</b> Write these on the quarter-sheet frames and clip or tape one to each painting.<br>
-&nbsp;&nbsp;<b>Milk Crate</b> &mdash; <i>The famous man we always see here, who is not him.</i><br>
-&nbsp;&nbsp;<b>Patricia&rsquo;s</b> &mdash; <i>Just the name. Look her up.</i><br>
-&nbsp;&nbsp;<b>Hamlet</b> &mdash; <i>We saw the film of this play. Whose film was it? Look her up by her first name.</i><br>
-&nbsp;&nbsp;<b>Fairy houses</b> &mdash; <i>What was the family name of the one who lived here? Look her up.</i><br>
-&nbsp;&nbsp;<b>Abyssinia</b> &mdash; <i>This country has another name now. Find its colours at sarahs.quest, and turn them over.</i><br>
-&nbsp;&nbsp;<b>Gleaners</b> &mdash; <i>The caf&eacute; sits in a market named for a country. Its colours are at sarahs.quest too. You will need this one and Abyssinia both.</i></div>
+<div class="write"><b>2 · The six painting backs.</b> These are printed for you on the sheet titled <i>The Six Painting Backs</i>. Cut each card out on its frame line, which trims away the name above it, and fasten one to the back of each painting.<br>
+{clue_rows}</div>
 
 <div class="write"><b>3 · The wall.</b> Two inks on one surface. The tracing sheet two pages back shows the whole thing laid out.<br>
 &nbsp;&nbsp;<b>Line one, dry-erase marker, large:</b> <span class="mono">ALIEN BLUES</span><br>
