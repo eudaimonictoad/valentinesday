@@ -57,6 +57,20 @@ REPRINT_PAINTINGS = [
 ]
 
 
+# Ben printed the 40-page packet and nothing since. This is everything that has
+# changed since then, in packet order: six sheets of hers, seven of his.
+REPRINT_CATCHUP = [
+    ('reprint-cover-catchup',        None),
+    ('02-cipher-wheel',              'HERS: replaces packet 3-4, cipher plates'),
+    ('07-cartomancers-pocket-guide', 'HERS: replaces packet 26-27, card guide'),
+    ('09-pigpen-key',                'HERS: replaces packet 29, pig-pen alphabet'),
+    ('13-framers-delivery-card',     'HERS: new sheet, after the clue frames'),
+    ('pigpen-message',               'YOURS: replaces packet 34, the wall to trace'),
+    ('10-mapping-GAMEMASTER-remove', 'YOURS: replaces packet 35-39, setup guide'),
+    ('02-cipher-wheel-SOLUTION-gamemaster-only', 'YOURS: replaces packet 40, solution'),
+]
+
+
 def main():
     where = merge(HERS + GM, 'ALL-escape-room-print-me.pdf')
     total = sum(n for _, n in where.values())
@@ -69,6 +83,16 @@ def main():
     # The guide instructs him to tear off the last seven leaves. Keep that honest.
     assert gm_pages == 7, f'game-master section is {gm_pages} pages; the setup guide says seven'
     print(f'\ngame-master leaves to tear off: {gm_pages}  (setup guide says seven)')
+
+    w3 = merge(REPRINT_CATCHUP, 'REPRINT-everything-since-your-print.pdf')
+    n3 = sum(n for _, n in w3.values())
+    print(f'\nREPRINT-everything-since-your-print.pdf  {n3} pages  (cover + {n3-1} to print)')
+    for stem, mark in REPRINT_CATCHUP:
+        a, n = w3[stem]
+        print(f'   {a:>3}-{a+n-1:<3} {mark or "cover"}')
+    cover3 = w3['reprint-cover-catchup'][1]
+    assert cover3 == 1, f'the catch-up cover is {cover3} pages; it tells him to print from page 2'
+    assert n3 - cover3 == 13, f'catch-up pack is {n3-cover3} sheets, the cover says thirteen'
 
     w2 = merge(REPRINT_PAINTINGS, 'REPRINT-paintings-moved.pdf')
     n2 = sum(n for _, n in w2.values())

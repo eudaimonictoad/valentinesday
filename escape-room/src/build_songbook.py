@@ -71,7 +71,9 @@ def make_song(rng, title, beats, forced=()):
             break
     else:
         # force any missing type into some measure by replacing a quarter note of equal length
-        for t in set(types) - used:
+        # iterate in `types` order, not set order: a set's iteration order varies
+        # with PYTHONHASHSEED, which made every rebuild produce different music
+        for t in [x for x in types if x not in used]:
             for m in measures:
                 if 'quarter' in m and TYPES[t][1] == 1:
                     m[m.index('quarter')] = t; break
@@ -133,6 +135,10 @@ def build():
     ed = next(s for s in songs if s['title'] == ED_SONG)
     for t, n in ED_NOTES:
         assert ed['numbering'][t] == n, (t, ed['numbering'])
+        # numbering alone is not enough: the shape has to actually be printed in the
+        # air, or Stars and Their Notes points at a note that is not on the page.
+        assert any(t in m for m in ed['measures']), \
+            f'{t} is numbered {n} but never appears in {ED_SONG}'
     with open(os.path.join(ROOT, 'src', 'songbook_data.json'), 'w') as f:
         json.dump([{ 'title': s['title'], 'beats': s['beats'], 'numbering': s['numbering']} for s in songs], f, indent=1)
 
