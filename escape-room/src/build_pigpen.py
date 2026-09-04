@@ -60,7 +60,7 @@ def alphabet_table(x, y, cols=13, cell=48):
         out.append(f'<text x="{gx + 24}" y="{gy + 48}" text-anchor="middle" font-family="IM Fell DW Pica SC" font-size="15">{L}</text>')
     return ''.join(out)
 
-def message_svg(text, s=22, gap=8, per_line=22):
+def message_svg(text, s=22, gap=8, per_line=22, annotate=False):
     """Draw a message in pigpen glyphs; spaces become gaps, other characters are kept as text."""
     words = text.upper().split(' ')
     lines = []; cur = []
@@ -69,7 +69,7 @@ def message_svg(text, s=22, gap=8, per_line=22):
             lines.append(cur); cur = []
         cur.append(w)
     if cur: lines.append(cur)
-    out = []; y = 10
+    out = []; y = 10 if not annotate else 22
     for ln in lines:
         x = 10
         for w in ln:
@@ -78,9 +78,11 @@ def message_svg(text, s=22, gap=8, per_line=22):
                     out.append(glyph(ch, x, y, s, 2))
                 else:
                     out.append(f'<text x="{x + s/2}" y="{y + s*0.8}" text-anchor="middle" font-family="Libre Baskerville" font-weight="700" font-size="{s}">{esc(ch)}</text>')
+                if annotate:
+                    out.append(f'<text x="{x + s/2}" y="{y - 5}" text-anchor="middle" font-family="Old Standard TT" font-size="{s*0.5:.1f}" fill="#777">{esc(ch)}</text>')
                 x += s + gap
             x += s * 0.9
-        y += s + 26
+        y += s + (26 if not annotate else 34)
     return f'<svg viewBox="0 0 {per_line*(s+gap)+60} {y}" width="{per_line*(s+gap)+60}" height="{y}" xmlns="http://www.w3.org/2000/svg">{"".join(out)}</svg>'
 
 CSS = """
@@ -88,7 +90,7 @@ CSS = """
 .cap { text-align: center; font-style: italic; font-size: 10.5pt; margin: 2px 0 10px; }
 .preface { font-size: 10.5pt; text-align: justify; margin: 6px 0; }
 .sc2 { font-family: 'IM Fell DW Pica SC'; font-size: 13pt; letter-spacing: 0.1em; text-align: center; margin-top: 10px; }
-.msg { border: 1px solid #000; padding: 14px; margin: 14px 0; }
+.msg { border: 1px solid #000; padding: 16px 12px; margin: 12px 0; text-align: center; }
 """
 
 def build():
@@ -107,11 +109,15 @@ def build():
     write_page('09-pigpen-key', body, 'The Pig-Pen Alphabet', CSS)
 
 def build_message(text):
+    """Game-master tracing sheet: each glyph drawn full size with its letter above it."""
     body = f"""<div class="page">
-<div class="msg">{message_svg(text)}</div>
-<p class="small center">(game-master copy: reads "{esc(text.upper())}")</p>
+{masthead('The Wall', 'Trace these shapes in invisible ink', 'Game-master copy · not for Sarah · remove before she arrives')}
+<p class="preface">Write <b>ALIEN BLUES</b> above these in dry-erase marker, then copy the shapes below beneath it in the invisible-ink pen. The small grey letter over each shape is what that shape means; do not copy the letters, only the shapes. Leave a clear gap between words.</p>
+<div class="msg">{message_svg(text, 26, 10, 12, annotate=True)}</div>
+<p class="small center">Reads: <b>{esc(text.upper())}</b></p>
+<div class="foot">Game-master copy · The Wall</div>
 </div>"""
-    write_page('pigpen-message', body, 'Pigpen message', CSS)
+    write_page('pigpen-message', body, 'Wall message to trace', CSS)
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

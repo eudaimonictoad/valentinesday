@@ -30,7 +30,7 @@ def keep(name):
     m = re.search(re.escape(name) + r'</span> <span class="o">[^<]*</span> [^<]*<span class="k">Keepsake: ([^.]*)', reg)
     return m.group(1) if m else None
 chk("B1 Patricia -> painted egg (Wingspan)", 'painted egg' in (keep('Patricia') or ''), keep('Patricia'))
-chk("B6 Chloe -> young tree in a pot (bonsai)", 'young tree in a pot' in (keep('Chloe') or ''), keep('Chloe'))
+chk("B6 Chloe -> a jar of sweets (the candy jar)", 'jar of sweets' in (keep('Chloe') or ''), keep('Chloe'))
 chk("B9 Shirley -> a bottle (liquor cabinet)", 'bottle kept for company' in (keep('Shirley') or ''), keep('Shirley'))
 chk("Sarah has her own entry with a real keepsake", 'Sushi' in (keep('Sarah') or ''), keep('Sarah'))
 chk("no Sally to be confused with Sarah", '>Sally<' not in reg and 'Sally</span>' not in reg)
@@ -44,13 +44,13 @@ chk("B3 Queen of Hearts -> toilet cistern",
 fortunes = re.findall(r'fortune is sought <i>([^<]*)', cards)
 chk("52 cards + joker have fortunes", len(fortunes) == 53, len(fortunes))
 chk("all fortunes distinct", len(set(fortunes)) == len(fortunes))
-REAL = ['backgammon', 'wingspan', 'bonsai', 'liquor', 'meditation', 'cushion', 'suitcase', 'backpack']
+REAL = ['backgammon', 'wingspan', 'liquor', 'meditation', 'cushion', 'suitcase', 'backpack', 'sweets', 'candy']
 chk("no card fortune points at a real hiding place", not [f for f in fortunes if any(w in f.lower() for w in REAL)])
 chk("toilet and Dutch oven appear exactly once each",
     len([f for f in fortunes if 'toilet' in f.lower() or 'dutch oven' in f.lower()]) == 2)
 pairings = re.findall(r'<div class="p">([^<]*)', rec)
 chk("no recipe pairing points at a real hiding place",
-    not [p for p in pairings if any(w in p.lower() for w in ['wingspan', 'bonsai', 'liquor', 'dutch oven', 'toilet', 'cistern', 'meditation'])])
+    not [p for p in pairings if any(w in p.lower() for w in ['wingspan', 'liquor', 'dutch oven', 'toilet', 'cistern', 'meditation', 'candy jar'])])
 
 kn = H('01-knife-catalogue')
 import content_knives as CK
@@ -59,7 +59,7 @@ chk("no other knife within 15 g of 79", not [(n, w) for n, o, w, d, p in CK.KNIV
 chk("C2 the 79 g knife is the lemon one", 'lemon' in next(d for n, o, w, d, p in CK.KNIVES if w == 79).lower())
 
 import cipher_data as C
-msg = 'THE KEY IS IN THE FREEZER'
+msg = 'BEHIND THE MANY FACES'
 chk("E4 final card round-trips", C.decode(C.encode(msg)) == msg, C.encode(msg))
 sol = H('02-cipher-wheel-SOLUTION-gamemaster-only')
 chk("E4 wheel time is 3:30", 'read <b>3:30</b>' in sol)

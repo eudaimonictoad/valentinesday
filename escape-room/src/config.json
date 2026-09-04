@@ -1,7 +1,7 @@
 {
   "_comment": "Edit these, then run: python3 escape-room/src/build_all.py",
   "patricia_keepsake": "a small painted egg, of the sort kept in a box of birds",
-  "chloe_keepsake": "a young tree in a pot, and the soil beneath it",
+  "chloe_keepsake": "a jar of sweets, kept where the films are watched",
   "shirley_keepsake": "a bottle kept for company, among the other bottles",
   "joker_location": "in the Dutch oven",
   "joker_quip": "Lift the lid. If there is a stew in it, you have the wrong Dutch oven and somebody should be told.",
