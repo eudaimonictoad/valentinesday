@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Book of Hints</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+DW+Pica+SC&family=UnifrakturMaguntia&display=swap">
+<style>
+  /* One committed look: printed paper. Matches the Pocket Library props. */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #f3efe6; color: #171512; min-height: 100%; }
+  body { font-family: 'IM Fell English', Georgia, serif; font-size: 17px; line-height: 1.45;
+         padding: 16px 12px 70px; -webkit-tap-highlight-color: transparent;
+         background-image: radial-gradient(circle at 15% 0%, rgba(0,0,0,0.035), transparent 55%); }
+  .sheet { max-width: 640px; margin: 0 auto; }
+  .masthead { text-align: center; border-top: 3px double #171512; border-bottom: 3px double #171512; padding: 12px 6px 10px; }
+  .masthead .title { font-family: 'UnifrakturMaguntia', serif; font-size: clamp(30px, 9vw, 44px); line-height: 1.05; }
+  .masthead .sub { font-family: 'IM Fell DW Pica SC', serif; font-size: 13px; letter-spacing: 0.12em; margin-top: 6px; }
+  .masthead .est { font-style: italic; font-size: 14px; margin-top: 4px; }
+  .preface { margin: 14px 2px 20px; text-align: justify; }
+  .preface b { font-family: 'IM Fell DW Pica SC', serif; letter-spacing: 0.04em; }
+
+  .alarm { border: 2px solid #171512; background: #fbf8f1; padding: 12px 16px; margin: 16px 0 18px;
+           box-shadow: 3px 3px 0 rgba(23,21,18,0.16); font-size: 15px; line-height: 1.4; }
+  .alarm-t { display: block; font-family: 'IM Fell DW Pica SC', serif; font-size: 16px;
+             letter-spacing: 0.1em; margin-bottom: 5px; }
+  .alarm b { font-family: 'IM Fell DW Pica SC', serif; font-weight: normal; letter-spacing: 0.04em; }
+  .item { border-bottom: 1px solid #cdc6b6; }
+  .item:first-of-type { border-top: 1px solid #cdc6b6; }
+  .q { all: unset; display: flex; align-items: baseline; gap: 10px; width: 100%; cursor: pointer;
+       padding: 13px 2px; font-size: 17px; }
+  .q:focus-visible { outline: 2px solid #171512; outline-offset: 2px; }
+  .q .no { font-family: 'IM Fell DW Pica SC', serif; font-size: 13px; letter-spacing: 0.1em;
+           color: #6b6353; flex: 0 0 2.4em; }
+  .q .t { flex: 1; }
+  .q .caret { flex: 0 0 auto; color: #6b6353; font-size: 13px; transition: transform 0.2s; }
+  .item.open .q .caret { transform: rotate(90deg); }
+  .body { display: none; padding: 0 2px 16px 2px; }
+  .item.open .body { display: block; }
+
+  .tier { margin-top: 10px; }
+  .reveal { all: unset; display: inline-block; cursor: pointer; border: 1.5px solid #171512;
+            padding: 5px 14px; font-family: 'IM Fell DW Pica SC', serif; font-size: 13px;
+            letter-spacing: 0.1em; background: #fbf8f1; }
+  .reveal:hover { background: #171512; color: #f3efe6; }
+  .reveal:focus-visible { outline: 2px solid #171512; outline-offset: 3px; }
+  .reveal.last { border-style: dashed; }
+  .text { display: none; border-left: 3px solid #171512; padding: 4px 0 4px 12px; margin-top: 4px; }
+  .text.shown { display: block; }
+  .text .lbl { font-family: 'IM Fell DW Pica SC', serif; font-size: 12px; letter-spacing: 0.1em;
+               color: #6b6353; display: block; }
+  .tier.done .reveal { display: none; }
+
+  .colophon { text-align: center; font-family: 'IM Fell DW Pica SC', serif; font-size: 12px;
+              letter-spacing: 0.12em; margin-top: 30px; border-top: 1px solid #171512; padding-top: 10px; }
+  .colophon i { display: block; font-family: 'IM Fell English', serif; font-style: italic;
+                letter-spacing: 0; font-size: 15px; margin-top: 5px; }
+  .colophon a { color: #171512; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="masthead">
+    <div class="title">The Book of Hints</div>
+    <div class="sub">For the Reader who is Temporarily Defeated</div>
+    <div class="est">Pocket Library Series &middot; No. 12 &middot; Consult Sparingly</div>
+  </div>
+
+  <div class="alarm">
+    <span class="alarm-t">Read this first</span>
+    These are real answers, not riddles. Each line gives <b>a nudge</b>, then <b>a firmer nudge</b>, and only last <b>the answer outright</b>. Nothing is revealed until you tap for it, so take the smallest help that gets you moving and leave the rest unread. Nobody will know either way.
+  </div>
+
+  <p class="preface">Find the line below that sounds most like your predicament, and open that one only.</p>
+
+  <div id="list"></div>
+
+  <div class="colophon">The Book of Hints
+    <i>Take the smallest hint that works. <a href="/">Back to the flags.</a></i>
+  </div>
+</div>
+
+<script>
+  // Each item: the predicament, then three escalating tiers.
+  const HINTS = [
+    {
+      q: "I have just started and I do not know what to do.",
+      tiers: [
+        "You were handed a painting. Things you are handed usually have two sides.",
+        "The back of that painting asks about somebody. It is a question about a person you and I have both seen, more than once, in the same place.",
+        "The Milk Crate painting asks who the famous man is that you always see there. It is the barista who looks like Ed Sheeran. The answer is Ed Sheeran. Now find the printed sheet that lists celebrities."
+      ]
+    },
+    {
+      q: "I have a celebrity's name and nowhere to put it.",
+      tiers: [
+        "One of the printed sheets is a list of famous people. Somebody thought to ask each of them the same two questions.",
+        "Look up that celebrity in The Stars and Their Notes. It gives a favourite piece of music and two favourite note shapes.",
+        "Ed Sheeran's entry names The Barista's Hornpipe, and his two favourite shapes: the dotted half note, then the pair of beamed eighth notes. Now open the songbook to that piece."
+      ]
+    },
+    {
+      q: "I have a piece of music and two note shapes.",
+      tiers: [
+        "The songbook has a key at the front that names every note shape. Learn what the two shapes look like, then go hunting.",
+        "Every note in every piece has a small number printed above it. The numbers are different in each piece, so use the right one.",
+        "In The Barista's Hornpipe, the dotted half note carries the number 12 and the pair of beamed eighths carries 15. Your two numbers are 12 and 15."
+      ]
+    },
+    {
+      q: "I have two numbers, 12 and 15, and no idea what they open.",
+      tiers: [
+        "They are page numbers. One of the sheets is about a book, and there is a real copy of that book in this room.",
+        "The Reader's Concordance covers The Prophet by Kahlil Gibran. It gives one word-counting rule for every page. Find the book on the shelf, then follow the rule for page 12 and the rule for page 15.",
+        "Page 12 gives you CORN. Page 15 gives you BREAD. Put them together: cornbread. Now find the recipe book."
+      ]
+    },
+    {
+      q: "I have the word cornbread.",
+      tiers: [
+        "There is a recipe for it. The recipe itself is ordinary. What is written underneath it is not.",
+        "Every recipe in that book says how the dish is best enjoyed. Almost all of those are nonsense. One of them is an instruction.",
+        "The cornbread is best eaten while playing a game of backgammon. Go and open the backgammon set."
+      ]
+    },
+    {
+      q: "I have a knife and a kitchen scale.",
+      tiers: [
+        "The knife catalogue lists everything by weight. So weigh the knife.",
+        "It should read 79 grams. No other knife in the catalogue is anywhere near that, so you cannot pick the wrong one.",
+        "Seventy-nine grams is The Lemonade Knife. Its entry says it is happiest cutting lemons open, and that you never know what a lemon has in it. There is a bowl of lemons in this apartment. Cut them."
+      ]
+    },
+    {
+      q: "I found a playing card and I do not know what it means.",
+      tiers: [
+        "There is a sheet that lists every card in the deck and says where each one's fortune is to be sought.",
+        "Find your exact card in the Cartomancer's Pocket Guide. The Jokers are listed last, after the Spades, and there are two of them: yours is the coloured one, not the black-and-white one.",
+        "The Joker's fortune is sought in the Dutch oven. The Queen of Hearts sends you to the back of the upstairs toilet, and yes, you should lift the lid off the tank."
+      ]
+    },
+    {
+      q: "I have a woman's name and nothing to do with it.",
+      tiers: [
+        "There is a register of names. Every name in it has a meaning and, more usefully, a keepsake.",
+        "The keepsake is the clue. It describes an object in this apartment, sometimes a little sideways. Read it as a riddle, not a label.",
+        "Patricia's keepsake is a small painted egg, of the sort kept in a box of birds: the Wingspan box. Chloe's is a jar of sweets, kept where the films are watched: the candy jar by the television. Shirley's is a bottle kept for company: the liquor cabinet."
+      ]
+    },
+    {
+      q: "I have a painting of Hamlet.",
+      tiers: [
+        "The back asks about a film of this play, and who made it. It is not a filmed stage production; it is the recent one, about the son.",
+        "The film is Hamnet. Its director has a first name that is also a name in the register.",
+        "Chloé Zhao. Look up Chloe in the Register of Names. Her keepsake is a jar of sweets."
+      ]
+    },
+    {
+      q: "I have a painting of the fairy houses.",
+      tiers: [
+        "You are being asked for a name, and it is one you already know. Think about who lived in them.",
+        "It is her family name, not her first name. Then look it up like the others.",
+        "Shirley. Her entry in the register points at a bottle kept for company."
+      ]
+    },
+    {
+      q: "I have a little light and nothing glows.",
+      tiers: [
+        "It is a blue light. It shows up writing you cannot otherwise see. So the question is which surface is worth checking.",
+        "There is a flyer somewhere in this apartment advertising a concert in a very small venue. Go to that venue and look at the wall.",
+        "The bathroom. Somebody has written ALIEN BLUES there in marker, and under it a sentence with words missing. Shine the light into the gaps."
+      ]
+    },
+    {
+      q: "I have decoded the writing on the wall and I still do not know where to go.",
+      tiers: [
+        "Read the line as one sentence, marker words and hidden shapes together. It names a colour and a thing you sit on.",
+        "Not the sofa and not a chair. It is green, you sit on it, and you do it to breathe.",
+        "The meditation cushion. Do not just look under it or sit on it. Open it up and reach inside."
+      ]
+    },
+    {
+      q: "I am looking at shapes made of corners and dots.",
+      tiers: [
+        "That is a real cipher, several hundred years old, and there is a printed key to it among the papers.",
+        "The Pig-Pen Alphabet sheet shows four pens with letters inside them. Each shape you see is the walls around one letter, and a dot means the dotted pen. Use that printed sheet and only that sheet: this printer did not arrange the letters the way most versions do, so a copy you find elsewhere will give you nonsense.",
+        "If you have not found that sheet yet, it is in the liquor cabinet, which is where Shirley's keepsake points."
+      ]
+    },
+    {
+      q: "I have two paper discs and I cannot make them do anything.",
+      tiers: [
+        "The smaller one is meant to sit on top of the larger one and turn. Push a pin through both centres.",
+        "The rim of the larger plate tells you what to do: set the hour, find it without, read it within. So you need to know what time to set.",
+        "Set the hands to half past three: the long hand exactly on the 6, the short hand between the 3 and the 4. Then take each symbol of your message, find it on the outer dial, and read the letter beneath it on the inner disc."
+      ]
+    },
+    {
+      q: "I do not know what time to set the wheel to.",
+      tiers: [
+        "The time is written down somewhere, but not in words you can read yet.",
+        "Two of your paintings point at countries. This website has a hall of flags, and every figure turns over. You need both of them; one alone gives you half an answer.",
+        "Abyssinia is Ethiopia and the Gleaners market is Italian. Turn over both of those flags. Ethiopia gives HALF PAST and Italy gives THREE, so the hour is half past three."
+      ]
+    },
+    {
+      q: "I have a line of letters and numbers that spell nothing.",
+      tiers: [
+        "That is for the wheel. It will only make sense once both plates are pinned together and set to the right time.",
+        "Read it one symbol at a time. Find the symbol on the outer dial; the letter under it on the inner disc is the real one.",
+        "It reads: BEHIND THE MANY FACES."
+      ]
+    },
+    {
+      q: "I have keys and I do not know what they open.",
+      tiers: [
+        "There are only two locks in this apartment, and they are nested one inside the other.",
+        "The key you already have opens the outer one. The one you do not have yet opens what is inside it.",
+        "Black opens the suitcase. Dark blue opens the backpack inside it, and you will not find that key until the wheel tells you where it is."
+      ]
+    },
+    {
+      q: "I opened the suitcase and there is another locked bag inside it.",
+      tiers: [
+        "Yes. That is meant to happen, and it is not a dead end.",
+        "Its key is the last thing in the game. You will need both paper discs, the right hour, and whatever is hidden in the meditation cushion.",
+        "Do the wheel. It will tell you exactly where the second key is."
+      ]
+    },
+    {
+      q: "I have decoded the last message and I am still stuck.",
+      tiers: [
+        "Many faces in one place. Not a crowd, and not a mirror. Something on a wall or a shelf with more than one photograph in it.",
+        "It is a thing you gave him, years ago. Turn it around.",
+        "The framed photo puzzle. The dark blue key is taped flat to the back of the frame, and it opens the backpack."
+      ]
+    }
+  ];
+
+  const LABELS = ["A nudge", "A firmer nudge", "Just tell me"];
+  const list = document.getElementById('list');
+
+  // Remember what has been opened, so a refresh does not lose progress.
+  const store = {
+    read() { try { return JSON.parse(localStorage.getItem('hints') || '{}'); } catch (e) { return {}; } },
+    write(o) { try { localStorage.setItem('hints', JSON.stringify(o)); } catch (e) {} }
+  };
+  const seen = store.read();
+
+  HINTS.forEach((h, i) => {
+    const item = document.createElement('div');
+    item.className = 'item';
+    const n = String(i + 1).padStart(2, '0');
+
+    const tiers = h.tiers.map((t, j) => `
+      <div class="tier" data-tier="${i}-${j}">
+        <button type="button" class="reveal${j === 2 ? ' last' : ''}">${LABELS[j]}</button>
+        <div class="text"><span class="lbl">${LABELS[j]}</span>${t}</div>
+      </div>`).join('');
+
+    item.innerHTML = `
+      <button type="button" class="q" aria-expanded="false">
+        <span class="no">${n}</span><span class="t">${h.q}</span><span class="caret">&#9654;</span>
+      </button>
+      <div class="body">${tiers}</div>`;
+
+    const q = item.querySelector('.q');
+    q.addEventListener('click', () => {
+      const open = item.classList.toggle('open');
+      q.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    item.querySelectorAll('.tier').forEach(tier => {
+      const show = () => {
+        tier.classList.add('done');
+        tier.querySelector('.text').classList.add('shown');
+        seen[tier.dataset.tier] = 1;
+        store.write(seen);
+      };
+      tier.querySelector('.reveal').addEventListener('click', show);
+      if (seen[tier.dataset.tier]) { show(); item.classList.add('open'); q.setAttribute('aria-expanded', 'true'); }
+    });
+
+    list.appendChild(item);
+  });
+</script>
+</body>
+</html>
