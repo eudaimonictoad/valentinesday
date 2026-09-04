@@ -33,12 +33,36 @@
           background-image: repeating-linear-gradient(0deg, transparent 0 23px, rgba(23,21,18,0.08) 23px 24px); }
   .back svg { display: block; max-width: 100%; height: auto; }
   .back .fig { font-family: 'IM Fell DW Pica SC', serif; font-size: 10px; letter-spacing: 0.14em; position: absolute; bottom: 4px; left: 0; right: 0; text-align: center; color: #5a5348; }
-  .stuck { display: block; text-decoration: none; color: #171512; border: 2px solid #171512;
-           background: #fbf8f1; padding: 12px 16px; margin: 0 0 20px; text-align: center;
+  /* Plain and unmistakable on purpose: this is the one control on the page, and it
+     has to read at a glance to someone who is already frustrated. */
+  .stuck { display: block; width: 100%; font: inherit; cursor: pointer;
+           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+           color: #171512; border: 2px solid #171512; background: #fbf8f1;
+           padding: 14px 16px; margin: 0 0 20px; text-align: center;
            box-shadow: 3px 3px 0 rgba(23,21,18,0.16); }
   .stuck:hover, .stuck:focus-visible { background: #171512; color: #f3efe6; }
-  .stuck-t { display: block; font-family: 'IM Fell DW Pica SC', serif; font-size: 17px; letter-spacing: 0.08em; }
-  .stuck-s { display: block; font-size: 14px; font-style: italic; margin-top: 5px; line-height: 1.35; }
+  .stuck-t { display: block; font-size: 18px; font-weight: 600; letter-spacing: 0.01em; }
+  .stuck-s { display: block; font-size: 14px; margin-top: 4px; line-height: 1.35; }
+
+  /* confirm step */
+  dialog.gate { border: 2px solid #171512; background: #fbf8f1; color: #171512;
+                max-width: 30rem; width: calc(100% - 32px); padding: 22px 22px 18px;
+                box-shadow: 5px 5px 0 rgba(23,21,18,0.22);
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  dialog.gate::backdrop { background: rgba(23,21,18,0.55); }
+  dialog.gate h2 { font-family: 'IM Fell DW Pica SC', serif; font-size: 21px;
+                   letter-spacing: 0.06em; margin: 0 0 10px; font-weight: 400; }
+  dialog.gate p { margin: 0 0 10px; font-size: 16px; line-height: 1.45; }
+  dialog.gate p.last { margin-bottom: 18px; }
+  dialog.gate b { font-weight: 600; }
+  .gate-btns { display: flex; flex-direction: column; gap: 9px; }
+  .gate-btns a, .gate-btns button {
+    font: inherit; font-size: 16px; text-align: center; text-decoration: none;
+    padding: 12px 14px; border: 2px solid #171512; cursor: pointer; display: block; }
+  .gate-go { background: #171512; color: #f3efe6; font-weight: 600; }
+  .gate-go:hover, .gate-go:focus-visible { background: #3a352c; }
+  .gate-back { background: #fbf8f1; color: #171512; }
+  .gate-back:hover, .gate-back:focus-visible { background: #e7e1d4; }
   .colophon { text-align: center; font-family: 'IM Fell DW Pica SC', serif; font-size: 12px; letter-spacing: 0.12em; margin-top: 26px; border-top: 1px solid #171512; padding-top: 8px; }
   .colophon i { display: block; font-family: 'IM Fell English', serif; font-style: italic; letter-spacing: 0; font-size: 14px; margin-top: 4px; }
   @media (prefers-reduced-motion: reduce) { .inner { transition: none; } }
@@ -53,10 +77,20 @@
   </div>
   <p class="preface">The engraver was paid by the flag and not by the name, and so no names are given. Each figure turns over. On the back of every one the engraver has left a remark in the pen-and-dot hand of the Freemasons; the key to that hand is published separately, and the reader who has not yet got it may look and wonder.</p>
 
-  <a class="stuck" href="/hints.html">
-    <span class="stuck-t">Stuck? Open the Book of Hints</span>
-    <span class="stuck-s">Every hint gives you a gentle nudge first &mdash; but read far enough and it will hand you the answer outright. Use it when you would rather move on than be defeated.</span>
-  </a>
+  <button class="stuck" type="button" id="stuck">
+    <span class="stuck-t">Stuck? Tap here for a hint</span>
+    <span class="stuck-s">Don't tap this unless you really need it.</span>
+  </button>
+
+  <dialog class="gate" id="gate">
+    <h2>Wait &mdash; read this first</h2>
+    <p><b>These are not clues.</b> You already have every clue you need. They are in the room, on the paintings, and in the printed things.</p>
+    <p class="last">This is only for when a clue isn't making sense and you would rather move on than stay stuck.</p>
+    <div class="gate-btns">
+      <a class="gate-go" href="/hints.html">Yes, I understand &mdash; show me a hint</a>
+      <button class="gate-back" type="button" id="gate-back">Oops, take me back</button>
+    </div>
+  </dialog>
   <div class="grid" id="grid"></div>
   <div class="colophon">The Hall of Flags
     <i>Every figure says something. Only the right figures say something useful.</i>
@@ -153,6 +187,18 @@
     card.querySelector('button').addEventListener('click', () => card.classList.toggle('flipped'));
     grid.appendChild(card);
   });
+
+  // The hints are one tap from the flags, so the tap has to be deliberate.
+  (function () {
+    var btn = document.getElementById('stuck'), gate = document.getElementById('gate');
+    if (!btn || !gate) return;
+    btn.addEventListener('click', function () {
+      if (typeof gate.showModal === 'function') { gate.showModal(); }
+      else { window.location.href = '/hints.html'; }   // very old browser: just go
+    });
+    document.getElementById('gate-back').addEventListener('click', function () { gate.close(); });
+    gate.addEventListener('click', function (e) { if (e.target === gate) gate.close(); });
+  })();
 </script>
 </body>
 </html>
