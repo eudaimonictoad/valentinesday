@@ -4,7 +4,6 @@ from music import *
 
 SEED = 1215
 SONGS = [
- ("The Barista's Hornpipe", "H. Whitlock", "Briskly", 4),
  ("Air for a Rainy Tuesday", "Mrs. E. Pennywhistle", "Andante", 4),
  ("The Copy-Shop Reel", "Trad., arr. O. Blount", "Lively", 4),
  ("Waltz for a Geneticist", "L. Marchetti", "Tempo di valse", 3),
@@ -16,6 +15,7 @@ SONGS = [
  ("March of the Small Paintings", "H. Whitlock", "Alla marcia", 4),
  ("The Tram to Brunswick", "A. Moreno", "Steadily", 4),
  ("Song of the Sock Drawer", "Anon.", "Comfortably", 3),
+ ("The Barista's Hornpipe", "H. Whitlock", "Briskly", 4),
  ("Minuet for Two Teacups", "L. Marchetti", "Tempo di minuetto", 3),
  ("The Landlord's Jig", "Trad., arr. O. Blount", "Fast, and then faster", 4),
  ("Lullaby for a Houseplant", "Mrs. E. Pennywhistle", "Very gently", 3),
