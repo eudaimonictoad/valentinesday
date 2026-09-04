@@ -38,7 +38,7 @@ def build():
 {masthead("The Cartomancer's Pocket Guide", 'The Meaning of every Card, and where its Fortune is to be Sought', 'As practised in the Kitchens of Europe · Sixth Printing')}
 <p class="preface">Draw a card, or be given one, or find one where no card ought to be. Read its meaning below, and then, if you are brave, go and look for its fortune in the place appointed. The places are traditional and have not been altered in six printings. The cards do not care whether you believe them.</p>
 <div class="cols2">{''.join(blocks)}</div>
-<div class="joker"><b>The Joker</b> (either colour) — the fool who knows everything and says nothing; the card that appears where it was not put. Its fortune is sought <i>{esc(cfg['joker_location'])}</i>.</div>
+<div class="joker"><b>The Joker</b> (either colour) — the fool who knows everything and says nothing; the card that appears where it was not put. Its fortune is sought <i>{esc(cfg['joker_location'])}</i>. {esc(cfg.get('joker_quip', ''))}</div>
 <div class="foot">The Cartomancer's Pocket Guide</div>
 </div>"""
     write_page('07-cartomancers-pocket-guide', body, "The Cartomancer's Pocket Guide", CSS)
