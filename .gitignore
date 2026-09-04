@@ -6,3 +6,5 @@ assets/preview_*
 music-preview.html
 sfx-preview.html
 escape-room/pdf/*.png
+__pycache__/
+*.pyc
