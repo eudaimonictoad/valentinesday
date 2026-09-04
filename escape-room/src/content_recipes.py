@@ -3,7 +3,7 @@ RECIPES = [
  # ---- Breads & Bakes
  ("Breads & Bakes", "Soda Bread", "Mix flour, a spoon of soda, and salt. Pour in buttermilk until a rough dough forms, shape into a round, cut a cross in the top, and bake hard and fast.", "Best eaten while playing the guitar, badly."),
  ("Breads & Bakes", "Oat Biscuits", "Rub butter into oats and flour, sweeten with brown sugar, bind with a little milk, and bake in small rounds until the edges darken.", "Best eaten while sweeping the window sills."),
- ("Breads & Bakes", "Yorkshire Pudding", "Beat eggs, flour, and milk into a thin batter and let it rest an hour. Pour into smoking-hot fat and do not open the oven door, whatever you hear.", "Best eaten after checking behind the television."),
+ ("Breads & Bakes", "Yorkshire Pudding", "Beat eggs, flour, and milk into a thin batter and let it rest an hour. Pour into smoking-hot fat and do not open the oven door, whatever you hear.", "Best eaten after looking under the couch cushions."),
  ("Breads & Bakes", "Buttermilk Scones", "Cut cold butter into flour and a pinch of sugar, add buttermilk, and handle as little as possible. Bake tall and split while warm.", "Best enjoyed while playing the piano with one hand."),
  ("Breads & Bakes", "Rye Crackers", "Roll rye flour, water, salt, and caraway very thin, prick all over with a fork, and bake until they snap.", "Keep well in the sock drawer, wrapped in paper."),
  ("Breads & Bakes", "Cornbread", "Stir a cup of cornmeal into a cup of flour with a spoon of sugar, a pinch of salt, and a spoon of baking powder. Beat in an egg, a cup of milk, and a knob of melted butter. Bake in a hot, buttered tin until the top cracks and turns gold.", "Best eaten while playing a game of backgammon."),

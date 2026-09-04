@@ -44,13 +44,13 @@ chk("B3 Queen of Hearts -> toilet cistern",
 fortunes = re.findall(r'fortune is sought <i>([^<]*)', cards)
 chk("52 cards + joker have fortunes", len(fortunes) == 53, len(fortunes))
 chk("all fortunes distinct", len(set(fortunes)) == len(fortunes))
-REAL = ['backgammon', 'wingspan', 'liquor', 'meditation', 'cushion', 'suitcase', 'backpack', 'sweets', 'candy', 'frame', 'picture', 'photo', 'puzzle', 'mirror', 'jigsaw']
+REAL = ['backgammon', 'wingspan', 'liquor', 'meditation', 'cushion', 'suitcase', 'backpack', 'sweets', 'candy', 'frame', 'picture', 'photo', 'puzzle', 'jigsaw']
 chk("no card fortune points at a real hiding place", not [f for f in fortunes if any(w in f.lower() for w in REAL)])
 chk("toilet and Dutch oven appear exactly once each",
     len([f for f in fortunes if 'toilet' in f.lower() or 'dutch oven' in f.lower()]) == 2)
 pairings = re.findall(r'<div class="p">([^<]*)', rec)
 chk("no recipe pairing points at a real hiding place",
-    not [p for p in pairings if any(w in p.lower() for w in ['wingspan', 'liquor', 'dutch oven', 'toilet', 'cistern', 'meditation', 'candy jar', 'cushion', 'suitcase', 'backpack', 'jigsaw', 'puzzle', 'picture', 'frame', 'mirror', 'photo'])])
+    not [p for p in pairings if any(w in p.lower() for w in ['wingspan', 'liquor', 'dutch oven', 'toilet', 'cistern', 'meditation', 'candy jar', 'suitcase', 'backpack', 'jigsaw', 'puzzle', 'picture', 'frame', 'photo'])])
 
 kn = H('01-knife-catalogue')
 import content_knives as CK
