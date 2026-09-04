@@ -14,7 +14,7 @@ CSS = """
 
 def build():
     cfg = json.load(open(os.path.join(ROOT, 'src', 'config.json')))
-    special = {'Patricia': cfg['patricia_keepsake'], 'Chloe': cfg['chloe_keepsake'], 'Sarah': "the author's whole heart"}
+    special = {'Patricia': cfg['patricia_keepsake'], 'Chloe': cfg['chloe_keepsake'], 'Shirley': cfg.get('shirley_keepsake', 'a bright meadow'), 'Sarah': "the author's whole heart"}
     rng = random.Random(1887)
     pool = [k for k in KEEPSAKES if k not in special.values()]
     rng.shuffle(pool)

@@ -2,6 +2,7 @@
   "_comment": "Edit these, then run: python3 escape-room/src/build_all.py",
   "patricia_keepsake": "whatever is kept at the back of the upstairs toilet, about which a noble woman does not ask",
   "chloe_keepsake": "a potted plant, or the soil beneath it",
+  "shirley_keepsake": "a bottle kept for company, in the cabinet where such bottles are kept",
   "joker_location": "in the Dutch oven",
   "joker_quip": "Lift the lid. If there is a stew in it, you have the wrong Dutch oven and somebody should be told."
 }
