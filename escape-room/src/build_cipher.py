@@ -34,7 +34,7 @@ def dial_svg(cx=350, cy=350):
     # rim inscription along the outer band
     RR = 332
     s.append(f'<defs><path id="rim" d="M {cx - RR},{cy} a {RR},{RR} 0 1,1 {2*RR},0 a {RR},{RR} 0 1,1 -{2*RR},0"/></defs>')
-    rim = '· SET THE HOUR · FIND IT WITHOUT · READ IT WITHIN ' * 3
+    rim = '· SET THE HOUR · OUTER RING IS WHAT IS WRITTEN · INNER RING IS WHAT IT MEANS ' * 2
     s.append(f'<text font-family="IM Fell DW Pica SC" font-size="11" letter-spacing="1.6" textLength="2072" lengthAdjust="spacing"><textPath href="#rim" startOffset="0">{rim.strip()}</textPath></text>')
     # centre mark
     s.append(f'<circle cx="{cx}" cy="{cy}" r="5" fill="none" stroke="#000" stroke-width="1"/><line x1="{cx-9}" y1="{cy}" x2="{cx+9}" y2="{cy}" stroke="#000" stroke-width="0.8"/><line x1="{cx}" y1="{cy-9}" x2="{cx}" y2="{cy+9}" stroke="#000" stroke-width="0.8"/>')
@@ -66,8 +66,10 @@ def hands_svg(cx=350, cy=350, rotation=0, with_labels=True):
     s.append(f'<circle cx="{cx}" cy="{cy}" r="9" fill="#000"/><circle cx="{cx}" cy="{cy}" r="3" fill="#fff"/>')
     if with_labels:
         # labels placed away from the hands
-        s.append(f'<text x="{cx}" y="{cy+110}" text-anchor="middle" font-family="IM Fell DW Pica SC" font-size="14" letter-spacing="2">PLATE II · THE HANDS</text>')
-        s.append(f'<text x="{cx}" y="{cy+135}" text-anchor="middle" font-family="IM Fell English" font-style="italic" font-size="11">Cut round the edge. Pin at the centre.</text>')
+        s.append(f'<text x="{cx}" y="{cy+92}" text-anchor="middle" font-family="IM Fell DW Pica SC" font-size="14" letter-spacing="2">PLATE II · THE HANDS</text>')
+        s.append(f'<text x="{cx}" y="{cy+114}" text-anchor="middle" font-family="IM Fell English" font-style="italic" font-size="11">Cut round the edge. Pin at the centre of Plate I.</text>')
+        s.append(f'<text x="{cx}" y="{cy+140}" text-anchor="middle" font-family="IM Fell DW Pica SC" font-size="10" letter-spacing="0.5">OUTER RING: WHAT IS WRITTEN</text>')
+        s.append(f'<text x="{cx}" y="{cy+156}" text-anchor="middle" font-family="IM Fell DW Pica SC" font-size="10" letter-spacing="0.5">INNER RING: WHAT IT MEANS</text>')
     s.append('</g>')
     return ''.join(s)
 
@@ -105,7 +107,7 @@ def build():
     body = f"""
 <div class="page">
 <div class="masthead"><div class="title">Cipher Solution Sheet</div><div class="sub">For the game-master only · do not print for Sarah</div></div>
-<div class="box"><b>How it works.</b> Plate II (the hands) is pinned on top of Plate I (the dial) and turned until the hands read <b>{SOLUTION_TIME}</b> on the dial's clock numerals: the short hand pointing straight at the <b>{HOUR_ANGLE // 30}</b> and the long hand straight at the <b>{12 if MINUTE_ANGLE == 0 else MINUTE_ANGLE // 30}</b>. That is a turn of {ROT}° clockwise from the printed position. The rim of the dial says <i>find it without, read it within</i>: a secret message is written in <b>dial symbols</b>; for each one, find it on the outer dial and read the symbol lined up with it on the inner disc. Letters and digits both take part, so you can hide a number, a time, or a word.</div>
+<div class="box"><b>How it works.</b> Plate II (the hands) is pinned on top of Plate I (the dial) and turned until the hands read <b>{SOLUTION_TIME}</b> on the dial's clock numerals: the short hand pointing straight at the <b>{HOUR_ANGLE // 30}</b> and the long hand straight at the <b>{12 if MINUTE_ANGLE == 0 else MINUTE_ANGLE // 30}</b>. That is a turn of {ROT}° clockwise from the printed position. The rim of the dial says <i>outer ring is what is written, inner ring is what it means</i>: a secret message is written in <b>dial symbols</b>; for each one, find it on the outer dial and read the symbol lined up with it on the inner disc. Letters and digits both take part, so you can hide a number, a time, or a word.</div>
 <div style="display:flex;gap:10px;justify-content:center;align-items:flex-start;">
 <svg viewBox="0 0 700 700" style="width:3.4in;height:3.4in" xmlns="http://www.w3.org/2000/svg">{dial_svg()}{hands_svg(rotation=ROT, with_labels=False)}</svg>
 <div style="display:flex;gap:6px">{tables}</div>
