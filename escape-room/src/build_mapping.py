@@ -77,7 +77,7 @@ def chart():
         ["Cartomancer's Guide, the Joker  →  in the Dutch oven"],
     ])
     s.append(c); s.append(arrow(535, yc, 535, yc + 9))
-    s.append(payload(370, yc + 10, 330, 36, ['HIDE IN THE DUTCH OVEN:', 'Plate I (the big dial), with a brad taped to it']))
+    s.append(payload(370, yc + 10, 330, 36, ['HIDE IN THE DUTCH OVEN:', 'Plate I (the big dial), with a paper fastener taped to it']))
     # Tier 2
     s.append(band(10, 392, 700, 76, 'OPENS WHEN THE MUSIC LINE IS DONE'))
     s.append(arrow(180, ya + 46, 180, 404))
@@ -121,7 +121,7 @@ PLACES = [
  ("Toilet cistern", "The BLACK key in a ziplock bag. Nothing else, ever. No paper, no paintings."),
  ("The candy jar", "The blue-light pen; the Abyssinia painting; the Gleaners painting. Roll the paintings or lay them under the jar if they will not fit inside."),
  ("Liquor cabinet", "The Pig-Pen Alphabet key sheet"),
- ("Dutch oven", "Plate I, with a brad (split pin) taped to it"),
+ ("Dutch oven", "Plate I, with a paper fastener taped to it (the brass pin with two flat legs; she pushes it through both discs and bends the legs back so the top disc spins)"),
  ("Bathroom wall or mirror", "ALIEN BLUES in dry-erase marker; the pigpen glyphs from the tracing sheet in invisible ink beneath"),
  ("Inside the meditation cushion", "The cipher card, in a small envelope, tucked just inside the zip where a hand will meet it"),
  ("Behind the framed photo puzzle", "The DARK BLUE key, taped flat to the back of the frame. Nothing points here until the wheel is decoded, so it is never searched."),
@@ -139,7 +139,7 @@ def build():
 <h3>Plain English for the things with odd names</h3>
 <dl class="gloss">
 <dt>The Concordance</dt><dd>The one-page sheet headed "A Reader's Concordance" with "The Prophet, by Kahlil Gibran" printed under the masthead. It gives one word-counting rule for each of 84 pages. She needs a real copy of The Prophet to use it; the sheet itself names the book, so put the book on the shelf among others and nothing more is needed.</dd>
-<dt>Plate I and Plate II</dt><dd><b>&ldquo;Plate&rdquo; always means one of the two cipher discs, and nothing else.</b> Plate I, The Dial, is the big circle with clock numerals round the rim. Plate II, The Hands, is the smaller circle with two clock hands on it. Cut both out. Push a brad (split pin) through the centre of Plate I and tape it there; she lays Plate II on top and turns it until the hands read 3:30. So &ldquo;hide Plate I in the Dutch oven&rdquo; simply means: put the big disc in the Dutch oven.</dd>
+<dt>Plate I and Plate II</dt><dd><b>&ldquo;Plate&rdquo; always means one of the two cipher discs, and nothing else.</b> Plate I, The Dial, is the big circle with clock numerals round the rim. Plate II, The Hands, is the smaller circle with two clock hands on it. Cut both out. Tape a paper fastener to Plate I (the brass pin with a round head and two flat legs, from any office-supply shop; a pushpin into cardboard works too); she lays Plate II on top and turns it until the hands read 3:30. So &ldquo;hide Plate I in the Dutch oven&rdquo; simply means: put the big disc in the Dutch oven.</dd>
 <dt>Figure I to Figure XX</dt><dd>The twenty flag cards on sarahs.quest. They carry no country names, only numbers, so Figure VII is the seventh card along. She never needs the number; she recognises Ethiopia and Italy by their colours. The numbers are only here so you can check the right card without counting.</dd>
 <dt>Pigpen</dt><dd>A cipher where each letter is drawn as the walls of the box it sits in. The printed Pig-Pen Alphabet sheet is the key. The only pigpen you write by hand is the wall; the flags' pigpen is already on the website.</dd>
 <dt>Wheel symbols</dt><dd>Ordinary letters and digits that only mean something once the wheel is set. You copy them onto the cushion card exactly as printed below.</dd>
