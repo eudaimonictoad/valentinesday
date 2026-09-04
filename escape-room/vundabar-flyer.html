@@ -15,9 +15,11 @@
   .tape.tl { top: -0.2in; left: 0.6in; transform: rotate(-6deg); }
   .tape.tr { top: -0.2in; right: 0.6in; transform: rotate(5deg); }
   .top { display: flex; justify-content: space-between; font-size: 11pt; letter-spacing: 0.15em; text-transform: uppercase; border-bottom: 3px solid #000; padding-bottom: 4px; }
-  .band { font-family: 'Anton', Impact, 'Arial Narrow', sans-serif; font-size: 118pt; line-height: 0.88; letter-spacing: 0.01em; text-align: center; margin: 0.05in 0 0; }
+  .band { display: block; width: 100%; margin: 0.05in 0 0; }
+  .band text { font-family: 'Anton', Impact, 'Arial Narrow', sans-serif; fill: #000; }
   .playing { text-align: center; font-size: 13pt; letter-spacing: 0.35em; text-transform: uppercase; }
-  .song { font-family: 'Anton', Impact, sans-serif; font-size: 64pt; line-height: 0.95; text-align: center; background: #000; color: #fff; padding: 0.12in 0.1in 0.16in; letter-spacing: 0.02em; }
+  .song { display: block; width: 100%; background: #000; padding: 0.1in 0.12in 0.12in; }
+  .song text { font-family: 'Anton', Impact, sans-serif; fill: #fff; }
   .where { text-align: center; font-size: 20pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; border-top: 3px solid #000; border-bottom: 3px solid #000; padding: 8px 0; }
   .where small { display: block; font-size: 11pt; font-weight: 400; letter-spacing: 0.25em; margin-top: 4px; }
   .shout { font-family: 'Anton', Impact, sans-serif; font-size: 34pt; text-align: center; letter-spacing: 0.04em; }
@@ -36,9 +38,13 @@
 <div class="sheet">
   <div class="tape tl"></div><div class="tape tr"></div>
   <div class="top"><span>One night only</span><span>All ages</span><span>No cover</span></div>
-  <div class="band">VUNDABAR</div>
+  <svg class="band" viewBox="0 0 1000 200" role="img" aria-label="Vundabar">
+    <text x="500" y="160" text-anchor="middle" font-size="200" textLength="980" lengthAdjust="spacingAndGlyphs">VUNDABAR</text>
+  </svg>
   <div class="playing">performing, in full, the hit single</div>
-  <div class="song">ALIEN BLUES</div>
+  <div class="song"><svg viewBox="0 0 1000 150" role="img" aria-label="Alien Blues">
+    <text x="500" y="118" text-anchor="middle" font-size="150" textLength="980" lengthAdjust="spacingAndGlyphs">ALIEN BLUES</text>
+  </svg></div>
   <div class="where">Live in the bathroom<small>upstairs · left at the top · the door that sticks</small></div>
   <div class="shout">CHECK IT OUT!!!</div>
   <div class="stars">★ ★ ★ ★ ★</div>
