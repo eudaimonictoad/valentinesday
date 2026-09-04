@@ -103,7 +103,10 @@ def build():
     # split into 3 side-by-side tables
     cols = [SYMBOLS[i::3] for i in range(3)]
     tables = ''.join('<table class="sol"><tr><th>Dial</th><th>Hands</th></tr>' + ''.join(f'<tr><td>{o}</td><td>{m[o]}</td></tr>' for o in c) + '</table>' for c in cols)
-    sample = 'LOOK BEHIND THE MIRROR AT 3 30'
+    # The real card, not an invented phrase. The old example read LOOK BEHIND THE
+    # MIRROR, which is one of the cartomancer's red-herring places — a confusing
+    # thing to find on your own answer sheet at midnight.
+    sample = 'BEHIND THE MANY FACES'
     body = f"""
 <div class="page">
 <div class="masthead"><div class="title">Cipher Solution Sheet</div><div class="sub">For the game-master only · do not print for Sarah</div></div>
@@ -112,7 +115,7 @@ def build():
 <svg viewBox="0 0 700 700" style="width:3.4in;height:3.4in" xmlns="http://www.w3.org/2000/svg">{dial_svg()}{hands_svg(rotation=ROT, with_labels=False)}</svg>
 <div style="display:flex;gap:6px">{tables}</div>
 </div>
-<div class="box"><b>Example.</b> Plain: <span style="font-family:'Old Standard TT'">{sample}</span><br>Written for Sarah (dial symbols): <span style="font-family:'Old Standard TT';font-size:13pt;letter-spacing:2px">{encode(sample)}</span><br>
+<div class="box"><b>The card she finds in the meditation cushion.</b> Written for Sarah (dial symbols): <span style="font-family:'Old Standard TT';font-size:13pt;letter-spacing:2px">{encode(sample)}</span><br>It must decode to: <span style="font-family:'Old Standard TT'"><b>{sample}</b></span> &mdash; that is the fifth test in your setup guide.<br>
 To make your own: <code>python3 escape-room/src/cipher_data.py YOUR MESSAGE HERE</code></div>
 <div class="box small">Plate II's hands are deliberately printed at an angle that reads as no sensible time; only when turned {ROT}° do they show {SOLUTION_TIME}. If you would rather a different answer, change SOLUTION_TIME, HOUR_ANGLE, MINUTE_ANGLE and ROT in <code>src/cipher_data.py</code> (ROT must be a multiple of 10) and rebuild.</div>
 </div>"""
