@@ -38,7 +38,7 @@ for nm in ('Patricia', 'Chloe', 'Shirley'):
     chk(f"{nm}'s keepsake is unique in the register", reg.count(keep(nm)) == 1)
 
 cards = H('07-cartomancers-pocket-guide')
-chk("C4 Red Joker -> Dutch oven", 'The Red Joker</b>' in cards and 'fortune is sought <i>in the Dutch oven' in cards)
+chk("C4 Coloured Joker -> Dutch oven", 'The Coloured Joker</b>' in cards and 'fortune is sought <i>in the Dutch oven' in cards)
 chk("Joker is set like the other suits, not boxed", 'class="joker"' not in cards)
 chk("B3 Queen of Hearts -> toilet cistern",
     'Queen of Hearts</b> — a kind and loyal woman; its fortune is sought <i>at the back of the upstairs toilet' in cards)

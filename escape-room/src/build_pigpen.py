@@ -12,7 +12,7 @@ def glyph(letter, x, y, s=26, sw=2.2):
     """SVG for one pigpen glyph with its top-left at (x, y) and side length s."""
     L = letter.upper(); out = []
     line = lambda x1, y1, x2, y2: out.append(f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="#000" stroke-width="{sw}" stroke-linecap="square"/>')
-    dot = lambda: out.append(f'<circle cx="{x+s/2:.1f}" cy="{y+s/2:.1f}" r="{s*0.09:.1f}" fill="#000"/>')
+    dot = lambda: out.append(f'<circle cx="{x+s/2:.1f}" cy="{y+s/2:.1f}" r="{s*0.10:.1f}" fill="#000"/>')
     if L in GRID1 or L in GRID2:
         i = (GRID1 + GRID2).index(L) % 9; r, c = divmod(i, 3)
         if r > 0: line(x, y, x + s, y)
@@ -39,18 +39,21 @@ def key_figure(x, y, cell=44):
             out.append(f'<line x1="{gx}" y1="{y + i*cell}" x2="{gx + 3*cell}" y2="{y + i*cell}" stroke="#000" stroke-width="2.5"/>')
         for i, L in enumerate(letters):
             r, c = divmod(i, 3)
-            out.append(f'<text x="{gx + c*cell + cell/2}" y="{y + r*cell + cell/2 + 1}" text-anchor="middle" dominant-baseline="central" font-family="Libre Baskerville" font-weight="700" font-size="20">{L}</text>')
+            lx = gx + c*cell + cell/2 - (cell*0.10 if dotted else 0)
+            ly = y + r*cell + cell/2
+            out.append(f'<text x="{lx}" y="{ly}" text-anchor="middle" dominant-baseline="central" font-family="Libre Baskerville" font-weight="700" font-size="20">{L}</text>')
             if dotted:
-                out.append(f'<circle cx="{gx + c*cell + cell/2}" cy="{y + r*cell + cell - 8}" r="3" fill="#000"/>')
+                out.append(f'<circle cx="{lx + cell*0.26:.1f}" cy="{ly + cell*0.22:.1f}" r="2.6" fill="#000"/>')
     for xi, (letters, dotted) in enumerate(((X1, False), (X2, True))):
         xx = x + 2 * (cell * 3 + 40) + xi * (cell * 3 + 40); size = 3 * cell
         out.append(f'<line x1="{xx}" y1="{y}" x2="{xx + size}" y2="{y + size}" stroke="#000" stroke-width="2.5"/>')
         out.append(f'<line x1="{xx + size}" y1="{y}" x2="{xx}" y2="{y + size}" stroke="#000" stroke-width="2.5"/>')
         pos = [(size/2, size*0.22), (size*0.2, size/2), (size*0.8, size/2), (size/2, size*0.8)]
         for L, (px, py) in zip(letters, pos):
-            out.append(f'<text x="{xx + px}" y="{y + py}" text-anchor="middle" dominant-baseline="central" font-family="Libre Baskerville" font-weight="700" font-size="20">{L}</text>')
+            lx = xx + px - (size*0.045 if dotted else 0)
+            out.append(f'<text x="{lx:.1f}" y="{y + py}" text-anchor="middle" dominant-baseline="central" font-family="Libre Baskerville" font-weight="700" font-size="20">{L}</text>')
             if dotted:
-                out.append(f'<circle cx="{xx + px + 16}" cy="{y + py + 9}" r="3" fill="#000"/>')
+                out.append(f'<circle cx="{lx + size*0.09:.1f}" cy="{y + py + size*0.075:.1f}" r="2.6" fill="#000"/>')
     return ''.join(out)
 
 def alphabet_table(x, y, cols=13, cell=48):

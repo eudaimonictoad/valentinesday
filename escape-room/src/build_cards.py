@@ -38,7 +38,7 @@ def build():
             p += 1
         blocks.append(f'<div class="suit"><h3><span>{sym}</span> {suit} <span class="small" style="font-family:\'IM Fell English\';font-style:italic;letter-spacing:0;text-transform:none">— {theme}</span></h3>{rows}</div>')
     # the two Jokers, set as a fifth suit so they do not stand out
-    jrows = (f'<div class="c"><b>The Red Joker</b> — the fool who knows everything and says nothing; its fortune is sought <i>{esc(cfg["joker_location"])}</i>.</div>'
+    jrows = (f'<div class="c"><b>The Coloured Joker</b> — the fool who knows everything and says nothing; its fortune is sought <i>{esc(cfg["joker_location"])}</i>.</div>'
              f'<div class="c"><b>The Black Joker</b> — the fool who says everything and knows nothing; its fortune is sought <i>inside a rolled-up yoga mat</i>.</div>')
     blocks.append(f'<div class="suit"><h3><span>✦</span> Jokers <span class="small" style="font-family:\'IM Fell English\';font-style:italic;letter-spacing:0;text-transform:none">— matters that fit nowhere else</span></h3>{jrows}</div>')
     body = f"""<div class="page">
