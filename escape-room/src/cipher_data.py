@@ -7,7 +7,9 @@ _r = random.Random(SEED)
 OUTER = SYMBOLS[:]; _r.shuffle(OUTER)      # symbols printed on the dial (outer plate), slot k at angle 10k
 INNER = SYMBOLS[:]; _r.shuffle(INNER)      # symbols printed on the hands disc (inner plate), slot k at angle 10k in its own frame
 SOLUTION_TIME = '3:30'
-HOUR_ANGLE, MINUTE_ANGLE = 105, 180        # where the hands must point on the dial at 3:30 (degrees clockwise from 12)
+HOUR_ANGLE, MINUTE_ANGLE = 90, 180         # where the hands must point on the dial (degrees clockwise from 12)
+# The hour hand points STRAIGHT AT the 3, not at the true 3:30 position between 3 and 4.
+# A real clock would put it halfway; a puzzle you have to line up by eye should not.
 ROT = 200                                   # the inner disc must be turned 200 degrees clockwise to read 3:30
 ROT_SLOTS = ROT // 10
 # hands are printed on the inner disc at these angles in the disc's own frame
