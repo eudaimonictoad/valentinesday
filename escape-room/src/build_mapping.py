@@ -69,7 +69,7 @@ def chart():
         ['Receipt Book, cornbread  →  a game of backgammon'],
     ])
     s.append(a); s.append(arrow(180, ya, 180, ya + 9))
-    s.append(payload(20, ya + 10, 320, 36, ['BACKGAMMON SET', 'Plate II  ·  the Patricia painting']))
+    s.append(payload(20, ya + 10, 320, 36, ['HIDE IN THE BACKGAMMON SET:', 'Plate II (the small disc with the hands) + Patricia painting']))
     c, yc = chain(370, 126, 330, [
         ['Put the knife on the scale  →  79 g'],
         ['Knife Catalogue, 79 g  →  No. 9, the Lemonade Knife'],
@@ -77,19 +77,19 @@ def chart():
         ["Cartomancer's Guide, the Joker  →  in the Dutch oven"],
     ])
     s.append(c); s.append(arrow(535, yc, 535, yc + 9))
-    s.append(payload(370, yc + 10, 330, 36, ['DUTCH OVEN', 'Plate I']))
+    s.append(payload(370, yc + 10, 330, 36, ['HIDE IN THE DUTCH OVEN:', 'Plate I (the big dial), with a brad taped to it']))
     # Tier 2
     s.append(band(10, 392, 700, 76, 'OPENS WHEN THE MUSIC LINE IS DONE'))
     s.append(arrow(180, ya + 46, 180, 404))
     s.append(box(20, 406, 320, 28, ['Patricia painting → Register → a small painted egg…']))
     s.append(arrow(340, 420, 369, 420))
-    s.append(payload(370, 402, 330, 36, ['WINGSPAN BOX', 'Hamlet painting  ·  fairy painting  ·  a Queen of Hearts']))
+    s.append(payload(370, 402, 330, 36, ['HIDE IN THE WINGSPAN BOX:', 'Hamlet painting · fairy painting · a Queen of Hearts']))
     # Tier 3: three at once
     s.append(band(10, 492, 700, 112, 'THREE AT ONCE  ·  any order'))
     lanes = [
-        (20, ["Queen of Hearts → Cartomancer's Guide", '→ the back of the upstairs toilet'], ['TOILET CISTERN', 'the BLACK key → the suitcase']),
-        (252, ['Hamlet → Hamnet → Chloé Zhao', '→ Register, Chloe → a jar of sweets'], ['THE CANDY JAR', 'blue-light pen · Abyssinia & Gleaners paintings']),
-        (484, ['Fairy houses → Shirley', '→ Register → a bottle kept for company'], ['LIQUOR CABINET', 'the Pig-Pen Alphabet sheet']),
+        (20, ["Queen of Hearts → Cartomancer's Guide", '→ the back of the upstairs toilet'], ['HIDE IN THE TOILET CISTERN:', 'the BLACK key (opens the suitcase)']),
+        (252, ['Hamlet → Hamnet → Chloé Zhao', '→ Register, Chloe → a jar of sweets'], ['HIDE IN THE CANDY JAR:', 'blue-light pen · Abyssinia + Gleaners paintings']),
+        (484, ['Fairy houses → Shirley', '→ Register → a bottle kept for company'], ['HIDE IN THE LIQUOR CABINET:', 'the Pig-Pen Alphabet sheet']),
     ]
     for x, lines, pay in lanes:
         s.append(arrow(535, 438, x + 108, 504))
@@ -98,14 +98,14 @@ def chart():
         s.append(payload(x, 553, 216, 40, pay))
     # Tier 4: the lock
     s.append(band(10, 628, 700, 330, 'THE LOCK  ·  needs a piece from every line'))
-    s.append(box(20, 642, 320, 44, ['Abyssinia painting + pigpen sheet → sarahs.quest,', 'the Ethiopian flag is Plate VII, turned over → HALF PAST THREE']))
-    s.append(box(370, 642, 330, 44, ['Flyer → bathroom. Blue-light pen + pigpen sheet', '→ under ALIEN BLUES: OPEN WHAT YOU SIT ON TO BREATHE']))
+    s.append(box(20, 642, 320, 44, ['Abyssinia + Gleaners + pigpen sheet → sarahs.quest. Ethiopia is', 'Figure VII (HALF PAST), Italy is Figure XIV (THREE) → 3:30']))
+    s.append(box(370, 642, 330, 44, ['Flyer → bathroom. Blue-light pen + pigpen sheet', 'marker: BREATHE IN, BREATHE OUT. ink: OPEN THE GREEN THING YOU SIT ON']))
     s.append(arrow(535, 686, 535, 698))
-    s.append(payload(370, 700, 330, 32, ['INSIDE THE MEDITATION CUSHION', 'the card:  DW5OY7 H5W VKYJ LKRWQ']))
+    s.append(payload(370, 700, 330, 32, ['HIDE INSIDE THE MEDITATION CUSHION:', 'the card:  DW5OY7 H5W VKYJ LKRWQ']))
     s.append(arrow(180, 686, 180, 746)); s.append(arrow(535, 732, 535, 746))
-    s.append(box(20, 748, 680, 44, ['THE WHEEL: pin Plate II on Plate I, set the hands to 3:30, decode the card', 'DW5OY7 H5W VKYJ LKRWQ  =  BEHIND THE MANY FACES'], size=10.5))
+    s.append(box(20, 748, 680, 44, ['THE WHEEL: pin Plate II (hands) on Plate I (dial), set 3:30, decode the card', 'DW5OY7 H5W VKYJ LKRWQ  =  BEHIND THE MANY FACES'], size=10.5))
     s.append(arrow(360, 792, 360, 804))
-    s.append(payload(20, 806, 680, 32, ['BEHIND THE FRAMED PHOTO PUZZLE  ·  the DARK BLUE key']))
+    s.append(payload(20, 806, 680, 32, ['HIDE BEHIND THE FRAMED PHOTO PUZZLE:  the DARK BLUE key']))
     s.append(arrow(360, 838, 360, 852))
     s.append(box(20, 854, 320, 44, ['BLACK key, from the cistern, opens the SUITCASE', 'early on. Inside: the backpack, still locked.'], size=10.5))
     s.append(arrow(340, 876, 369, 876))
@@ -139,7 +139,8 @@ def build():
 <h3>Plain English for the things with odd names</h3>
 <dl class="gloss">
 <dt>The Concordance</dt><dd>The one-page sheet headed "A Reader's Concordance" with "The Prophet, by Kahlil Gibran" printed under the masthead. It gives one word-counting rule for each of 84 pages. She needs a real copy of The Prophet to use it; the sheet itself names the book, so put the book on the shelf among others and nothing more is needed.</dd>
-<dt>Plate I and Plate II</dt><dd>The two circles on the cipher-wheel pages. Plate I, "The Dial", is the big one with clock numerals round the rim. Plate II, "The Hands", is the smaller one with two clock hands printed on it. Cut both out. Push a brad (split pin) through the centre of Plate I and tape it there; she pins Plate II on top and turns it until the hands read 3:30.</dd>
+<dt>Plate I and Plate II</dt><dd><b>&ldquo;Plate&rdquo; always means one of the two cipher discs, and nothing else.</b> Plate I, The Dial, is the big circle with clock numerals round the rim. Plate II, The Hands, is the smaller circle with two clock hands on it. Cut both out. Push a brad (split pin) through the centre of Plate I and tape it there; she lays Plate II on top and turns it until the hands read 3:30. So &ldquo;hide Plate I in the Dutch oven&rdquo; simply means: put the big disc in the Dutch oven.</dd>
+<dt>Figure I to Figure XX</dt><dd>The twenty flag cards on sarahs.quest. They carry no country names, only numbers, so Figure VII is the seventh card along. She never needs the number; she recognises Ethiopia and Italy by their colours. The numbers are only here so you can check the right card without counting.</dd>
 <dt>Pigpen</dt><dd>A cipher where each letter is drawn as the walls of the box it sits in. The printed Pig-Pen Alphabet sheet is the key. The only pigpen you write by hand is the wall; the flags' pigpen is already on the website.</dd>
 <dt>Wheel symbols</dt><dd>Ordinary letters and digits that only mean something once the wheel is set. You copy them onto the cushion card exactly as printed below.</dd>
 </dl>
@@ -176,13 +177,17 @@ every one of them is a question. You will need a scale, a knife, a pin, and more
 &nbsp;&nbsp;<b>Hamlet</b> &mdash; <i>We saw the film of this play. Whose film was it? Look her up by her first name.</i><br>
 &nbsp;&nbsp;<b>Fairy houses</b> &mdash; <i>What was the family name of the one who lived here? Look her up.</i><br>
 &nbsp;&nbsp;<b>Abyssinia</b> &mdash; <i>This country has another name now. Find its colours at sarahs.quest, and turn them over.</i><br>
-&nbsp;&nbsp;<b>Gleaners</b> &mdash; <i>The caf&eacute; sits in a market named for a country. Its colours are at sarahs.quest too.</i></div>
+&nbsp;&nbsp;<b>Gleaners</b> &mdash; <i>The caf&eacute; sits in a market named for a country. Its colours are at sarahs.quest too. You will need this one and Abyssinia both.</i></div>
 
-<div class="write"><b>3 · The wall.</b> In dry-erase marker, large: <span class="mono">ALIEN BLUES</span>.
-Directly beneath it, in the invisible-ink pen, copy the shapes from the tracing sheet two pages back. Each shape
-has its letter printed above it in grey; copy the shapes only, never the letters. They read OPEN WHAT YOU
-SIT ON TO BREATHE. Test a corner first: glass and glazed tile wipe clean, grout and stone do not. The mirror is
-the safest surface in the room.</div>
+<div class="write"><b>3 · The wall.</b> Two inks, and the order matters.<br>
+&nbsp;&nbsp;<b>In dry-erase marker</b>, large, so she can read it the moment she walks in:<br>
+&nbsp;&nbsp;<span class="mono">ALIEN BLUES</span><br>
+&nbsp;&nbsp;<span class="mono">BREATHE IN, BREATHE OUT.</span><br>
+&nbsp;&nbsp;<b>In the invisible-ink pen</b>, underneath, copy the shapes from the tracing sheet two pages back.
+They read OPEN THE GREEN THING YOU SIT ON. Each shape has its letter above it in grey; copy the shapes only,
+never the letters. The visible half is atmosphere and gives nothing away; the hidden half is the answer, so she
+still needs the pen and the pig-pen sheet to get there. Test a corner first: glass and glazed tile wipe clean,
+grout and stone do not. The mirror is the safest surface in the room.</div>
 
 <div class="write"><b>4 · The cipher card.</b> Any scrap of paper. In capitals, exactly, with the spaces where they are:
 <div class="mono" style="text-align:center;font-size:15pt;margin:6px 0">DW5OY7 H5W VKYJ LKRWQ</div>
@@ -205,7 +210,7 @@ the songbook, the knife catalogue and the recipe book are printed and final. The
 <li><b>The book.</b> Open your copy of The Prophet. Page 12, fourth word of the first line, must be <b>corn</b>. Page 15, the first sentence beginning &ldquo;Give&rdquo;, sixth word, must be <b>bread</b>. Editions differ and this is the single most likely thing to break.</li>
 <li><b>The wall.</b> Shine the blue-light pen on your writing. The shapes must show clearly. Then wipe a corner to be certain it comes off.</li>
 <li><b>The wheel.</b> Cut both plates, pin them, set the hands to half past three, and decode the cipher card yourself. It must read BEHIND THE MANY FACES.</li>
-<li><b>The website.</b> Open sarahs.quest on your phone. Tap Plate VII, the green-yellow-red flag with the blue disc. The pigpen on its back must read HALF PAST THREE.</li>
+<li><b>The website.</b> Open sarahs.quest on your phone. Tap Figure VII, the green-yellow-red flag with the blue disc: its back must read HALF PAST. Then tap Figure XIV, the green-white-red vertical stripes: its back must read THREE. Together they give half past three.</li>
 </ol>
 
 <h3>The order to set the room up</h3>
