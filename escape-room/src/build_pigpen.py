@@ -4,7 +4,10 @@
 import sys
 from common import *
 
-GRID1 = 'ABCDEFGHI'; GRID2 = 'JKLMNOPQR'; X1 = 'STUV'; X2 = 'WXYZ'
+# Deliberately NOT the textbook arrangement: the dotted figures hold the EARLIER
+# letters. The key sheet teaches it in full, so it is no harder to follow, but
+# decoding it from memory or from a search result gives nothing.
+GRID1 = 'JKLMNOPQR'; GRID2 = 'ABCDEFGHI'; X1 = 'WXYZ'; X2 = 'STUV'
 # The wall. lowercase = dry-erase marker, CAPITALS = invisible ink drawn as pig-pen.
 WALL = 'BREATHE in BREATHE out open the GREEN thing you SIT on'
 
@@ -12,7 +15,7 @@ def glyph(letter, x, y, s=26, sw=2.2):
     """SVG for one pigpen glyph with its top-left at (x, y) and side length s."""
     L = letter.upper(); out = []
     line = lambda x1, y1, x2, y2: out.append(f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="#000" stroke-width="{sw}" stroke-linecap="square"/>')
-    dot = lambda: out.append(f'<circle cx="{x+s/2:.1f}" cy="{y+s/2:.1f}" r="{s*0.10:.1f}" fill="#000"/>')
+    dot = lambda dx=0.0, dy=0.0: out.append(f'<circle cx="{x+s/2+dx:.1f}" cy="{y+s/2+dy:.1f}" r="{s*0.095:.1f}" fill="#000"/>')
     if L in GRID1 or L in GRID2:
         i = (GRID1 + GRID2).index(L) % 9; r, c = divmod(i, 3)
         if r > 0: line(x, y, x + s, y)
@@ -22,11 +25,13 @@ def glyph(letter, x, y, s=26, sw=2.2):
         if L in GRID2: dot()
     elif L in X1 or L in X2:
         i = (X1 + X2).index(L) % 4; cx, cy = x + s / 2, y + s / 2
-        if i == 0:   line(x, y, cx, cy); line(cx, cy, x + s, y)              # S/W : V shape
-        elif i == 1: line(x, y, cx, cy); line(cx, cy, x, y + s)              # T/X : > shape
-        elif i == 2: line(x + s, y, cx, cy); line(cx, cy, x + s, y + s)      # U/Y : < shape
-        else:        line(x, y + s, cx, cy); line(cx, cy, x + s, y + s)      # V/Z : ^ shape
-        if L in X2: dot()
+        # the enclosed triangle opens away from the vertex, so the dot is offset into it
+        off = s * 0.27
+        if i == 0:   line(x, y, cx, cy); line(cx, cy, x + s, y);             d = (0, -off)   # S/W : opens upward
+        elif i == 1: line(x, y, cx, cy); line(cx, cy, x, y + s);             d = (-off, 0)   # T/X : opens left
+        elif i == 2: line(x + s, y, cx, cy); line(cx, cy, x + s, y + s);     d = (off, 0)    # U/Y : opens right
+        else:        line(x, y + s, cx, cy); line(cx, cy, x + s, y + s);     d = (0, off)    # V/Z : opens downward
+        if L in X2: dot(*d)
     return ''.join(out)
 
 def key_figure(x, y, cell=44):
@@ -39,21 +44,22 @@ def key_figure(x, y, cell=44):
             out.append(f'<line x1="{gx}" y1="{y + i*cell}" x2="{gx + 3*cell}" y2="{y + i*cell}" stroke="#000" stroke-width="2.5"/>')
         for i, L in enumerate(letters):
             r, c = divmod(i, 3)
-            lx = gx + c*cell + cell/2 - (cell*0.10 if dotted else 0)
-            ly = y + r*cell + cell/2
-            out.append(f'<text x="{lx}" y="{ly}" text-anchor="middle" dominant-baseline="central" font-family="Libre Baskerville" font-weight="700" font-size="20">{L}</text>')
+            lx = gx + c*cell + cell*(0.42 if dotted else 0.5)
+            ly = y + r*cell + cell*(0.42 if dotted else 0.5)
+            out.append(f'<text x="{lx:.1f}" y="{ly:.1f}" text-anchor="middle" dominant-baseline="central" font-family="Libre Baskerville" font-weight="700" font-size="20">{L}</text>')
             if dotted:
-                out.append(f'<circle cx="{lx + cell*0.26:.1f}" cy="{ly + cell*0.22:.1f}" r="2.6" fill="#000"/>')
+                out.append(f'<circle cx="{gx + c*cell + cell*0.75:.1f}" cy="{y + r*cell + cell*0.75:.1f}" r="2.8" fill="#000"/>')
     for xi, (letters, dotted) in enumerate(((X1, False), (X2, True))):
         xx = x + 2 * (cell * 3 + 40) + xi * (cell * 3 + 40); size = 3 * cell
         out.append(f'<line x1="{xx}" y1="{y}" x2="{xx + size}" y2="{y + size}" stroke="#000" stroke-width="2.5"/>')
         out.append(f'<line x1="{xx + size}" y1="{y}" x2="{xx}" y2="{y + size}" stroke="#000" stroke-width="2.5"/>')
         pos = [(size/2, size*0.22), (size*0.2, size/2), (size*0.8, size/2), (size/2, size*0.8)]
-        for L, (px, py) in zip(letters, pos):
-            lx = xx + px - (size*0.045 if dotted else 0)
-            out.append(f'<text x="{lx:.1f}" y="{y + py}" text-anchor="middle" dominant-baseline="central" font-family="Libre Baskerville" font-weight="700" font-size="20">{L}</text>')
+        # dot offsets follow the triangle each letter sits in: up, left, right, down
+        doff = [(0, -size*0.105), (-size*0.105, 0), (size*0.105, 0), (0, size*0.105)]
+        for L, (px, py), (dx, dy) in zip(letters, pos, doff):
+            out.append(f'<text x="{xx + px:.1f}" y="{y + py}" text-anchor="middle" dominant-baseline="central" font-family="Libre Baskerville" font-weight="700" font-size="20">{L}</text>')
             if dotted:
-                out.append(f'<circle cx="{lx + size*0.09:.1f}" cy="{y + py + size*0.075:.1f}" r="2.6" fill="#000"/>')
+                out.append(f'<circle cx="{xx + px + dx:.1f}" cy="{y + py + dy:.1f}" r="2.8" fill="#000"/>')
     return ''.join(out)
 
 def alphabet_table(x, y, cols=13, cell=48):
@@ -111,9 +117,9 @@ CSS = """
 def build():
     body = f"""<div class="page">
 {masthead("The Pig-Pen Alphabet", 'A Key to the Cipher of the Freemasons, the Rosicrucians, and Schoolchildren', 'Pocket Library Series · No. 4')}
-<p class="preface">Each letter is written not by its name but by the shape of the pen it lives in. Find the letter in one of the four figures below and draw the lines that enclose it, and nothing else; the dot marks the second set. To read a message, do the same in reverse: match the shape to its pen, and take the letter that sits in it. The alphabet is set out in full underneath for the impatient.</p>
+<p class="preface">Each letter is written not by its name but by the shape of the pen it lives in. Find the letter in one of the four figures below and draw the lines that enclose it, and nothing else; the dot marks the second set. To read a message, do the same in reverse: match the shape to its pen, and take the letter that sits in it. The alphabet is set out in full underneath for the impatient. Note that these pens are not arranged as every printer arranges them; trust this sheet and nothing else.</p>
 <svg class="fig" viewBox="0 0 690 140" width="690" height="140" xmlns="http://www.w3.org/2000/svg">{key_figure(4, 4)}</svg>
-<div class="cap">The four pens. Left to right: letters A to I, letters J to R (dotted), S to V, W to Z (dotted).</div>
+<div class="cap">The four pens, left to right: {GRID1[0]} to {GRID1[-1]}, then {GRID2[0]} to {GRID2[-1]} with a dot, then {X1[0]} to {X1[-1]}, then {X2[0]} to {X2[-1]} with a dot.</div>
 <div class="sc2">The Alphabet in Full</div>
 <svg class="fig" viewBox="0 0 640 170" width="640" height="170" xmlns="http://www.w3.org/2000/svg">{alphabet_table(8, 8)}</svg>
 <div class="sc2">For Practice</div>
