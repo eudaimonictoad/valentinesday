@@ -51,7 +51,7 @@
     <div class="sub">Twenty Ensigns of the Nations · Uncaptioned</div>
     <div class="est">Pocket Library Series · No. 11 · The Reader is Trusted to Know Them</div>
   </div>
-  <p class="preface">The engraver was paid by the flag and not by the name, and so no names are given. Each plate turns over. On the back of every one the engraver has left a remark in the pen-and-dot hand of the Freemasons; the key to that hand is published separately, and the reader who has not yet got it may look and wonder.</p>
+  <p class="preface">The engraver was paid by the flag and not by the name, and so no names are given. Each figure turns over. On the back of every one the engraver has left a remark in the pen-and-dot hand of the Freemasons; the key to that hand is published separately, and the reader who has not yet got it may look and wonder.</p>
 
   <a class="stuck" href="/hints.html">
     <span class="stuck-t">Stuck? Open the Book of Hints</span>
@@ -59,7 +59,7 @@
   </a>
   <div class="grid" id="grid"></div>
   <div class="colophon">The Hall of Flags
-    <i>Every plate says something. Only the right plates say something useful.</i>
+    <i>Every figure says something. Only the right figures say something useful.</i>
   </div>
 </div>
 
@@ -78,14 +78,14 @@
     { draw: () => svg(V(['#169b62', '#ffffff', '#ff883e'])), msg: 'NOT THIS GREEN' },                        // Ireland
     { draw: () => svg(H(['#ae1c28', '#ffffff', '#21468b'])), msg: 'TOO TALL' },                              // Netherlands
     { draw: () => svg(V(['#14b53a', '#fcd116', '#ce1126'])), msg: 'CLOSE BUT NO' },                          // Mali
-    { draw: () => svg(H(['#078930', '#fcdd09', '#da121a']) + `<circle cx="45" cy="30" r="13" fill="#0f47af"/>` + star(45, 30, 9.5, '#fcdd09')), msg: 'HALF PAST THREE' }, // Ethiopia
+    { draw: () => svg(H(['#078930', '#fcdd09', '#da121a']) + `<circle cx="45" cy="30" r="13" fill="#0f47af"/>` + star(45, 30, 9.5, '#fcdd09')), msg: 'HALF PAST' }, // Ethiopia
     { draw: () => svg(H(['#ce2939', '#ffffff', '#477050'])), msg: 'HUNGRY' },                                // Hungary
     { draw: () => svg(V(['#000000', '#fdda24', '#ef3340'])), msg: 'WAFFLES' },                               // Belgium
     { draw: () => svg(H(['#ce1126', '#fcd116', '#006b3f']) + star(45, 30, 8, '#000000')), msg: 'WRONG STAR' }, // Ghana
     { draw: () => svg(H(['#0057b7', '#ffd700'])), msg: 'SUNFLOWERS' },                                       // Ukraine
     { draw: () => svg(V(['#f77f00', '#ffffff', '#009e60'])), msg: 'OTHER WAY ROUND' },                       // Ivory Coast
     { draw: () => svg(`<rect width="90" height="60" fill="#ffffff"/><circle cx="45" cy="30" r="18" fill="#bc002d"/>`), msg: 'SAKAI STEEL' }, // Japan
-    { draw: () => svg(V(['#009246', '#ffffff', '#ce2b37'])), msg: 'I WOULD GLEAN A WHOLE FIELD FOR YOU' },   // Italy
+    { draw: () => svg(V(['#009246', '#ffffff', '#ce2b37'])), msg: 'THREE' },   // Italy
     { draw: () => svg(H(['#ed2939', '#ffffff', '#ed2939'])), msg: 'NOT AUSTRALIA' },                         // Austria
     { draw: () => svg(H(['#fdb913', '#006a44', '#c1272d'])), msg: 'COLD' },                                  // Lithuania
     { draw: () => svg(`<rect width="90" height="30" fill="#fcd116"/><rect y="30" width="90" height="15" fill="#003893"/><rect y="45" width="90" height="15" fill="#ce1126"/>`), msg: 'COFFEE FIRST' }, // Colombia
@@ -145,9 +145,9 @@
   const grid = document.getElementById('grid');
   FLAGS.forEach((f, i) => {
     const card = document.createElement('div'); card.className = 'card';
-    card.innerHTML = `<button type="button" aria-label="Plate ${ROMAN[i]}, tap to turn over"><div class="inner">
-      <div class="face front"><div class="plate">${f.draw()}</div><div class="fig">Plate ${ROMAN[i]}</div></div>
-      <div class="face back">${messageSvg(f.msg)}<div class="fig">Plate ${ROMAN[i]}</div></div>
+    card.innerHTML = `<button type="button" aria-label="Figure ${ROMAN[i]}, tap to turn over"><div class="inner">
+      <div class="face front"><div class="plate">${f.draw()}</div><div class="fig">Figure ${ROMAN[i]}</div></div>
+      <div class="face back">${messageSvg(f.msg)}<div class="fig">Figure ${ROMAN[i]}</div></div>
     </div></button>`;
     card.querySelector('button').addEventListener('click', () => card.classList.toggle('flipped'));
     grid.appendChild(card);
