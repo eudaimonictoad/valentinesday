@@ -5,5 +5,8 @@
   "shirley_keepsake": "a bottle kept for company, among the other bottles",
   "joker_location": "in the Dutch oven",
   "joker_quip": "Lift the lid. If there is a stew in it, you have the wrong Dutch oven and somebody should be told.",
-  "sarah_keepsake": "a small stuffed animal answering to the name Sushi"
+  "sarah_keepsake": "a small stuffed animal answering to the name Sushi",
+  "_comment_framer": "Where the two flag paintings actually are. The framer's card in the candy jar reads these out. Keep them flat, dry, and nowhere near the toilet. Neither may repeat one of the 52 card fortunes in build_cards.py; verify.py checks that.",
+  "abyssinia_location": "taped flat to the inside of a kitchen cupboard door",
+  "gleaners_location": "standing on its edge between two plates in the stack of crockery"
 }

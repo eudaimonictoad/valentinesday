@@ -1,0 +1,62 @@
+import json
+from common import *
+
+# The card that sits in the candy jar with the blue-light pen. It names where the two
+# flag paintings actually are. It deliberately does NOT describe either picture: saying
+# "a country in the horn of Africa" or "three women at the harvest" would hand her the
+# Abyssinia and Gleaners steps for free. Both are just "one small picture, ink and wash".
+
+CSS = """
+.card { width: 4.7in; margin: 0 auto; border: 1.5px solid #000; padding: 16px 20px 12px; }
+.card + .card { margin-top: 0.42in; }
+.cut { text-align: center; font-size: 8pt; letter-spacing: 0.28em; font-family: 'IM Fell DW Pica SC';
+       margin: 0.2in auto; width: 4.7in; border-top: 1px dashed #000; padding-top: 3px; }
+.shop { text-align: center; font-family: 'UnifrakturMaguntia'; font-size: 21pt; line-height: 1.05; }
+.trade { text-align: center; font-family: 'IM Fell DW Pica SC'; font-size: 8.6pt; letter-spacing: 0.13em; margin-top: 3px; }
+.est { text-align: center; font-style: italic; font-size: 8.2pt; margin-top: 1px; }
+.notice { text-align: center; font-family: 'IM Fell DW Pica SC'; font-size: 11pt; letter-spacing: 0.09em;
+          border-top: 3px double #000; border-bottom: 3px double #000; padding: 5px 0; margin: 9px 0 8px; }
+.said { font-size: 9.6pt; line-height: 1.3; text-align: justify; margin-bottom: 7px; }
+.item { font-size: 9.8pt; line-height: 1.32; border-bottom: 1px dotted #000; padding-bottom: 4px; margin-bottom: 5px; }
+.item .no { font-family: 'IM Fell DW Pica SC'; letter-spacing: 0.06em; }
+.item .where { font-style: italic; }
+.pair { font-size: 9.4pt; font-style: italic; text-align: center; margin: 7px 0 4px; }
+.sign { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 8px; }
+.sign .rec { font-size: 8pt; }
+.sign .rec span { display: inline-block; border-bottom: 1px solid #000; width: 1.15in; }
+.cfoot { font-size: 7.6pt; text-align: center; border-top: 1px solid #000; padding-top: 3px; margin-top: 7px; font-style: italic; }
+"""
+
+
+def card(cfg):
+    return f"""<div class="card">
+<div class="shop">Beezley &amp; Daughter</div>
+<div class="trade">PICTURE FRAMERS · GILDERS · RESTORERS</div>
+<div class="est">at the sign of the Gilt Corner · established 1871</div>
+<div class="notice">NOTICE OF DELIVERY IN YOUR ABSENCE</div>
+<p class="said">We called this morning with two pictures and found nobody at home. Rather than
+carry them back to the shop and charge you a second time for the cartage, we have taken the
+liberty of leaving them about the premises, thus:</p>
+<div class="item"><span class="no">No. 1.</span> &nbsp;One small picture, ink and wash. Left <span class="where">{esc(cfg['abyssinia_location'])}</span>.</div>
+<div class="item"><span class="no">No. 2.</span> &nbsp;One small picture, ink and wash. Left <span class="where">{esc(cfg['gleaners_location'])}</span>.</div>
+<p class="pair">The two are a pair, and are wanted together.<br>One without the other is of no use to anybody.</p>
+<div class="sign">
+  <div class="rec">Received in good order &nbsp;<span></span></div>
+  <div class="rec">Carman &nbsp;<span></span></div>
+</div>
+<div class="cfoot">No responsibility is accepted for pictures left in this manner.</div>
+</div>"""
+
+
+def build():
+    cfg = json.load(open(os.path.join(ROOT, 'src', 'config.json')))
+    body = f"""<div class="page">
+{card(cfg)}
+<div class="cut">CUT HERE · THE SECOND IS A SPARE</div>
+{card(cfg)}
+</div>"""
+    write_page('13-framers-delivery-card', body, "Beezley & Daughter — Notice of Delivery", CSS)
+
+
+if __name__ == '__main__':
+    build()

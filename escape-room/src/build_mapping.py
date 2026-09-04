@@ -1,6 +1,7 @@
 # The game-master's setup guide: a flowchart of what runs in parallel, the lock
 # order, every hiding place, and exactly what to write by hand. Printed LAST in
 # the combined PDF, to be torn off. File name kept for the merge script.
+import json
 from common import *
 
 CSS = """
@@ -25,7 +26,38 @@ svg text { font-family: 'IM Fell English', serif; }
 
 # ---------- flowchart ----------
 W = 720
+# box() has no wrapping, so an over-long line silently spills across its
+# neighbours and off the page — which is exactly how the ALIEN BLUES line sat
+# unnoticed on top of the box beside it. Refuse to build one instead.
+# Per-character widths (as a fraction of font size) fitted by least squares
+# against 67 text spans measured off a rendered flowchart page with PyMuPDF.
+# Capitals are the expensive ones, which is why the all-caps lines were the
+# ones that blew out. SAFETY covers the worst under-prediction in that fit.
+# This is a guard against gross overflow (the offender above was 60% over its
+# box), not a typesetter. With the 10-unit padding below it leaves normal lines
+# alone and shouts about the ones that would land on their neighbours.
+CHAR_W = {'upper': 0.7128, 'lower': 0.4350, 'punct': 0.1431, 'space': 0.3259}
+SAFETY = 1.08
+
+def text_width(text, size):
+    total = 0.0
+    for ch in text:
+        if ch == ' ':                        k = 'space'
+        elif ch.isupper() or ch.isdigit():   k = 'upper'
+        elif ch.islower():                   k = 'lower'
+        else:                                k = 'punct'
+        total += CHAR_W[k]
+    return total * size * SAFETY
+
+def fits(text, size, w):
+    return text_width(text, size) <= w - 10
+
 def box(x, y, w, h, lines, fill='#fff', color='#000', size=10.5, bold=False):
+    for t in lines:
+        if not fits(t, size, w):
+            raise ValueError(
+                f'flowchart line overflows its {w}-wide box at size {size} '
+                f'(needs ~{text_width(t, size):.0f}, {w - 10} available): {t!r}')
     fam = "'IM Fell DW Pica SC'" if bold else "'IM Fell English'"
     n = len(lines); lh = size * 1.25
     y0 = y + h / 2 - (n - 1) * lh / 2 + size * 0.35
@@ -58,7 +90,9 @@ def chart():
     # Tier 0
     s.append(band(10, 22, 700, 66, 'MINUTE ONE'))
     s.append(box(20, 34, 320, 44, ['HANDED TO HER: the letter and the Milk Crate painting.', 'The letter gives her the address sarahs.quest.']))
-    s.append(box(370, 34, 330, 44, ['OUT IN THE OPEN: seven printed sheets (not the pig-pen key, not the plates),', 'the flyer, the lemons, the knife AND the scale, The Prophet, the locked suitcase.']))
+    s.append(box(370, 34, 330, 44, ['OUT IN THE OPEN: seven printed sheets (not the pig-pen',
+                                    'key, not the plates), the flyer, the lemons, the knife AND',
+                                    'the scale, The Prophet, the locked suitcase.'], size=9.6))
     # Tier 1: A and C in parallel
     s.append(band(10, 112, 700, 258, 'OPEN AT THE SAME TIME  ·  two lines, either order'))
     a, ya = chain(20, 126, 320, [
@@ -88,7 +122,7 @@ def chart():
     s.append(band(10, 492, 700, 112, 'THREE AT ONCE  ·  any order'))
     lanes = [
         (20, ["Queen of Hearts → Cartomancer's Guide", '→ the back of the upstairs toilet'], ['HIDE IN THE TOILET CISTERN:', 'the BLACK key (opens the suitcase)']),
-        (252, ['Hamlet → Hamnet → Chloé Zhao', '→ Register, Chloe → a jar of sweets'], ['HIDE IN THE CANDY JAR:', 'blue-light pen · Abyssinia + Gleaners paintings']),
+        (252, ['Hamlet → Hamnet → Chloé Zhao', '→ Register, Chloe → a jar of sweets'], ['HIDE IN THE CANDY JAR:', "blue-light pen · the framer's card"]),
         (484, ['Fairy houses → Shirley', '→ Register → a bottle kept for company'], ['HIDE IN THE LIQUOR CABINET:', 'the Pig-Pen Alphabet sheet']),
     ]
     for x, lines, pay in lanes:
@@ -98,8 +132,12 @@ def chart():
         s.append(payload(x, 553, 216, 40, pay))
     # Tier 4: the lock
     s.append(band(10, 628, 700, 330, 'THE LOCK  ·  needs a piece from every line'))
-    s.append(box(20, 642, 320, 44, ['Abyssinia + Gleaners + pigpen sheet → sarahs.quest. Ethiopia is', 'Figure VII (HALF PAST), Italy is Figure XIV (THREE) → 3:30']))
-    s.append(box(370, 642, 330, 44, ['Flyer → bathroom. Blue-light pen + pigpen sheet', 'ALIEN BLUES in marker; then BREATHE in BREATHE out open the GREEN thing you SIT on (caps in ink)']))
+    s.append(box(20, 642, 320, 44, ["Framer's card → both paintings. With the pigpen sheet:",
+                                    'sarahs.quest → Ethiopia = Figure VII (HALF PAST),',
+                                    'Italy = Figure XIV (THREE). The hour is 3:30.'], size=9.6))
+    s.append(box(370, 642, 330, 44, ['Flyer → bathroom. Blue-light pen + pigpen sheet.',
+                                     'Marker: ALIEN BLUES. Invisible ink, in the gaps:',
+                                     'BREATHE / BREATHE / GREEN / SIT'], size=9.6))
     s.append(arrow(535, 686, 535, 698))
     s.append(payload(370, 700, 330, 32, ['HIDE INSIDE THE MEDITATION CUSHION:', 'the card:  DW5OY7 H5W VKYJ LKRWQ']))
     s.append(arrow(180, 686, 180, 746)); s.append(arrow(535, 732, 535, 746))
@@ -113,13 +151,16 @@ def chart():
     s.append(f'<text x="360" y="930" text-anchor="middle" font-size="10" font-style="italic">Nothing can be shortcut: the card is unreadable without both plates and the time, and those come from three different places.</text>')
     return f'<svg viewBox="0 0 {W} 950" width="6.85in" xmlns="http://www.w3.org/2000/svg">{"".join(s)}</svg>'
 
-PLACES = [
+def places(cfg):
+  return [
  ("Her hands", "The welcome letter and the Milk Crate painting. Nothing is hidden on the painting; its back just carries the written clue."),
  ("Out in the open", "Seven printed sheets scattered about: knife catalogue, songbook, Stars and Their Notes, receipt book, register, cartomancer's guide, concordance. NOT the pig-pen key (liquor cabinet) and NOT the two plates (backgammon set, Dutch oven). Also the flyer on the fridge; a bowl of lemons, one loaded; the knife and the kitchen scale on the counter; The Prophet on the shelf among many books; the locked suitcase"),
  ("Backgammon set", "Plate II; the Patricia painting"),
  ("Wingspan box", "The Hamlet painting; the fairy painting; a real Queen of Hearts playing card"),
  ("Toilet cistern", "The BLACK key in a ziplock bag. Nothing else, ever. No paper, no paintings."),
- ("The candy jar", "The blue-light pen; the Abyssinia painting; the Gleaners painting. Roll the paintings or lay them under the jar if they will not fit inside."),
+ ("The candy jar", "The blue-light pen and the framer's delivery card, rolled together. No paintings in here any more: the card is what tells her where the two of them are."),
+ ("Abyssinia painting", f"{cfg['abyssinia_location'][0].upper() + cfg['abyssinia_location'][1:]}. Named by the framer's card. Nothing else goes here."),
+ ("Gleaners painting", f"{cfg['gleaners_location'][0].upper() + cfg['gleaners_location'][1:]}. Named by the framer's card. Nothing else goes here."),
  ("Liquor cabinet", "The Pig-Pen Alphabet key sheet"),
  ("Dutch oven", "Plate I, with a paper fastener taped to it (the brass pin with two flat legs; she pushes it through both discs and bends the legs back so the top disc spins)"),
  ("Bathroom wall or mirror", "ALIEN BLUES in dry-erase marker; the pigpen glyphs from the tracing sheet in invisible ink beneath"),
@@ -130,7 +171,8 @@ PLACES = [
 ]
 
 def build():
-    prows = ''.join(f'<tr><td class="loc">{esc(a)}</td><td>{esc(b)}</td></tr>' for a, b in PLACES)
+    cfg = json.load(open(os.path.join(ROOT, "src", "config.json")))
+    prows = ''.join(f'<tr><td class="loc">{esc(a)}</td><td>{esc(b)}</td></tr>' for a, b in places(cfg))
     page1 = f"""<div class="page">
 <div class="warn">Game-master's setup guide · remove these leaves before she arrives</div>
 {chart()}
@@ -216,16 +258,17 @@ the songbook, the knife catalogue and the recipe book are printed and final. The
 <ol>
 <li>Lock the backpack, put it in the suitcase, lock the suitcase, stand it in the open.</li>
 <li>Hide the two keys: BLACK in the cistern, DARK BLUE behind the framed puzzle.</li>
-<li>Place all six paintings: Milk Crate in her envelope; Patricia in the backgammon set; Hamlet and the fairy houses in the Wingspan box with the Queen of Hearts; Abyssinia and Gleaners with the candy jar. None goes in the backpack.</li>
+<li>Place all six paintings: Milk Crate in her envelope; Patricia in the backgammon set; Hamlet and the fairy houses in the Wingspan box with the Queen of Hearts; Abyssinia and Gleaners in the two places the framer&rsquo;s card names. None goes in the backpack, and none goes in the candy jar.</li>
+<li>Blue-light pen and the framer&rsquo;s delivery card into the candy jar, rolled together. Check the card names the two places you actually used.</li>
 <li>Plate II in the backgammon set. Plate I in the Dutch oven. Pig-pen sheet in the liquor cabinet.</li>
 <li>Load one lemon with the Joker and set the bowl out. Knife and scale on the counter.</li>
 <li>Cipher card into the cushion. Write the wall. Flyer on the fridge.</li>
 <li>Scatter the seven open sheets around the room: knife catalogue, songbook, Stars and Their Notes, receipt book, register, cartomancer's guide, concordance. The Prophet onto the shelf among other books. Keep the pig-pen key and both plates for their hiding places.</li>
-<li>Tear the last six leaves out of the printed packet and hide them from yourself.</li>
+<li>Tear the last <b>seven</b> leaves out of the printed packet and hide them from yourself: the wall to trace, these five guide pages, and the cipher solution. The wall sheet is the first of the seven and it gives the answer away, so count from the back and be sure you have all seven.</li>
 </ol>
 
 <h3>If she stalls</h3>
-<p style="font-size:9.6pt"><span class="mono">sarahs.quest/hints.html</span> holds eighteen predicaments, each with a nudge,
+<p style="font-size:9.6pt"><span class="mono">sarahs.quest/hints.html</span> holds a hint for every predicament in the game, each with a nudge,
 then a firmer nudge, then the answer outright. It is linked in a box at the top of the flags page, so she can reach it
 on her own and you never have to be the one who gives it away. Or just tell her; you are allowed.</p>
 <div class="foot">Game-master&rsquo;s setup guide · 5 of 5 · the cipher solution follows, remove that too</div>

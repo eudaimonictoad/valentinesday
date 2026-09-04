@@ -90,6 +90,33 @@ chk("E1 flags carry no country names", 'Ethiopia<' not in fl and '>Italy<' not i
 chk("E1 no flag duplicates a route", 'TUCK AND DRAW' not in fl)
 chk("E1 flag cards are Figures, not Plates", 'Plate ${ROMAN' not in fl and '>Plate <' not in fl)
 
+# ---- F: the framer's delivery card, and the two painting spots it names ----
+cfg = json.load(open('src/config.json'))
+fr = H('13-framers-delivery-card')
+ab, gl = cfg['abyssinia_location'], cfg['gleaners_location']
+chk("F1 framer's card names the Abyssinia spot", ab in fr, ab)
+chk("F1 framer's card names the Gleaners spot", gl in fr, gl)
+chk("F2 the two painting spots are different places", ab != gl)
+chk("F3 card leaks neither painting's subject",
+    not [w for w in ('Abyssinia', 'Ethiop', 'Ital', 'Glean', 'Africa', 'harvest', 'market') if w in fr],
+    [w for w in ('Abyssinia', 'Ethiop', 'Ital', 'Glean', 'Africa', 'harvest', 'market') if w in fr])
+chk("F4 no painting goes anywhere near water", not [w for w in ('toilet', 'cistern', 'bath', 'sink', 'shower', 'kettle') if w in (ab + ' ' + gl).lower()])
+from build_cards import PLACES as CARDPLACES
+def core(p):
+    for pre in ('nestled in the ', 'inside the ', 'inside a ', 'beneath the ', 'behind the ',
+                'under the ', 'in the ', 'on the ', 'at the ', 'in a ', 'under a '):
+        if p.startswith(pre): return p[len(pre):]
+    return p
+hits = [p for p in CARDPLACES if core(p) and core(p) in (ab + ' | ' + gl)]
+chk("F5 neither painting spot collides with a card fortune", not hits, hits)
+chk("F6 candy jar no longer holds the paintings",
+    'Abyssinia painting' not in gm.split('The candy jar')[1].split('</tr>')[0] if 'The candy jar' in gm else False)
+chk("F7 guide's candy-jar row names the framer's card", "framer's delivery card" in gm)
+chk("F8 guide tells him to tear off seven leaves, not six",
+    'seven</b> leaves' in gm and 'last six leaves' not in gm)
+chk("F9 set-up order places the pen and card in the jar", 'into the candy jar' in gm)
+
+
 print('\n'.join('PASS  ' + s for s in ok))
 if bad: print('\n' + '\n'.join('FAIL  ' + s for s in bad))
 print(f"\n{len(ok)} passed, {len(bad)} failed")
