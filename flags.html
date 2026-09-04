@@ -33,6 +33,12 @@
           background-image: repeating-linear-gradient(0deg, transparent 0 23px, rgba(23,21,18,0.08) 23px 24px); }
   .back svg { display: block; max-width: 100%; height: auto; }
   .back .fig { font-family: 'IM Fell DW Pica SC', serif; font-size: 10px; letter-spacing: 0.14em; position: absolute; bottom: 4px; left: 0; right: 0; text-align: center; color: #5a5348; }
+  .stuck { display: block; text-decoration: none; color: #171512; border: 2px solid #171512;
+           background: #fbf8f1; padding: 12px 16px; margin: 0 0 20px; text-align: center;
+           box-shadow: 3px 3px 0 rgba(23,21,18,0.16); }
+  .stuck:hover, .stuck:focus-visible { background: #171512; color: #f3efe6; }
+  .stuck-t { display: block; font-family: 'IM Fell DW Pica SC', serif; font-size: 17px; letter-spacing: 0.08em; }
+  .stuck-s { display: block; font-size: 14px; font-style: italic; margin-top: 5px; line-height: 1.35; }
   .colophon { text-align: center; font-family: 'IM Fell DW Pica SC', serif; font-size: 12px; letter-spacing: 0.12em; margin-top: 26px; border-top: 1px solid #171512; padding-top: 8px; }
   .colophon i { display: block; font-family: 'IM Fell English', serif; font-style: italic; letter-spacing: 0; font-size: 14px; margin-top: 4px; }
   @media (prefers-reduced-motion: reduce) { .inner { transition: none; } }
@@ -46,10 +52,14 @@
     <div class="est">Pocket Library Series · No. 11 · The Reader is Trusted to Know Them</div>
   </div>
   <p class="preface">The engraver was paid by the flag and not by the name, and so no names are given. Each plate turns over. On the back of every one the engraver has left a remark in the pen-and-dot hand of the Freemasons; the key to that hand is published separately, and the reader who has not yet got it may look and wonder.</p>
+
+  <a class="stuck" href="/hints.html">
+    <span class="stuck-t">Stuck? Open the Book of Hints</span>
+    <span class="stuck-s">Every hint gives you a gentle nudge first &mdash; but read far enough and it will hand you the answer outright. Use it when you would rather move on than be defeated.</span>
+  </a>
   <div class="grid" id="grid"></div>
   <div class="colophon">The Hall of Flags
     <i>Every plate says something. Only the right plates say something useful.</i>
-    <i style="margin-top:10px">Hopelessly stuck? There is <a href="/hints.html" style="color:#171512">a book of hints</a>.</i>
   </div>
 </div>
 
