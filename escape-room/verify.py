@@ -66,6 +66,14 @@ chk("E4 wheel time is 3:30", 'read <b>3:30</b>' in sol)
 chk("E4 rotation is 200 degrees", 'turned 200°' in sol)
 chk("solution sheet is clearly marked", 'game-master only' in sol.lower())
 
+# ---- all six paintings: each is placed, each has a written clue, none duplicated ----
+gm = open('html/10-mapping-GAMEMASTER-remove.html').read()
+PAINTINGS = ['Milk Crate', 'Patricia', 'Hamlet', 'Fairy houses', 'Abyssinia', 'Gleaners']
+for name in PAINTINGS:
+    chk(f"painting '{name}' has a written clue on the guide", name in gm, name)
+chk("no phantom seventh painting in the backpack", 'sixth painting' not in gm)
+chk("all six paintings placed in the set-up order", 'Place all six paintings' in gm)
+
 fl = open('flags.html').read()
 chk("E1 Ethiopia plate gives the time", "'HALF PAST THREE'" in fl)
 chk("E1 flags carry no country names", 'Ethiopia<' not in fl and '>Italy<' not in fl)

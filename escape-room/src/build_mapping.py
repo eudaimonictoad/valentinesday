@@ -109,7 +109,7 @@ def chart():
     s.append(arrow(360, 838, 360, 852))
     s.append(box(20, 854, 320, 44, ['BLACK key, from the cistern, opens the SUITCASE', 'early on. Inside: the backpack, still locked.'], size=10.5))
     s.append(arrow(340, 876, 369, 876))
-    s.append(payload(370, 854, 330, 44, ['DARK BLUE key opens the BACKPACK', 'the sixth painting and the prize']))
+    s.append(payload(370, 854, 330, 44, ['DARK BLUE key opens the BACKPACK', 'the prize']))
     s.append(f'<text x="360" y="930" text-anchor="middle" font-size="10" font-style="italic">Nothing can be shortcut: the card is unreadable without both plates and the time, and those come from three different places.</text>')
     return f'<svg viewBox="0 0 {W} 950" width="6.85in" xmlns="http://www.w3.org/2000/svg">{"".join(s)}</svg>'
 
@@ -126,7 +126,7 @@ PLACES = [
  ("Inside the meditation cushion", "The cipher card, in a small envelope, tucked just inside the zip where a hand will meet it"),
  ("Behind the framed photo puzzle", "The DARK BLUE key, taped flat to the back of the frame. Nothing points here until the wheel is decoded, so it is never searched."),
  ("Suitcase", "The backpack. The suitcase itself is padlocked with the BLACK lock and left in plain sight all evening."),
- ("Backpack", "The sixth painting and the prize. Padlocked with the DARK BLUE lock."),
+ ("Backpack", "The prize. Padlocked with the DARK BLUE lock. All six paintings are placed elsewhere; none is in here."),
 ]
 
 def build():
@@ -146,7 +146,7 @@ def build():
 
 <h3>Lock and load, in this order, so no key ends up locked inside its own box</h3>
 <ol>
-<li>Put the sixth painting and the prize in the backpack. Close it and padlock it. Its key is <span class="key">DARK BLUE</span>.</li>
+<li>Put the prize in the backpack. Close it and padlock it. Its key is <span class="key">DARK BLUE</span>.</li>
 <li>Put the backpack inside the suitcase. Close the suitcase and padlock it. Its key is <span class="key">BLACK</span>.</li>
 <li>Stand the suitcase somewhere she will see it all evening. It is meant to taunt.</li>
 <li>Hide <span class="key">BLACK</span> in a ziplock in the toilet cistern. She reaches it mid-game, opens the suitcase, and finds the backpack still locked. That is the moment the evening turns.</li>
@@ -212,7 +212,7 @@ the songbook, the knife catalogue and the recipe book are printed and final. The
 <ol>
 <li>Lock the backpack, put it in the suitcase, lock the suitcase, stand it in the open.</li>
 <li>Hide the two keys: BLACK in the cistern, DARK BLUE behind the framed puzzle.</li>
-<li>Place the paintings: Patricia in the backgammon set; Hamlet and the fairy houses in the Wingspan box with the Queen of Hearts; Abyssinia and Gleaners with the candy jar. The sixth is already locked in the backpack. Milk Crate goes in her envelope.</li>
+<li>Place all six paintings: Milk Crate in her envelope; Patricia in the backgammon set; Hamlet and the fairy houses in the Wingspan box with the Queen of Hearts; Abyssinia and Gleaners with the candy jar. None goes in the backpack.</li>
 <li>Plate II in the backgammon set. Plate I in the Dutch oven. Pig-pen sheet in the liquor cabinet.</li>
 <li>Load one lemon with the Joker and set the bowl out. Knife and scale on the counter.</li>
 <li>Cipher card into the cushion. Write the wall. Flyer on the fridge.</li>
