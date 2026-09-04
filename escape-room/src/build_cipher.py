@@ -32,9 +32,10 @@ def dial_svg(cx=350, cy=350):
         x, y = pol(cx, cy, 270, a)
         s.append(f'<text x="{x:.1f}" y="{y:.1f}" text-anchor="middle" dominant-baseline="central" transform="rotate({a} {x:.1f} {y:.1f})" font-family="Libre Baskerville" font-weight="700" font-size="23">{OUTER[k]}</text>')
     # rim inscription along the outer band
-    s.append(f'<defs><path id="rim" d="M {cx - 336},{cy} a 336,336 0 1,1 672,0 a 336,336 0 1,1 -672,0"/></defs>')
-    rim = '· SET THE HOUR · FIND IT WITHOUT · READ IT WITHIN ' * 2 + '· SET THE HOUR · FIND IT WITHOUT · READ IT WITHIN'
-    s.append(f'<text font-family="IM Fell DW Pica SC" font-size="12.5" letter-spacing="2" textLength="2100" lengthAdjust="spacing"><textPath href="#rim" startOffset="0">{rim}</textPath></text>')
+    RR = 332
+    s.append(f'<defs><path id="rim" d="M {cx - RR},{cy} a {RR},{RR} 0 1,1 {2*RR},0 a {RR},{RR} 0 1,1 -{2*RR},0"/></defs>')
+    rim = '· SET THE HOUR · FIND IT WITHOUT · READ IT WITHIN ' * 3
+    s.append(f'<text font-family="IM Fell DW Pica SC" font-size="11" letter-spacing="1.6" textLength="2072" lengthAdjust="spacing"><textPath href="#rim" startOffset="0">{rim.strip()}</textPath></text>')
     # centre mark
     s.append(f'<circle cx="{cx}" cy="{cy}" r="5" fill="none" stroke="#000" stroke-width="1"/><line x1="{cx-9}" y1="{cy}" x2="{cx+9}" y2="{cy}" stroke="#000" stroke-width="0.8"/><line x1="{cx}" y1="{cy-9}" x2="{cx}" y2="{cy+9}" stroke="#000" stroke-width="0.8"/>')
     s.append(f'<text x="{cx}" y="{cy-60}" text-anchor="middle" font-family="IM Fell DW Pica SC" font-size="15" letter-spacing="3">PLATE I · THE DIAL</text>')
