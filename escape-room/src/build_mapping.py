@@ -255,7 +255,14 @@ the songbook, the knife catalogue and the recipe book are printed and final. The
 <ol>
 <li>Lock the backpack, put it in the suitcase, lock the suitcase, stand it in the open.</li>
 <li>Hide the two keys: BLACK in the cistern, DARK BLUE behind the framed puzzle.</li>
-<li>Place all six paintings: Milk Crate in her envelope; Patricia in the backgammon set; Hamlet and the fairy houses in the Wingspan box with the Queen of Hearts; Abyssinia and Gleaners in the two places the framer&rsquo;s card names. None goes in the backpack, and none goes in the candy jar.</li>
+<li>Place all six paintings, one line each. None goes in the backpack, and none goes in the candy jar.
+<table style="margin-top:4px"><tr><th>Painting</th><th>Goes</th></tr>
+<tr><td class="loc">Milk Crate</td><td>in her envelope, handed to her at the start</td></tr>
+<tr><td class="loc">Patricia&rsquo;s</td><td>in the backgammon set, with Plate II</td></tr>
+<tr><td class="loc">Hamlet</td><td>in the Wingspan box</td></tr>
+<tr><td class="loc">Fairy houses</td><td>in the Wingspan box</td></tr>
+<tr><td class="loc">Abyssinia</td><td>the first kitchen cupboard door, as the framer&rsquo;s card says</td></tr>
+<tr><td class="loc">Gleaners</td><td>the second kitchen cupboard door, as the framer&rsquo;s card says</td></tr></table></li>
 <li>Blue-light pen and the framer&rsquo;s delivery card into the candy jar, rolled together. Check the card names the two places you actually used.</li>
 <li>Plate II in the backgammon set. Plate I in the Dutch oven. Pig-pen sheet in the liquor cabinet.</li>
 <li>Load one lemon with the Joker and set the bowl out. Knife and scale on the counter.</li>
