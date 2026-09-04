@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Hall of Flags</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+DW+Pica+SC&family=UnifrakturMaguntia&family=Old+Standard+TT:wght@400;700&display=swap">
+<style>
+  /* Single theme on purpose: printed paper, to match the Pocket Library printables. */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #f3efe6; color: #171512; min-height: 100%; }
+  body { font-family: 'IM Fell English', Georgia, serif; padding: 16px 12px 60px; -webkit-tap-highlight-color: transparent;
+         background-image: radial-gradient(circle at 20% 0%, rgba(0,0,0,0.035), transparent 60%); }
+  .sheet { max-width: 900px; margin: 0 auto; }
+  .masthead { text-align: center; border-top: 3px double #171512; border-bottom: 3px double #171512; padding: 12px 6px 10px; }
+  .masthead .title { font-family: 'UnifrakturMaguntia', serif; font-size: clamp(30px, 8vw, 46px); line-height: 1.05; }
+  .masthead .sub { font-family: 'IM Fell DW Pica SC', serif; font-size: 14px; letter-spacing: 0.12em; margin-top: 6px; }
+  .masthead .est { font-style: italic; font-size: 14px; margin-top: 4px; }
+  .preface { max-width: 62ch; margin: 14px auto 18px; text-align: justify; font-size: 16px; line-height: 1.45; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px 14px; }
+  .card { perspective: 900px; }
+  .card button { all: unset; display: block; width: 100%; cursor: pointer; }
+  .card button:focus-visible { outline: 3px solid #171512; outline-offset: 4px; }
+  .inner { position: relative; width: 100%; aspect-ratio: 3 / 2.7; transform-style: preserve-3d; transition: transform 0.55s cubic-bezier(.2,.7,.2,1); }
+  .card.flipped .inner { transform: rotateY(180deg); }
+  .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border: 1.5px solid #171512; background: #fbf8f1; display: flex; flex-direction: column; overflow: hidden;
+          box-shadow: 2px 3px 0 rgba(23,21,18,0.18); }
+  .front { padding: 8px 8px 6px; }
+  .front .plate { border: 1px solid #171512; padding: 3px; background: #fff; }
+  .front svg { display: block; width: 100%; height: auto; }
+  .front .fig { font-family: 'IM Fell DW Pica SC', serif; font-size: 12px; letter-spacing: 0.14em; text-align: center; margin-top: auto; padding-top: 6px; }
+  .back { transform: rotateY(180deg); align-items: center; justify-content: center; padding: 10px 8px 18px; background: #fbf8f1;
+          background-image: repeating-linear-gradient(0deg, transparent 0 23px, rgba(23,21,18,0.08) 23px 24px); }
+  .back svg { display: block; max-width: 100%; height: auto; }
+  .back .fig { font-family: 'IM Fell DW Pica SC', serif; font-size: 10px; letter-spacing: 0.14em; position: absolute; bottom: 4px; left: 0; right: 0; text-align: center; color: #5a5348; }
+  .colophon { text-align: center; font-family: 'IM Fell DW Pica SC', serif; font-size: 12px; letter-spacing: 0.12em; margin-top: 26px; border-top: 1px solid #171512; padding-top: 8px; }
+  .colophon i { display: block; font-family: 'IM Fell English', serif; font-style: italic; letter-spacing: 0; font-size: 14px; margin-top: 4px; }
+  @media (prefers-reduced-motion: reduce) { .inner { transition: none; } }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="masthead">
+    <div class="title">The Hall of Flags</div>
+    <div class="sub">Twenty Ensigns of the Nations · Uncaptioned</div>
+    <div class="est">Pocket Library Series · No. 11 · The Reader is Trusted to Know Them</div>
+  </div>
+  <p class="preface">The engraver was paid by the flag and not by the name, and so no names are given. Each plate turns over. On the back of every one the engraver has left a remark in the pen-and-dot hand of the Freemasons; the key to that hand is published separately, and the reader who has not yet got it may look and wonder.</p>
+  <div class="grid" id="grid"></div>
+  <div class="colophon">The Hall of Flags <i>Every plate says something. Only the right plates say something useful.</i></div>
+</div>
+
+<script>
+  // ---------- flags: each is a function returning SVG (3:2). No names anywhere on the page. ----------
+  const H = (cols) => cols.map((c, i) => `<rect x="0" y="${(i * 60 / cols.length).toFixed(2)}" width="90" height="${(60 / cols.length + 0.2).toFixed(2)}" fill="${c}"/>`).join('');
+  const V = (cols) => cols.map((c, i) => `<rect x="${(i * 90 / cols.length).toFixed(2)}" y="0" width="${(90 / cols.length + 0.2).toFixed(2)}" height="60" fill="${c}"/>`).join('');
+  const star = (cx, cy, r, fill) => { let p = []; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5; const rr = i % 2 ? r * 0.42 : r; p.push(`${(cx + rr * Math.cos(a)).toFixed(2)},${(cy + rr * Math.sin(a)).toFixed(2)}`); } return `<polygon points="${p.join(' ')}" fill="${fill}"/>`; };
+  const svg = (inner) => `<svg viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${inner}</svg>`;
+
+  // Order is deliberate: the two that matter sit in the middle of the pack, among their look-alikes.
+  const FLAGS = [
+    { draw: () => svg(V(['#0055a4', '#ffffff', '#ef4135'])), msg: 'NON' },                                   // France
+    { draw: () => svg(H(['#000000', '#dd0000', '#ffce00'])), msg: 'NEIN' },                                  // Germany
+    { draw: () => svg(H(['#d52b1e', '#f9e300', '#007934'])), msg: 'UPSIDE DOWN' },                           // Bolivia
+    { draw: () => svg(V(['#169b62', '#ffffff', '#ff883e'])), msg: 'NOT THIS GREEN' },                        // Ireland
+    { draw: () => svg(H(['#ae1c28', '#ffffff', '#21468b'])), msg: 'TOO TALL' },                              // Netherlands
+    { draw: () => svg(V(['#14b53a', '#fcd116', '#ce1126'])), msg: 'CLOSE BUT NO' },                          // Mali
+    { draw: () => svg(H(['#078930', '#fcdd09', '#da121a']) + `<circle cx="45" cy="30" r="13" fill="#0f47af"/>` + star(45, 30, 9.5, '#fcdd09')), msg: 'HALF PAST THREE' }, // Ethiopia
+    { draw: () => svg(H(['#ce2939', '#ffffff', '#477050'])), msg: 'HUNGRY' },                                // Hungary
+    { draw: () => svg(V(['#000000', '#fdda24', '#ef3340'])), msg: 'WAFFLES' },                               // Belgium
+    { draw: () => svg(H(['#ce1126', '#fcd116', '#006b3f']) + star(45, 30, 8, '#000000')), msg: 'WRONG STAR' }, // Ghana
+    { draw: () => svg(H(['#0057b7', '#ffd700'])), msg: 'SUNFLOWERS' },                                       // Ukraine
+    { draw: () => svg(V(['#f77f00', '#ffffff', '#009e60'])), msg: 'OTHER WAY ROUND' },                       // Ivory Coast
+    { draw: () => svg(`<rect width="90" height="60" fill="#ffffff"/><circle cx="45" cy="30" r="18" fill="#bc002d"/>`), msg: 'SAKAI STEEL' }, // Japan
+    { draw: () => svg(V(['#009246', '#ffffff', '#ce2b37'])), msg: 'I WOULD GLEAN A WHOLE FIELD FOR YOU' },   // Italy
+    { draw: () => svg(H(['#ed2939', '#ffffff', '#ed2939'])), msg: 'NOT AUSTRALIA' },                         // Austria
+    { draw: () => svg(H(['#fdb913', '#006a44', '#c1272d'])), msg: 'COLD' },                                  // Lithuania
+    { draw: () => svg(`<rect width="90" height="30" fill="#fcd116"/><rect y="30" width="90" height="15" fill="#003893"/><rect y="45" width="90" height="15" fill="#ce1126"/>`), msg: 'COFFEE FIRST' }, // Colombia
+    { draw: () => svg(H(['#ffffff', '#00966e', '#d62612'])), msg: 'NICE YOGURT' },                           // Bulgaria
+    { draw: () => svg(H(['#ffffff', '#dc143c'])), msg: 'PIEROGI' },                                          // Poland
+    { draw: () => svg(`<rect width="90" height="60" fill="#006aa7"/><rect x="27" width="12" height="60" fill="#fecc00"/><rect y="24" width="90" height="12" fill="#fecc00"/>`), msg: 'FLAT PACK' }, // Sweden
+  ];
+  const ROMAN = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX'];
+
+  // ---------- pigpen glyphs ----------
+  const GRID1 = 'ABCDEFGHI', GRID2 = 'JKLMNOPQR', X1 = 'STUV', X2 = 'WXYZ';
+  function glyph(L, x, y, s, sw) {
+    const o = [];
+    const line = (a, b, c, d) => o.push(`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke="#171512" stroke-width="${sw}" stroke-linecap="square"/>`);
+    const dot = () => o.push(`<circle cx="${x + s / 2}" cy="${y + s / 2}" r="${(s * 0.09).toFixed(2)}" fill="#171512"/>`);
+    if (GRID1.includes(L) || GRID2.includes(L)) {
+      const i = (GRID1 + GRID2).indexOf(L) % 9, r = Math.floor(i / 3), c = i % 3;
+      if (r > 0) line(x, y, x + s, y);
+      if (r < 2) line(x, y + s, x + s, y + s);
+      if (c > 0) line(x, y, x, y + s);
+      if (c < 2) line(x + s, y, x + s, y + s);
+      if (GRID2.includes(L)) dot();
+    } else if (X1.includes(L) || X2.includes(L)) {
+      const i = (X1 + X2).indexOf(L) % 4, cx = x + s / 2, cy = y + s / 2;
+      if (i === 0) { line(x, y, cx, cy); line(cx, cy, x + s, y); }
+      else if (i === 1) { line(x, y, cx, cy); line(cx, cy, x, y + s); }
+      else if (i === 2) { line(x + s, y, cx, cy); line(cx, cy, x + s, y + s); }
+      else { line(x, y + s, cx, cy); line(cx, cy, x + s, y + s); }
+      if (X2.includes(L)) dot();
+    }
+    return o.join('');
+  }
+  function messageSvg(text, s = 16, gap = 5, perLine = 7) {
+    const words = text.toUpperCase().split(' ');
+    const lines = []; let cur = [];
+    for (const w of words) {
+      const len = cur.reduce((n, x) => n + x.length + 1, 0) + w.length;
+      if (len > perLine && cur.length) { lines.push(cur); cur = []; }
+      cur.push(w);
+    }
+    if (cur.length) lines.push(cur);
+    const out = []; let y = 4; let maxX = 0;
+    for (const ln of lines) {
+      let x = 4;
+      for (const w of ln) {
+        for (const ch of w) { out.push(glyph(ch, x, y, s, 2)); x += s + gap; }
+        x += s * 0.8;
+      }
+      maxX = Math.max(maxX, x);
+      y += s + 10;
+    }
+    const w = Math.max(perLine * (s + gap) + 8, maxX), h = y;
+    return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="a remark in cipher">${out.join('')}</svg>`;
+  }
+
+  // ---------- build the grid ----------
+  const grid = document.getElementById('grid');
+  FLAGS.forEach((f, i) => {
+    const card = document.createElement('div'); card.className = 'card';
+    card.innerHTML = `<button type="button" aria-label="Plate ${ROMAN[i]}, tap to turn over"><div class="inner">
+      <div class="face front"><div class="plate">${f.draw()}</div><div class="fig">Plate ${ROMAN[i]}</div></div>
+      <div class="face back">${messageSvg(f.msg)}<div class="fig">Plate ${ROMAN[i]}</div></div>
+    </div></button>`;
+    card.querySelector('button').addEventListener('click', () => card.classList.toggle('flipped'));
+    grid.appendChild(card);
+  });
+</script>
+</body>
+</html>
