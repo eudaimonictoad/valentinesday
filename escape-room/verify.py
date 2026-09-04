@@ -32,7 +32,8 @@ def keep(name):
 chk("B1 Patricia -> painted egg (Wingspan)", 'painted egg' in (keep('Patricia') or ''), keep('Patricia'))
 chk("B6 Chloe -> young tree in a pot (bonsai)", 'young tree in a pot' in (keep('Chloe') or ''), keep('Chloe'))
 chk("B9 Shirley -> a bottle (liquor cabinet)", 'bottle kept for company' in (keep('Shirley') or ''), keep('Shirley'))
-chk("Sarah's line is a gift, not a clue", "author's whole heart" in (keep('Sarah') or ''))
+chk("Sarah has her own entry with a real keepsake", 'Sushi' in (keep('Sarah') or ''), keep('Sarah'))
+chk("no Sally to be confused with Sarah", '>Sally<' not in reg and 'Sally</span>' not in reg)
 for nm in ('Patricia', 'Chloe', 'Shirley'):
     chk(f"{nm}'s keepsake is unique in the register", reg.count(keep(nm)) == 1)
 

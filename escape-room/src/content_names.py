@@ -241,7 +241,6 @@ Ruby|Latin|the red gem
 Ruth|Hebrew|companion, friend
 Sabrina|Celtic|the river Severn
 Sadie|Hebrew|princess
-Sally|Hebrew|princess
 Sandra|Greek|defender of mankind
 Sarah|Hebrew|princess, noblewoman
 Selina|Greek|the moon
