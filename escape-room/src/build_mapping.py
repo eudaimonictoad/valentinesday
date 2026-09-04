@@ -103,9 +103,9 @@ def chart():
     s.append(arrow(535, 686, 535, 698))
     s.append(payload(370, 700, 330, 32, ['INSIDE THE MEDITATION CUSHION', 'the card, in wheel symbols']))
     s.append(arrow(180, 686, 180, 746)); s.append(arrow(535, 732, 535, 746))
-    s.append(box(20, 748, 680, 44, ['THE WHEEL: pin Plate II on Plate I, set the hands to 3:30, decode the card', 'MFF6 DW5OY7 H5W LO8QH 9KOYHOYA  =  LOOK BEHIND THE FIRST PAINTING'], size=10.5))
+    s.append(box(20, 748, 680, 44, ['THE WHEEL: pin Plate II on Plate I, set the hands to 3:30, decode the card', 'H5W 6WJ OQ OY H5W L8WWZW8  =  THE KEY IS IN THE FREEZER'], size=10.5))
     s.append(arrow(360, 792, 360, 804))
-    s.append(payload(20, 806, 680, 32, ['BEHIND THE MILK CRATE PAINTING  ·  the PURPLE key']))
+    s.append(payload(20, 806, 680, 32, ['THE FREEZER  ·  the PURPLE key, in a ziplock']))
     s.append(arrow(360, 838, 360, 852))
     s.append(box(20, 854, 216, 44, ['BLACK key (cistern)', 'opens the SUITCASE'], size=10.5))
     s.append(arrow(236, 876, 251, 876))
@@ -116,7 +116,7 @@ def chart():
     return f'<svg viewBox="0 0 {W} 950" width="6.85in" xmlns="http://www.w3.org/2000/svg">{"".join(s)}</svg>'
 
 PLACES = [
- ("Her hands", "The welcome letter; the Milk Crate painting with the PURPLE key taped flat behind it under a sheet of paper"),
+ ("Her hands", "The welcome letter and the Milk Crate painting. Nothing is hidden on the painting; its back just carries the written clue."),
  ("Out in the open", "The nine printables scattered about; the flyer on the fridge; a bowl of lemons, one loaded; the knife and the kitchen scale on the counter; The Prophet on the shelf among many books; the locked suitcase"),
  ("Backgammon set", "Plate II; the Patricia painting"),
  ("Wingspan box", "The Hamlet painting; the fairy painting; a real Queen of Hearts playing card"),
@@ -126,6 +126,7 @@ PLACES = [
  ("Dutch oven", "Plate I with a brad taped to it; the DARK BLUE key"),
  ("Bathroom wall or mirror", "ALIEN BLUES in dry-erase marker; the pigpen glyphs from the tracing sheet in invisible ink beneath"),
  ("Inside the meditation cushion", "The card of wheel symbols, in a small envelope, just inside the zip"),
+ ("The freezer", "The PURPLE key in a ziplock, tucked behind the frozen peas. Nothing points here until the wheel is decoded."),
  ("Suitcase", "The backpack. Padlocked with the BLACK lock."),
  ("Backpack", "The prize in its inner compartment, padlocked with the PURPLE lock; the main zip padlocked with the DARK BLUE lock"),
 ]
@@ -151,18 +152,21 @@ def build():
 <li>Close the backpack's main zip. Padlock it. Set its key aside: <span class="key">DARK BLUE</span>.</li>
 <li>Put the backpack inside the suitcase. Padlock the suitcase. Set its key aside: <span class="key">BLACK</span>.</li>
 <li>Leave the suitcase somewhere she will see it all evening. It is meant to taunt.</li>
-<li>Now hide the three keys: <span class="key">BLACK</span> in a ziplock in the toilet cistern; <span class="key">DARK BLUE</span> in the Dutch oven with Plate I; <span class="key">PURPLE</span> taped flat behind the Milk Crate painting, under a sheet of paper, before you put that painting in her envelope.</li>
+<li>Now hide the three keys: <span class="key">BLACK</span> in a ziplock in the toilet cistern; <span class="key">DARK BLUE</span> in the Dutch oven with Plate I; <span class="key">PURPLE</span> in a ziplock bag in the freezer, behind something frozen. Nothing points at the freezer until she decodes the wheel, so it stays unsearched.</li>
 <li><span class="key">LIGHT BLUE</span> and its lock are not used. Put them in a drawer.</li>
 </ol>
 
+<div class="foot">Game-master's setup guide · 2 of 4</div>
+</div>
+<div class="page">
 <h3>Every hiding place and what goes in it</h3>
 <table><tr><th>Place</th><th>Contents</th></tr>{prows}</table>
-<div class="foot">Game-master's setup guide · 2 of 3</div>
+<div class="foot">Game-master's setup guide · 3 of 4</div>
 </div>"""
     page3 = f"""<div class="page">
 <h3>Exactly what to write by hand, and where</h3>
 <div class="write"><b>The bathroom wall or mirror.</b> In dry-erase marker, large: <span class="mono">ALIEN BLUES</span>. Directly beneath it, in the invisible-ink pen, copy the pigpen shapes from the tracing sheet (the page before this guide). They read BREATHE IN BREATHE OUT LOOK INSIDE. Test a corner first: glazed tile and glass wipe clean, grout and stone do not. The mirror is the safest surface.</div>
-<div class="write"><b>The cushion card.</b> On a quarter-sheet frame or any card, in capitals, exactly: <span class="mono">MFF6 DW5OY7 H5W LO8QH 9KOYHOYA</span>. Put it in a small envelope. On the envelope: <i>This will mean nothing until the hour is set.</i> Tuck it just inside the cushion's zip.</div>
+<div class="write"><b>The cushion card.</b> Any scrap of paper or index card will do. Write in capitals, exactly: <span class="mono">H5W 6WJ OQ OY H5W L8WWZW8</span>. Put it in a small envelope. On the envelope: <i>This will mean nothing until the hour is set.</i> Tuck it just inside the cushion's zip.</div>
 <div class="write"><b>The six painting backs.</b> Write on the quarter-sheet frames and attach one to each painting.<br>
 Milk Crate: <i>The famous man we always see here, who is not him.</i><br>
 Patricia's: <i>Just the name. Look her up.</i><br>
@@ -178,13 +182,13 @@ Gleaners: <i>The café sits in a market named for a country. Its colours are at 
 <li>Put your real knife on your real scale. It must read 79 g. Nearest catalogue entries are 58 g and 99 g.</li>
 <li>Open your copy of The Prophet. Page 12, fourth word of the first line must be <b>corn</b>. Page 15, the first sentence beginning "Give", sixth word must be <b>bread</b>. If either fails, tell me the real page numbers and I will reprint the concordance.</li>
 <li>Shine the blue-light pen on the wall. The pigpen must show. Then wipe a corner to be sure it comes off.</li>
-<li>Pin the plates, set 3:30, decode the cushion card yourself. It must read LOOK BEHIND THE FIRST PAINTING.</li>
+<li>Pin the plates, set 3:30, decode the cushion card yourself. It must read THE KEY IS IN THE FREEZER.</li>
 <li>Open sarahs.quest on your phone, tap Plate VII, confirm the pigpen on the back reads HALF PAST THREE.</li>
 </ol>
 
 <h3>If she stalls</h3>
 <p style="font-size:9.6pt">sarahs.quest/hints.html: eighteen predicaments, each with a nudge, a firmer nudge, and the answer. Linked from the bottom of the flags page. Or just tell her; you are allowed.</p>
-<div class="foot">Game-master's setup guide · 3 of 3 · the cipher solution follows, remove that too</div>
+<div class="foot">Game-master's setup guide · 4 of 4 · the cipher solution follows, remove that too</div>
 </div>"""
     write_page('10-mapping-GAMEMASTER-remove', page1 + page2 + page3, "Game-master's setup guide", CSS)
 

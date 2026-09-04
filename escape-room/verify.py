@@ -59,7 +59,7 @@ chk("no other knife within 15 g of 79", not [(n, w) for n, o, w, d, p in CK.KNIV
 chk("C2 the 79 g knife is the lemon one", 'lemon' in next(d for n, o, w, d, p in CK.KNIVES if w == 79).lower())
 
 import cipher_data as C
-msg = 'LOOK BEHIND THE FIRST PAINTING'
+msg = 'THE KEY IS IN THE FREEZER'
 chk("E4 final card round-trips", C.decode(C.encode(msg)) == msg, C.encode(msg))
 sol = H('02-cipher-wheel-SOLUTION-gamemaster-only')
 chk("E4 wheel time is 3:30", 'read <b>3:30</b>' in sol)
