@@ -116,6 +116,12 @@ chk("F8 guide tells him to tear off seven leaves, not six",
     'seven</b> leaves' in gm and 'last six leaves' not in gm)
 chk("F9 set-up order places the pen and card in the jar", 'into the candy jar' in gm)
 
+chk("F10 no reprint cover hard-codes a painting location",
+    not [f for f in ('reprint-cover-catchup', 'reprint-cover-paintings')
+         if os.path.exists(f'html/{f}.html') and (ab in H(f) or gl in H(f))],
+    [f for f in ('reprint-cover-catchup', 'reprint-cover-paintings')
+     if os.path.exists(f'html/{f}.html') and (ab in H(f) or gl in H(f))])
+
 
 print('\n'.join('PASS  ' + s for s in ok))
 if bad: print('\n' + '\n'.join('FAIL  ' + s for s in bad))

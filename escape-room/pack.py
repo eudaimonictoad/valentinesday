@@ -48,15 +48,6 @@ def merge(parts, out):
     return where
 
 
-# The change that moved the two flag paintings out of the candy jar. He has already
-# printed the 40-page packet, so this pack is only what that change touches.
-REPRINT_PAINTINGS = [
-    ('reprint-cover-paintings',       None),
-    ('13-framers-delivery-card',      "HERS: new sheet, goes after the clue frames"),
-    ('10-mapping-GAMEMASTER-remove',  'YOURS: replaces packet 35-39, setup guide'),
-]
-
-
 # Ben printed the 40-page packet and nothing since. This is everything that has
 # changed since then, in packet order: six sheets of hers, seven of his.
 REPRINT_CATCHUP = [
@@ -94,12 +85,6 @@ def main():
     assert cover3 == 1, f'the catch-up cover is {cover3} pages; it tells him to print from page 2'
     assert n3 - cover3 == 13, f'catch-up pack is {n3-cover3} sheets, the cover says thirteen'
 
-    w2 = merge(REPRINT_PAINTINGS, 'REPRINT-paintings-moved.pdf')
-    n2 = sum(n for _, n in w2.values())
-    print(f'\nREPRINT-paintings-moved.pdf  {n2} pages  (1 cover + {n2-1} to print)')
-    for stem, mark in REPRINT_PAINTINGS:
-        a, n = w2[stem]
-        print(f'   {a:>3}-{a+n-1:<3} {mark or "cover"}')
 
 
 if __name__ == '__main__':
