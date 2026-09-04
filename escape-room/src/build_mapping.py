@@ -57,7 +57,7 @@ def chart():
     s = ['<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#000"/></marker></defs>']
     # Tier 0
     s.append(band(10, 22, 700, 66, 'MINUTE ONE'))
-    s.append(box(20, 34, 320, 44, ['HANDED TO HER: the letter and the Milk Crate painting.', 'Letter gives sarahs.quest and ends: breathe in, breathe out.']))
+    s.append(box(20, 34, 320, 44, ['HANDED TO HER: the letter and the Milk Crate painting.', 'The letter gives her the address sarahs.quest.']))
     s.append(box(370, 34, 330, 44, ['OUT IN THE OPEN: the nine printables, the flyer, the lemons,', 'the knife AND the scale, The Prophet, the locked suitcase.']))
     # Tier 1: A and C in parallel
     s.append(band(10, 112, 700, 258, 'OPEN AT THE SAME TIME  ·  two lines, either order'))
@@ -99,7 +99,7 @@ def chart():
     # Tier 4: the lock
     s.append(band(10, 628, 700, 330, 'THE LOCK  ·  needs a piece from every line'))
     s.append(box(20, 642, 320, 44, ['Abyssinia painting + pigpen sheet → sarahs.quest,', 'the Ethiopian flag is Plate VII, turned over → HALF PAST THREE']))
-    s.append(box(370, 642, 330, 44, ['Flyer → bathroom. Blue-light pen + pigpen sheet', '→ under ALIEN BLUES: BREATHE IN BREATHE OUT LOOK INSIDE']))
+    s.append(box(370, 642, 330, 44, ['Flyer → bathroom. Blue-light pen + pigpen sheet', '→ under ALIEN BLUES: OPEN WHAT YOU SIT ON TO BREATHE']))
     s.append(arrow(535, 686, 535, 698))
     s.append(payload(370, 700, 330, 32, ['INSIDE THE MEDITATION CUSHION', 'the card:  DW5OY7 H5W VKYJ LKRWQ']))
     s.append(arrow(180, 686, 180, 746)); s.append(arrow(535, 732, 535, 746))
@@ -166,7 +166,7 @@ def build():
 
 <div class="write"><b>1 · The welcome letter.</b> Your words, your handwriting. It must do three jobs and no more:
 give her the address <span class="mono">sarahs.quest</span>; warn her that some things she finds will not make
-sense on the day she finds them; and end with the line <i>breathe in, breathe out</i>. Do not explain any puzzle.
+sense on the day she finds them; and end with a line in your own voice. Do not explain any puzzle.
 Do not mention the suitcase. If you are stuck for an opening: <i>&ldquo;There are six paintings in this apartment and
 every one of them is a question. You will need a scale, a knife, a pin, and more patience than I deserve.&rdquo;</i></div>
 
@@ -180,8 +180,8 @@ every one of them is a question. You will need a scale, a knife, a pin, and more
 
 <div class="write"><b>3 · The wall.</b> In dry-erase marker, large: <span class="mono">ALIEN BLUES</span>.
 Directly beneath it, in the invisible-ink pen, copy the shapes from the tracing sheet two pages back. Each shape
-has its letter printed above it in grey; copy the shapes only, never the letters. They read BREATHE IN BREATHE
-OUT LOOK INSIDE. Test a corner first: glass and glazed tile wipe clean, grout and stone do not. The mirror is
+has its letter printed above it in grey; copy the shapes only, never the letters. They read OPEN WHAT YOU
+SIT ON TO BREATHE. Test a corner first: glass and glazed tile wipe clean, grout and stone do not. The mirror is
 the safest surface in the room.</div>
 
 <div class="write"><b>4 · The cipher card.</b> Any scrap of paper. In capitals, exactly, with the spaces where they are:
