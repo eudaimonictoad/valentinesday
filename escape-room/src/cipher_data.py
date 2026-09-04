@@ -6,9 +6,9 @@ SEED = 3330
 _r = random.Random(SEED)
 OUTER = SYMBOLS[:]; _r.shuffle(OUTER)      # symbols printed on the dial (outer plate), slot k at angle 10k
 INNER = SYMBOLS[:]; _r.shuffle(INNER)      # symbols printed on the hands disc (inner plate), slot k at angle 10k in its own frame
-SOLUTION_TIME = '2:00'
-HOUR_ANGLE, MINUTE_ANGLE = 60, 0           # where the hands must point on the dial at 2:00 (degrees clockwise from 12)
-ROT = 200                                   # the inner disc must be turned 200 degrees clockwise to read 2:00
+SOLUTION_TIME = '3:30'
+HOUR_ANGLE, MINUTE_ANGLE = 105, 180        # where the hands must point on the dial at 3:30 (degrees clockwise from 12)
+ROT = 200                                   # the inner disc must be turned 200 degrees clockwise to read 3:30
 ROT_SLOTS = ROT // 10
 # hands are printed on the inner disc at these angles in the disc's own frame
 HAND_HOUR = (HOUR_ANGLE - ROT) % 360
