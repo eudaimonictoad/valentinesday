@@ -17,7 +17,7 @@ li { margin-bottom: 3px; }
 """
 
 STEPS = [
- ("0", "Handed to her: the letter and the Milk Crate painting", "The letter names sarahs.quest and ends 'breathe in, breathe out, and sit with it'"),
+ ("0", "Handed to her: the letter and the Milk Crate painting", "The letter names sarahs.quest and ends 'breathe in, breathe out, and look inside'"),
  ("A1", "Milk Crate painting, back: the famous man we always see here", "Ed Sheeran"),
  ("A2", "Stars and Their Notes, under Ed Sheeran", "The Barista's Hornpipe; the dotted half note, then the pair of beamed eighths"),
  ("A3", "Parlour Songbook, that air, those two shapes", "12 and 15"),
@@ -42,7 +42,7 @@ STEPS = [
  ("D1", "The suitcase, with the BLACK key", "the backpack, locked"),
  ("D2", "The backpack, with the DARK BLUE key", "the prize, and one locked compartment"),
  ("E1", "sarahs.quest, Abyssinia painting: Ethiopia, Plate VII, turned over", "HALF PAST THREE, in pigpen"),
- ("E2", "The flyer, the blue-light pen, the pigpen key: the bathroom wall under ALIEN BLUES", "BREATHE IN BREATHE OUT SIT WITH IT"),
+ ("E2", "The flyer, the blue-light pen, the pigpen key: the bathroom wall under ALIEN BLUES", "BREATHE IN BREATHE OUT LOOK INSIDE"),
  ("E3", "THE MEDITATION CUSHION", "the final card, in wheel symbols"),
  ("E4", "Plate I + Plate II pinned, set to 3:30, decode the card", "LOOK BEHIND THE FIRST PAINTING"),
  ("E5", "Behind the Milk Crate painting, the one she was handed first", "the PURPLE key"),

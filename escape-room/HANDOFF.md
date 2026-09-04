@@ -137,7 +137,7 @@ Real, confirmed his:
 
 > "a real clue for something can be breathe in, breathe out, for my meditation cushion do u feel liek thats too weak?"
 
-Answer given: not too weak **as a payoff** she decodes, rather than a riddle she has to interpret cold. So the pigpen on the bathroom wall decodes to BREATHE IN BREATHE OUT SIT WITH IT, and "sit" does the pointing.
+Answer given: not too weak **as a payoff** she decodes, rather than a riddle she has to interpret cold. So the pigpen on the bathroom wall decodes to BREATHE IN BREATHE OUT LOOK INSIDE, and "sit" does the pointing.
 
 ### 1.10 The sixth painting (the fairy houses)
 
@@ -332,7 +332,7 @@ Digits work too, so you can hide a number or a time.
 
 Standard Freemason's pigpen. `09-pigpen-key.pdf` is the key sheet for Sarah: the four pens, the full alphabet in glyphs, and a practice line reading THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.
 
-To draw a message as glyphs for tracing: `python3 escape-room/src/build_pigpen.py "BREATHE IN BREATHE OUT SIT WITH IT"` writes `html/pigpen-message.html`, which prints the glyphs plus a small game-master line saying what it reads. Print it, then trace the glyphs onto the bathroom tile in invisible ink under the words ALIEN BLUES written in dry-erase marker.
+To draw a message as glyphs for tracing: `python3 escape-room/src/build_pigpen.py "BREATHE IN BREATHE OUT LOOK INSIDE"` writes `html/pigpen-message.html`, which prints the glyphs plus a small game-master line saying what it reads. Print it, then trace the glyphs onto the bathroom tile in invisible ink under the words ALIEN BLUES written in dry-erase marker.
 
 ---
 
@@ -429,7 +429,7 @@ She is handed **one envelope**: the welcome letter and the Milk Crate painting. 
 12. → cut the lemons → **the Joker** → Cartomancer's Guide → **THE DUTCH OVEN**: Plate I
 
 **Convergence**
-13. Flyer on the fridge (Vundabar, Alien Blues, in the bathroom) + blue-light pen + pigpen key → the bathroom wall reads **BREATHE IN BREATHE OUT SIT WITH IT**
+13. Flyer on the fridge (Vundabar, Alien Blues, in the bathroom) + blue-light pen + pigpen key → the bathroom wall reads **BREATHE IN BREATHE OUT LOOK INSIDE**
 14. → **THE MEDITATION CUSHION**: the final message card, written in wheel symbols
 15. Plate I + Plate II + the time (3:30) → she decodes the card
 16. → the last instruction → the locked bag she has been looking at all evening
@@ -505,7 +505,7 @@ Claude-Session: https://claude.ai/code/session_01JWvfNQhCGYTVxZ34crbqJz
 - [ ] The lemon: print a joker ~25×35 mm, wrap in cling film, slit one lemon lengthways at the stem end, push the roll in, wipe, put it in a bowl with three or four honest lemons
 - [ ] Bathroom wall: ALIEN BLUES in dry-erase marker, pigpen beneath in invisible ink; **test that the pen reveals it and that it wipes off the tile**
 - [ ] Write the six painting backs on the quarter-sheet frames
-- [ ] Write the welcome letter; give her sarahs.quest if the flags go live; end it with *breathe in, breathe out, and sit with it*
+- [ ] Write the welcome letter; give her sarahs.quest if the flags go live; end it with *breathe in, breathe out, and look inside*
 - [ ] Write the final wheel-symbol card for under the cushion
 - [ ] Plant the Queen of Hearts in the Wingspan box; key in a ziplock in the cistern
 - [ ] Three hint envelopes, opened only if stuck ten minutes
@@ -521,4 +521,4 @@ Claude-Session: https://claude.ai/code/session_01JWvfNQhCGYTVxZ34crbqJz
 
 1. **What the final wheel card says.** Under 25 letters. If the bag is on the table all evening, `THE BAG WAS NEVER LOCKED` → `H5W DKA PKQ YW4W8 MFR6W7` is a good ending. Otherwise name where the key is.
 2. **Flags live or parked**, which decides where "half past three" comes from and what the Abyssinia and Gleaners paintings do.
-3. **The welcome letter.** Ben writes it. It should hand her sarahs.quest if the flags are live, warn that not everything can be read on the day it is found, and end with *breathe in, breathe out, and sit with it*.
+3. **The welcome letter.** Ben writes it. It should hand her sarahs.quest if the flags are live, warn that not everything can be read on the day it is found, and end with *breathe in, breathe out, and look inside*.
