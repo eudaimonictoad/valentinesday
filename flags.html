@@ -96,7 +96,8 @@
   const ROMAN = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX'];
 
   // ---------- pigpen glyphs ----------
-  const GRID1 = 'ABCDEFGHI', GRID2 = 'JKLMNOPQR', X1 = 'STUV', X2 = 'WXYZ';
+  // must match src/build_pigpen.py exactly: not the textbook arrangement
+  const GRID1 = 'JKLMNOPQR', GRID2 = 'ABCDEFGHI', X1 = 'WXYZ', X2 = 'STUV';
   function glyph(L, x, y, s, sw) {
     const o = [];
     const line = (a, b, c, d) => o.push(`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke="#171512" stroke-width="${sw}" stroke-linecap="square"/>`);
