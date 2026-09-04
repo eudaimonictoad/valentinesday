@@ -4,17 +4,16 @@
 # `label` is for Ben only and is printed OUTSIDE the cut line, to be trimmed off.
 # Labels are plain text (they get upper-cased), so no HTML entities in them.
 #
-# The clue text is raw HTML: <span class="url"> makes the address stand out on the
-# printed card. Every clue that needs the website says the whole address, because
-# she has no reason to guess at it.
+# The clue text is raw HTML. The two website clues end with the bare address on its
+# own line and say nothing more: the question, then where to take it.
 
-URL = '<span class="url">www.sarahs.quest</span>'
+URL = '<div class="url">www.sarahs.quest</div>'
 
 CLUES = [
     ('Milk Crate',
      'The famous man we always see here, who is not him.'),
 
-    ('Patricia’s',
+    ('Patricia\u2019s',
      'Just the name. Look her up in the Register of Names.'),
 
     # Was "Whose film was it?" — too coy for a director she does not know by name.
@@ -32,13 +31,12 @@ CLUES = [
     # settles which one is meant — and no Eritrean flag hangs in the Hall anyway.
     ('Abyssinia',
      'The food here is eaten with your hands, torn from a soft round of injera. '
-     'Coffee was born here too. Which country is it? '
-     f'Find its colours at {URL} and turn them over.'),
+     'Coffee was born here too. Which country is it?'
+     + URL),
 
     ('Gleaners',
-     'This caf&eacute; stands in a market named after a country. Which one? '
-     f'Its colours are at {URL} as well. '
-     'You will need this painting and the injera one both.'),
+     'This caf&eacute; stands in a market named after a country. Which one?'
+     + URL),
 ]
 
 assert len(CLUES) == 6, 'there are six paintings and six clues'
